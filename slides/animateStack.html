@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Animating the Stack &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Animating the Stack">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/slides/animateStack.html">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/slides/animateStack.html">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+  <link type="text/css" rel="stylesheet" href="/lightslider/dist/css/lightslider.css" />
+  <script src="/lightslider/dist/js/lightslider.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow-x: hidden;
+    }
+    img {
+      min-width: 100%
+    }
+  </style>
+</head>
+<body>
+<ul>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack1.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack2.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack3.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack4.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack5.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack6.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack7.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack8.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack9.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack10.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack11.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack13.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack14.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack15.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack16.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack17.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack18.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack19.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack20.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack21.png" alt="Stack Animation" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/animateStack/stack22.png" alt="Stack Animation" /></li>
+</ul>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      $("ul").lightSlider({
+        "item": 1,
+        "loop": true,
+        "mode": "none",
+        "speed": 600,
+        "pause": 2000,
+        "vertical": false,
+        "auto": true,
+        "pauseOnHover": false,
+        "pager": true,
+        "controls": true,
+        "adaptiveHeight": false
+      });
+    });
+    
+</script>
+</body>
+</html>

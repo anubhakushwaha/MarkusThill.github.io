@@ -1,0 +1,1216 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Solving Peg Solitaire with efficient Bit-Board Representations &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Solving Peg Solitaire with efficient Bit-Board Representations">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/solving-peg-solitaire/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/petite-anse.jpg">
+
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/solving-peg-solitaire/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Solving Peg Solitaire with efficient Bit-Board Representations | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Solving Peg Solitaire with efficient Bit-Board Representations" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Many of us might now the board game peg solitaire and might even have one of its many variants at home. Peg solitaire is a one-player game played on a board with holes and pegs. The number of holes depends on the board variant. For example, the English variant consists of 33 holes while the typical diamond variant consists of 41 holes. The rules of the game are rather easy. In each move the player selects one peg and jumps – either vertically or horizontally, not diagonally – with this peg over a directly neighboring one into an empty hole. The neighboring peg is then removed, leaving an empty hole. So, in each move, one peg jumps 2 holes further and the peg in-between is removed. Once no move is possible any longer, the game is over. This is the case when there is no pair of pegs which are orthogonally adjacent or if only one peg is left. In the latter case the game is won. The English variant, as shown below, has one additional rule: In order to win, it is not sufficient that only one peg is left in the end; this peg also has to be located in the center of the board. The English variant is shown in the figure below. Even though the rules of the game are rather simple, finding a solution is not trivial. Many players need quite a few attempts in order to find the solution for the English peg solitaire. The solution for the diamond shaped board is even more tricky." />
+<meta property="og:description" content="Many of us might now the board game peg solitaire and might even have one of its many variants at home. Peg solitaire is a one-player game played on a board with holes and pegs. The number of holes depends on the board variant. For example, the English variant consists of 33 holes while the typical diamond variant consists of 41 holes. The rules of the game are rather easy. In each move the player selects one peg and jumps – either vertically or horizontally, not diagonally – with this peg over a directly neighboring one into an empty hole. The neighboring peg is then removed, leaving an empty hole. So, in each move, one peg jumps 2 holes further and the peg in-between is removed. Once no move is possible any longer, the game is over. This is the case when there is no pair of pegs which are orthogonally adjacent or if only one peg is left. In the latter case the game is won. The English variant, as shown below, has one additional rule: In order to win, it is not sufficient that only one peg is left in the end; this peg also has to be located in the center of the board. The English variant is shown in the figure below. Even though the rules of the game are rather simple, finding a solution is not trivial. Many players need quite a few attempts in order to find the solution for the English peg solitaire. The solution for the diamond shaped board is even more tricky." />
+<link rel="canonical" href="https://markusthill.github.io/solving-peg-solitaire/" />
+<meta property="og:url" content="https://markusthill.github.io/solving-peg-solitaire/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-10-24T00:13:54+02:00" />
+<script type="application/ld+json">
+{"description":"Many of us might now the board game peg solitaire and might even have one of its many variants at home. Peg solitaire is a one-player game played on a board with holes and pegs. The number of holes depends on the board variant. For example, the English variant consists of 33 holes while the typical diamond variant consists of 41 holes. The rules of the game are rather easy. In each move the player selects one peg and jumps – either vertically or horizontally, not diagonally – with this peg over a directly neighboring one into an empty hole. The neighboring peg is then removed, leaving an empty hole. So, in each move, one peg jumps 2 holes further and the peg in-between is removed. Once no move is possible any longer, the game is over. This is the case when there is no pair of pegs which are orthogonally adjacent or if only one peg is left. In the latter case the game is won. The English variant, as shown below, has one additional rule: In order to win, it is not sufficient that only one peg is left in the end; this peg also has to be located in the center of the board. The English variant is shown in the figure below. Even though the rules of the game are rather simple, finding a solution is not trivial. Many players need quite a few attempts in order to find the solution for the English peg solitaire. The solution for the diamond shaped board is even more tricky.","headline":"Solving Peg Solitaire with efficient Bit-Board Representations","dateModified":"2017-10-24T00:13:54+02:00","datePublished":"2017-10-24T00:13:54+02:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/solving-peg-solitaire/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/solving-peg-solitaire/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" class="feature">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Solving Peg Solitaire with efficient Bit-Board Representations</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2017-10-24T00:13:54+02:00">October 24, 2017</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~28 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+            <div class="entry-image-index">
+              <img src="https://MarkusThill.github.io/images/petite-anse.jpg" alt="Solving Peg Solitaire with efficient Bit-Board Representations">
+              
+            </div>
+        
+      <h1 class="post-title entry-title">Solving Peg Solitaire with efficient Bit-Board Representations</h1>
+      <p>Many of us might now the board game peg solitaire and might even have one of its many variants at home. Peg solitaire is a one-player game played on a board with <script type="math/tex">n</script> holes and <script type="math/tex">n-1</script> pegs. The number of holes depends on the board variant. For example, the English variant consists of 33 holes while the typical diamond variant consists of 41 holes. The rules of the game are rather easy. In each move the player selects one peg and jumps – either vertically or horizontally, not diagonally – with this peg over a directly neighboring one into an empty hole. The neighboring peg is then removed, leaving an empty hole. So, in each move, one peg jumps 2 holes further and the peg in-between is removed. Once no move is possible any longer, the game is over. This is the case when there is no pair of pegs which are orthogonally adjacent or if only one peg is left. In the latter case the game is won.
+The English variant, as shown below, has one additional rule: In order to win, it is not sufficient that only one peg is left in the end; this peg also has to be located in the center of the board. The English variant is shown in the figure below.</p>
+
+<p><img src="https://MarkusThill.github.io/slides/peg-solitaire/solitaire1.png" alt="English Peg Solitaire" class="image-center" width="400px" /></p>
+
+<p>Even though the rules of the game are rather simple, finding a solution is not trivial. Many players need quite a few attempts in order to find the solution for the English peg solitaire. The solution for the diamond shaped board is even more tricky.</p>
+
+<!--more-->
+
+<h2 id="solution-for-the-english-peg-solitaire">Solution for the English Peg Solitaire</h2>
+<p>When I started programming a few years ago, English peg solitaire was one of my first projects. Since I could never solve the game myself I decided to write a solver for the problem. The code is attached at the end of this post. It is not nice nor efficient, but surprisingly finds the solution in less than a second. I suppose that I was actually quite lucky with the standard move ordering that I was using. With a slightly adjusted move ordering the solver apparently needs much more time (several hours).</p>
+
+<p>The solver gave me the following solution:</p>
+
+<center><iframe class="slideshow-iframe" src="https://MarkusThill.github.io/slides/peg-solitaire.html" style="width:70%" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe></center>
+
+<p>Recently, I again stumbled across peg solitaire when I saw a different board with the shape of a diamond. This stirred my interest in the game again and I spent several hours writing a solver using bit boards and some other enhancements for this board, as described in the following section.</p>
+
+<h2 id="efficiently-solving-the-diamond-41-board">Efficiently Solving the Diamond-41 Board</h2>
+<p>As the name suggests, the Diamond-41 board consists of 41 holes. As I was told – in contrast to the English variant – the only initial empty hole is not located in the center of the board but has to be placed at a slightly different position in order to be able to solve the game (as I found later, the solver was not able to solve the game for an initially empty hole in the center of the board). The initial position is as follows:</p>
+
+<p><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie01.png" alt="English Peg Solitaire" class="image-center" width="400px" /></p>
+
+<p>In the beginning, only two moves are possible. Since there are many corners on this board it is rather difficult to find a solution where only one peg is left over in the end. Also for backtracking algorithms the computational effort is enormous in order to solve this problem. Without the utilization of some advanced approaches, an algorithm could run for many days until a solution is found.</p>
+
+<h4 id="bit-boards">Bit-Boards</h4>
+<p>One major improvement of a classical algorithm can be achieved when instead of arrays, so called bit-boards are used for representing a position. For peg solitaire, the usage of bit-boards is especially easy, since each hole can either be empty (binary 0) or filled with a peg (binary 1). In this way, only 41 bit are required to encode any board position. Hence, a 64 bit variable is sufficient. There are also enough bits left over which can be used to encode the boundary of the board. This is, as we will see later, important for checking if a move is performed within the allowed boundaries. Bit boards have the advantage that the whole board can be processed at once with bitwise operations. If the encoding of each individual hole is done in a suitable way, many operations (such as the generation of valid moves for each position, mirroring the board along a certain axis, counting pegs, etc.) can be executed with a minimum amount of CPU cycles. Additionally, the representation is very memory efficient so that positions can be easily stored in a hash table or other data structures.</p>
+
+<p>I designed the following layout for the bit-board representation of the Diamond-41 variant of peg solitaire.</p>
+
+<p><img src="https://MarkusThill.github.io/slides/peg-solitaire2/0bitboard.png" alt="English Peg Solitaire" class="image-center" width="400px" /></p>
+
+<p>Each number represents the corresponding bit in the bit-board. The center hole is placed at bit 0. The boundary of the board is shown by the squares in above diagram. Moves are not allowed to end up in any of these bits. Note that many boundary bit-numbers appear twice in the diagram. This is due to the special layout, which I will explain in the following. However, it is not necessary to have a separate bit for every point on the boundary, since it is only used to check if a move leaves the board.</p>
+
+<p>The advantage of this arrangement is that all pegs can be easily moved vertically or horizontally. For example, a bitwise left rotation of the board by one would move all pegs up vertically by one. Accordingly, pegs are moved down by a right rotation of one (or left rotation of -1) and moved horizontally by bitwise rotations of the bit-board by 10 and -10. As we will see, this is especially helpful when we want to find all possible moves. This move generation can be done in very few CPU cycles, even for very complex board situations. Furthermore, mirroring of the board along the vertical and horizontal axis can also be done comparably fast. The only tradeoff is that rotations of a position cannot be computed easily. One solution for this problem could be, to always maintain two bit-boards: one for the original position and one for a rotated position (by 90 degrees). All other symmetric positions (8 overall) could then be constructed with vertical/horizontal flips.</p>
+
+<p>For example, the remaining number of pegs can be computed with an efficient function that counts the number of set bits in a bit-field. Since we are normally interested to count the remaining pegs after no move is possible any more, there are typically not too many pegs left and the following function computes the number very fast:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">bitCount</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">ZERO</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+        <span class="n">c</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>If only three bits are set in a bit-field, above function would only require 3 iterations in order to count the set bits.</p>
+
+<h4 id="move-generation">Move Generation</h4>
+
+<p>Even more important is the method to compute all the possible moves for a given board position <code class="highlighter-rouge">b</code>. All possible moves in one direction (in total 4 directions) can simply be computed with:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">uint64_t</span> <span class="n">mv</span> <span class="o">=</span> <span class="n">rol</span><span class="p">(</span><span class="n">rol</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">BOARD</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">BOARD</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">b</span><span class="p">);</span></code></pre></figure>
+
+<p>where <code class="highlighter-rouge">b</code> is an arbitrary board positon, <code class="highlighter-rouge">rol</code> is a bitwise rotation left (implemented with some inline assembler), <code class="highlighter-rouge">dir</code> is the specified direction (+1 for up, -1 for down, +10 for right, -10 for left) and <code class="highlighter-rouge">BOARD</code> is a bit-mask which masks all 41 holes of the board. The variable <code class="highlighter-rouge">mv</code> contains all the target holes for the allowed moves in the specified direction.
+After all the possible moves (in <code class="highlighter-rouge">mv</code>) for a direction <code class="highlighter-rouge">dir</code> are known, each move can also be performed with a few bitwise operations. We can extract the next move, which should be performed with:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// Get next move from all possibilities mv</span>
+<span class="kt">uint64_t</span> <span class="n">x</span> <span class="o">=</span> <span class="p">((</span><span class="n">mv</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="n">mv</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mv</span><span class="p">;</span></code></pre></figure>
+
+<p>In order to perform the move, we have to set a peg to the target position, we have to remove the “jumped-over” peg and then remove the peg from the old position:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// perform move</span>
+<span class="n">b</span> <span class="o">|=</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// set peg at new position</span>
+<span class="n">b</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">rol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">dir</span><span class="p">);</span> <span class="c1">// remove jumped-over peg</span>
+<span class="n">b</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">rol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dir</span><span class="p">);</span> <span class="c1">// remove  peg from old position</span></code></pre></figure>
+
+<p>Undoing a move can be done accordingly. All of these steps require only a few bitwise operations. A solver with an array-based data structure for the board would likely perform the moves slightly faster, but I suppose that the move generation itself (which is commonly an expensive task) is done much faster with this bit-board design.</p>
+
+<h4 id="move-ordering">Move Ordering</h4>
+<p>It is as simple as that to find all possible moves in one direction. However, I added a few lines of code which allow a better move ordering, which is essential for finding a solution faster. With a standard move ordering the search might take many days. Hence, it might be reasonable to spend some CPU time on sorting the moves a little, in order to try more promising moves first. For example, the move ordering defers moves which end up in the corners of the board, since it is typically not that easy to get out of the corner again. Also some other types of moves are ordered to the back of the list, if they do not appear promising.</p>
+
+<h4 id="symmetries--transposition-tables">Symmetries &amp; Transposition Tables</h4>
+<p>When traversing the search tree many positions repeat since permutations of a move sequence can lead to identical positions. Furthermore, the Diamond-41 board is symmetric, having mirror and rotation symmetries. Hence, we can save a lot of computation time if we already know the values of repeating positions and/or of their symmetric equivalents. The value of a position is the minimum number of remaining stones of the final state when an optimal move sequence is performed – starting from this particular position. For example if we know that position <script type="math/tex">b_1</script> has a corresponding value of <script type="math/tex">3</script>, then a position <script type="math/tex">b_2</script>, which is identical to <script type="math/tex">b_1</script> after rotation, will also have a value of <script type="math/tex">3</script>. If we had a possibility to store the already known values of positions, then we could save some computation time when we observe a (symmetrically) equivalent position again, by simply retrieving the stored value and returning it. With such an approach, we could prune the search tree significantly and avoid redundant calculations without loosing any information. A common technique used for board games such as chess, checkers, etc., are the so called transposition tables. The idea is to define a suitable hash function which takes the board position (and no historic information of the move sequence which led to this position) and returns a hash value that can be mapped to an index in order to store the game-theoretic value of a position in a hash table. When we observe a new position we can then simply calculate the corresponding hash and check if there is an entry in the hash table. If we find an entry, we are lucky and can stop the search for the current position and cut off the connected sub-tree. If not, then we have to traverse the connected sub tree and then store the retrieved value afterwards in the table. For our problem, an entry in the table could look like this:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">HashElement</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">key</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
+<span class="p">};</span></code></pre></figure>
+
+<p>Since we are not performing an Alpha-Beta search or similar, there is no need to store further information rather than a key and a value. Note that we also have to store a key, which in this case is simply the position itself, since many board positions will map to the same hash table index. This is due to the fact that the hash function itself is typically not injective as well as the modulo operation required to break down the hash value to an index. Since it is not possible to prevent collisions it is always necessary to compare the key of the stored element with the current board position. From this problem another question arises: What do we do, if we want to store a key-value pair in the transposition table, but the corresponding slot is already occupied by another position? The answer for our case is simple: We simply overwrite the older entry in the table. This approach is often sub-optimal, since we might destroy valuable information (especially the values of positions located close to the root node were expensive to compute and could be replaced by those of positions which are very close to a leaf node of the tree), but in our case it still worked decently.
+Commonly, the size of the hash table is chosen to be a power of two, since the modulo operation to map a hash value to an table index turns out to be simply a bitwise AND:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">  <span class="kt">int</span> <span class="n">hashIndex</span> <span class="o">=</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span> <span class="n">hash</span> <span class="o">&amp;</span> <span class="n">HASHMASK</span><span class="p">);</span> <span class="c1">// = hash % pow(2,n)</span></code></pre></figure>
+
+<p>where <code class="highlighter-rouge">HASHMASK</code> is the size of the table minus one (<script type="math/tex">2^n - 1</script>). One last detail has to be mentioned: How do we define the hash function? Typically, for many board games the so called Zobrist keys are used. These are a clever way to encode a position by XOR-ing (exclusive or) random integers. For each possible move, one random number is generated initially and then used throughout the search. Whenever a move is performed, the current Zobrist key <script type="math/tex">Z</script> will be linked by an XOR and the corresponding random number of the move. This approach utilizes the associative and commutative property of the exclusive or as well as the involutory property (<script type="math/tex">x \oplus x = 0</script> ). In my program I did not use Zobrist keys for reasons of simplicity (but they can also be implemented with relatively small effort). Instead I use a simple hash function of the form</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cm">/*
+ * Function to compute the hash for a 64bit variable. Maybe Zobrist keys would
+ * // work better (has to be investigated in future).
+ ****/</span>
+<span class="kt">uint64_t</span> <span class="nf">getHash</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">^</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">30</span><span class="p">))</span> <span class="o">*</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mh">0xbf58476d1ce4e5b9</span><span class="p">);</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">^</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">27</span><span class="p">))</span> <span class="o">*</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mh">0x94d049bb133111eb</span><span class="p">);</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">^</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">31</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>which is based on <a href="https://zimbry.blogspot.de/2011/09/better-bit-mixing-improving-on.html">this interesting blog post by David Stafford</a>.</p>
+
+<h4 id="finally-the-solution-of-the-diamond-41-peg-solitaire-board">Finally, the Solution of the Diamond-41 Peg Solitaire Board…</h4>
+
+<p>After we put all our components for the solver together, we can finally start running it (the whole source code is listed below). Initially, I ran the solver with a modified termination condition: solutions with <script type="math/tex">n</script> (e.g. <script type="math/tex">n=5</script>) left-over pegs in the final state were also accepted. A solver can find such a solution much faster and can be tested in this way. After everything seemed to work as intended, the solver was started for <script type="math/tex">n=1</script> (a solution is searched-for where only one peg remains in the end). Surprisingly, the solver found the solution much faster than expected: After about 6 minutes of computation, an optimal move sequence was found. This move sequence is shown in the slideshow below.</p>
+
+<center><iframe class="slideshow-iframe" src="https://MarkusThill.github.io/slides/peg-solitaire2.html" style="width:400px" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe></center>
+
+<h2 id="source-code-for-solving-the-diamond-41-peg-solitaire">Source Code for Solving the Diamond-41 Peg Solitaire</h2>
+<p>The following code should be compile-able with most C compilers (<code class="highlighter-rouge">gcc</code>, etc.). When running the binary file, you will need some patience. The solver will require several minutes, up to one hour (depending on your machine and the size of the transposition table). Once the result is found, the program will list all moves and print the positions in reverse order.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;sys/time.h&gt;
+#include &lt;time.h&gt;
+#include &lt;stdlib.h&gt;
+</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">TERM_CRITERION</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">// Specifying some constants</span>
+<span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">ZERO</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">B32</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p32</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">B16</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p16</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">B08</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p8</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">B04</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p4</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">B02</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">B01</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kt">uint64_t</span> <span class="n">BORDER</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kt">uint64_t</span> <span class="n">BOARD</span> <span class="o">=</span> <span class="mh">0x1</span><span class="n">p0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">// Contains bit-masks masking the lowest n bits</span>
+<span class="k">const</span> <span class="kt">uint64_t</span> <span class="n">B_LVL</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="n">B01</span><span class="p">,</span> <span class="n">B02</span><span class="p">,</span> <span class="n">B04</span><span class="p">,</span> <span class="n">B08</span><span class="p">,</span> <span class="n">B16</span><span class="p">,</span> <span class="n">B32</span><span class="p">};</span>
+
+<span class="c1">// Size of the board (number of holes</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">NUMBOARDBITS</span> <span class="o">=</span> <span class="mi">41</span><span class="p">;</span>
+
+<span class="c1">// After initialization, this array will contain the bit-numbers of all holes starting</span>
+<span class="c1">// from the top (left to right in the rows).</span>
+<span class="kt">int</span> <span class="n">BOARDBITS</span><span class="p">[</span><span class="n">NUMBOARDBITS</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="c1">// Number of bits that specify the border. Note that several bits are used as border</span>
+<span class="c1">// on both sides of the board. This is due to the addressing scheme of the board and</span>
+<span class="c1">// does not do any harm.</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">NUMBOUNDARYBITS</span> <span class="o">=</span> <span class="mi">15</span><span class="p">;</span>
+
+<span class="c1">// The actual bits that specify the border of the board</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">BOUNDARYBITS</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">5</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">58</span><span class="p">};</span>
+
+<span class="c1">// Specifies the corners (edge) of the board. Required to prevent moves into the corners</span>
+<span class="c1">// (or actually try them later)</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">NUMCORNERS</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">CORNERBITS</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">46</span><span class="p">,</span> <span class="mi">57</span><span class="p">};</span>
+
+<span class="c1">// actual bit-mask for all the corner holes</span>
+<span class="kt">uint64_t</span> <span class="n">CORNERS</span> <span class="o">=</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1">// How many rows (columns) does the board have</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">NUMROWS</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+
+<span class="c1">// Operations for moving the pegs. An UP-operation will cause all pegs of the board to be</span>
+<span class="c1">// moved up by one (some might be moved into the boundary).</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">UP</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">DOWN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">LEFT</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">RIGHT</span> <span class="o">=</span> <span class="o">+</span><span class="mi">10</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">DIRECTIONS</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="n">DOWN</span><span class="p">,</span> <span class="n">LEFT</span><span class="p">,</span> <span class="n">UP</span><span class="p">,</span> <span class="n">RIGHT</span><span class="p">};</span>
+
+
+<span class="c1">// Constants for the transposition table. Using this table can significantly reduce the</span>
+<span class="c1">// the efforts for the backtracking algorithm, since re-occuring positions do not have to</span>
+<span class="c1">// be searched twice. Permutations of one move sequence might lead to the same position,</span>
+<span class="c1">// which only has to be investigated once.</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">HASHSIZE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">25</span><span class="p">);</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">HASHMASK</span> <span class="o">=</span> <span class="n">HASHSIZE</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">HASHMISS</span> <span class="o">=</span> <span class="o">-</span><span class="mi">99</span><span class="p">;</span>
+
+<span class="c1">// Number of symmetries. In total there are actually 8 symmetric positions for each board.</span>
+<span class="c1">// Currently, only vertically and horizontally mirrored positions are considered. Rotations</span>
+<span class="c1">// are not yet implemented.</span>
+<span class="k">static</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">NUMSYMMETRIES</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+
+<span class="c1">// Masks for horizontal and vertical lines. Needed for mirroring a board along the vertical or</span>
+<span class="c1">// horizontal axis</span>
+<span class="k">static</span> <span class="kt">uint64_t</span> <span class="n">HORLINES</span><span class="p">[</span><span class="n">NUMROWS</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="k">static</span> <span class="kt">uint64_t</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="n">NUMROWS</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="c1">// Definition of one element of the transposition table. It contains a key (actual board, since several positions</span>
+<span class="c1">// can be mapped to the same hash-table entry) and a value (number of remaining pegs when solving this specific</span>
+<span class="c1">// position).</span>
+<span class="k">struct</span> <span class="n">HashElement</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">key</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">struct</span> <span class="n">HashElement</span> <span class="n">hashTable</span><span class="p">[</span><span class="n">HASHSIZE</span><span class="p">];</span>
+
+<span class="cm">/*
+ * Modulo operator, since the %-operator is the remainder and cannot deal with negative integers
+ */</span>
+<span class="kt">int</span> <span class="nf">mod</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">r</span> <span class="o">+</span> <span class="n">b</span> <span class="o">:</span> <span class="n">r</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Determines the position of a single bit in a 64bit variable in logarithmic time.
+ */</span>
+<span class="kt">int</span> <span class="nf">bitPos</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">bPos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">B_LVL</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="n">ZERO</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">nBits</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">B01</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">;</span>
+            <span class="n">x</span> <span class="o">&gt;&gt;=</span> <span class="n">nBits</span><span class="p">;</span>
+            <span class="n">bPos</span> <span class="o">+=</span> <span class="n">nBits</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">bPos</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Fast way to count the one-bits in a 64-bit variable.
+ * Only requires as many iterations as bits are set.
+ */</span>
+<span class="kt">int</span> <span class="nf">bitCount</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">ZERO</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">x</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+        <span class="n">c</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Rotatate 64-bit variable x by y bits. Note that this is not a shift-operation but a real
+ * rotate-left
+ */</span>
+<span class="k">static</span> <span class="kr">inline</span> <span class="kt">uint64_t</span> <span class="nf">rol</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">x</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">__asm__</span> <span class="p">(</span><span class="s">"rolq %1, %0"</span> <span class="o">:</span> <span class="s">"+g"</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">:</span> <span class="s">"cJ"</span> <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span> <span class="n">y</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Compute the bit indexes of the board from top to bottom (left to right in the rows) and from left to
+ * right (from top to bottom in each column)
+ */</span>
+<span class="kt">void</span> <span class="nf">initBOARDBits</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">startRow</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">startCol</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+    <span class="c1">// start with top cell and move line by line through</span>
+    <span class="c1">// the board (from left to right in each row).</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NUMROWS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">startRow</span><span class="p">;</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">startCol</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nrow</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span> <span class="o">%</span> <span class="mi">64</span><span class="p">,</span> <span class="n">m</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">BOARDBITS</span><span class="p">[</span><span class="n">l</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
+            <span class="n">HORLINES</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">k</span><span class="p">);</span>
+            <span class="n">VERTLINES</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">nrow</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">?</span> <span class="n">nrow</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">:</span> <span class="n">nrow</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+
+        <span class="c1">// % operator is a remainder operator and not a modulo operator</span>
+        <span class="n">startRow</span> <span class="o">=</span> <span class="n">mod</span><span class="p">((</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">?</span> <span class="n">startRow</span> <span class="o">-</span> <span class="mi">11</span> <span class="o">:</span> <span class="n">startRow</span> <span class="o">+</span> <span class="mi">9</span><span class="p">),</span> <span class="mi">64</span><span class="p">);</span>
+        <span class="n">startCol</span> <span class="o">=</span> <span class="n">mod</span><span class="p">((</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">?</span> <span class="n">startCol</span> <span class="o">+</span> <span class="mi">11</span> <span class="o">:</span> <span class="n">startCol</span> <span class="o">+</span> <span class="mi">9</span><span class="p">),</span> <span class="mi">64</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Initialize the bit-masks that describe the boundary and the actual board.
+ */</span>
+<span class="kt">void</span> <span class="nf">initBoardnBoundary</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NUMBOUNDARYBITS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">BORDER</span> <span class="o">|=</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">BOUNDARYBITS</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NUMBOARDBITS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">BOARD</span> <span class="o">|=</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">BOARDBITS</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Init the bit-mask representing all 16 corner holes of the board
+ */</span>
+<span class="kt">void</span> <span class="nf">initCorners</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">CORNERS</span> <span class="o">=</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NUMCORNERS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">CORNERS</span> <span class="o">|=</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">CORNERBITS</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Initialize the transposition table
+ */</span>
+<span class="kt">void</span> <span class="nf">initHashTable</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">HASHSIZE</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">hashTable</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">key</span> <span class="o">=</span> <span class="mi">0UL</span><span class="p">;</span>
+        <span class="n">hashTable</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">initBOARDBits</span><span class="p">();</span>
+    <span class="n">initBoardnBoundary</span><span class="p">();</span>
+    <span class="n">initHashTable</span><span class="p">();</span>
+    <span class="n">initCorners</span><span class="p">();</span>
+<span class="p">}</span>
+
+
+<span class="cm">/*
+ * Function to print the board to console
+ */</span>
+<span class="kt">void</span> <span class="nf">printBoard</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nrow</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NUMROWS</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">NUMROWS</span> <span class="o">-</span> <span class="n">nrow</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">" "</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"|"</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">nrow</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//char symb = 'o';</span>
+            <span class="kt">char</span> <span class="n">symb</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="n">BOARDBITS</span><span class="p">[</span><span class="n">l</span><span class="o">++</span><span class="p">])</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ZERO</span> <span class="o">?</span> <span class="sc">'x'</span> <span class="o">:</span> <span class="sc">'o'</span><span class="p">;</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"%c|"</span><span class="p">,</span> <span class="n">symb</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">nrow</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">?</span> <span class="n">nrow</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">:</span> <span class="n">nrow</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Removes one peg from the board and returns the modified board
+ */</span>
+<span class="kt">uint64_t</span> <span class="nf">removePeg</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bit</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">b</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="n">bit</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Place a peg at a certain position and return the modified board
+ */</span>
+<span class="kt">uint64_t</span> <span class="nf">setPeg</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bit</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">b</span> <span class="o">|</span> <span class="p">(</span><span class="mi">1UL</span> <span class="o">&lt;&lt;</span> <span class="n">bit</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="cm">/*
+ * Function to compute the hash for a 64bit variable. Maybe Zobrist keys would work better (has to be investigated
+ * in future).
+ */</span>
+<span class="kt">uint64_t</span> <span class="nf">getHash</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">^</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">30</span><span class="p">))</span> <span class="o">*</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mh">0xbf58476d1ce4e5b9</span><span class="p">);</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">^</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">27</span><span class="p">))</span> <span class="o">*</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mh">0x94d049bb133111eb</span><span class="p">);</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">^</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">31</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Mirror a board along the horizontal axis. This can be done quite fast.
+ */</span>
+<span class="kt">uint64_t</span> <span class="nf">mirrorHor</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">m</span> <span class="o">=</span> <span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">DOWN</span><span class="p">);</span> <span class="c1">// First row</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">DOWN</span><span class="p">);</span> <span class="c1">// Second row</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">DOWN</span><span class="p">);</span> <span class="c1">// Third row</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">DOWN</span><span class="p">);</span> <span class="c1">// Fourth row</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">UP</span><span class="p">);</span>   <span class="c1">// Sixth row</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">UP</span><span class="p">);</span>   <span class="c1">// Seventh row</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">UP</span><span class="p">);</span>   <span class="c1">// Eighth row</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">HORLINES</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">UP</span><span class="p">);</span>   <span class="c1">// Ninth row</span>
+    <span class="k">return</span> <span class="n">m</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Mirror a board along the vertical axis. This can be done quite fast.
+ */</span>
+<span class="kt">uint64_t</span> <span class="nf">mirrorVert</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">m</span> <span class="o">=</span> <span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">RIGHT</span><span class="p">);</span> <span class="c1">// First Column</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">RIGHT</span><span class="p">);</span> <span class="c1">// Second Column</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">RIGHT</span><span class="p">);</span> <span class="c1">// Third Column</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">RIGHT</span><span class="p">);</span> <span class="c1">// Fourth Column</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">LEFT</span><span class="p">);</span> <span class="c1">// Sixth Column</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">LEFT</span><span class="p">);</span> <span class="c1">// Seventh Column</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">LEFT</span><span class="p">);</span> <span class="c1">// Eighth Column</span>
+    <span class="n">m</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">VERTLINES</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">LEFT</span><span class="p">);</span> <span class="c1">// Ninth Column</span>
+    <span class="k">return</span> <span class="n">m</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Compute all mirrored positions for a board b and return all in the array m
+ */</span>
+<span class="kt">void</span> <span class="nf">mirror</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">m</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">mirrorVert</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">mirrorHor</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="n">m</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">mirrorHor</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Check if a position b or a mirrored equivalent is already stored in the transposition table. If yes, then
+ * return the value for this position.
+ */</span>
+<span class="kt">int</span> <span class="nf">getTransposition</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">m</span><span class="p">[</span><span class="n">NUMSYMMETRIES</span><span class="p">];</span>
+    <span class="n">mirror</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NUMSYMMETRIES</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint64_t</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">getHash</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="kt">int</span> <span class="n">hashIndex</span> <span class="o">=</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span> <span class="n">hash</span> <span class="o">&amp;</span> <span class="n">HASHMASK</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">hashTable</span><span class="p">[</span><span class="n">hashIndex</span><span class="p">].</span><span class="n">key</span> <span class="o">==</span> <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">hashTable</span><span class="p">[</span><span class="n">hashIndex</span><span class="p">].</span><span class="n">value</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">HASHMISS</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * After a position is completely evaluated, store the value of the position in the transposition table
+ */</span>
+<span class="kt">void</span> <span class="nf">putTransposition</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">getHash</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">hashIndex</span> <span class="o">=</span> <span class="p">((</span><span class="kt">int</span><span class="p">)</span> <span class="n">hash</span> <span class="o">&amp;</span> <span class="n">HASHMASK</span><span class="p">);</span>
+    <span class="n">hashTable</span><span class="p">[</span><span class="n">hashIndex</span><span class="p">].</span><span class="n">key</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">hashTable</span><span class="p">[</span><span class="n">hashIndex</span><span class="p">].</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Generates a list of possible moves in all directions for a board position b.
+ *
+ */</span>
+<span class="kt">void</span> <span class="nf">generateMoves</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="o">*</span><span class="k">const</span> <span class="n">allmv</span><span class="p">)</span> <span class="p">{</span><span class="c1">// Generate all possible moves</span>
+    <span class="kt">int</span> <span class="n">dir</span><span class="p">;</span>
+    <span class="kt">uint64_t</span> <span class="n">mv</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dir</span> <span class="o">=</span> <span class="n">DIRECTIONS</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">mv</span> <span class="o">=</span> <span class="n">rol</span><span class="p">(</span><span class="n">rol</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">BOARD</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">BOARD</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">b</span><span class="p">);</span>
+        <span class="kt">uint64_t</span> <span class="n">cmv</span> <span class="o">=</span> <span class="n">mv</span> <span class="o">&amp;</span> <span class="n">CORNERS</span><span class="p">;</span> <span class="c1">// find all moves into corners</span>
+        <span class="kt">uint64_t</span> <span class="n">zmv</span> <span class="o">=</span> <span class="n">mv</span> <span class="o">&amp;</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// Move into the center is not good as well</span>
+
+        <span class="c1">// also some fields in each direction should be avoided first. These typically</span>
+        <span class="c1">// violate a so called Pagoda function</span>
+        <span class="kt">uint64_t</span> <span class="n">dmv</span> <span class="o">=</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">DOWN</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">dmv</span> <span class="o">=</span> <span class="n">mv</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span> <span class="o">|</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">53</span> <span class="o">|</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">62</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">UP</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">dmv</span> <span class="o">=</span> <span class="n">mv</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span> <span class="o">|</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">11</span> <span class="o">|</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">55</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">LEFT</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">dmv</span> <span class="o">=</span> <span class="n">mv</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">44</span> <span class="o">|</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">53</span> <span class="o">|</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">55</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="n">RIGHT</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">dmv</span> <span class="o">=</span> <span class="n">mv</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span> <span class="o">|</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">11</span> <span class="o">|</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Remove these moves from the initial move list and try them later,</span>
+        <span class="c1">// since they are likely sub-optimal</span>
+        <span class="kt">uint64_t</span> <span class="n">mvLater</span> <span class="o">=</span> <span class="n">cmv</span> <span class="o">|</span> <span class="n">zmv</span> <span class="o">|</span> <span class="n">dmv</span><span class="p">;</span>
+        <span class="n">mv</span> <span class="o">^=</span> <span class="n">mvLater</span><span class="p">;</span>
+        <span class="n">allmv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mv</span><span class="p">;</span>
+        <span class="n">allmv</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">mvLater</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">backtrack</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">);</span>
+
+<span class="cm">/*
+ * Try all moves coded in mv (contains the destination holes) for a board b in a direction dir. Return, if a terminal
+ * position is reached.
+ */</span>
+<span class="kt">int</span> <span class="nf">tryMoves</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">mv</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dir</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">mv</span> <span class="o">!=</span> <span class="n">ZERO</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">uint64_t</span> <span class="n">x</span> <span class="o">=</span> <span class="p">((</span><span class="n">mv</span> <span class="o">-</span> <span class="n">UINT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">^</span> <span class="n">mv</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mv</span><span class="p">;</span>
+
+        <span class="c1">// perform move</span>
+        <span class="n">b</span> <span class="o">|=</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// set peg at new position</span>
+        <span class="n">b</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">rol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">dir</span><span class="p">);</span> <span class="c1">// remove jumped-over peg</span>
+        <span class="n">b</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">rol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dir</span><span class="p">);</span> <span class="c1">// remove  peg from old position</span>
+
+        <span class="c1">//recursion</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">backtrack</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+
+        <span class="c1">// undo move</span>
+        <span class="n">b</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">x</span><span class="p">;</span> <span class="c1">// remove peg from new position again</span>
+        <span class="n">b</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">dir</span><span class="p">);</span> <span class="c1">// add jumped-over peg again</span>
+        <span class="n">b</span> <span class="o">|=</span> <span class="n">rol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dir</span><span class="p">);</span> <span class="c1">// set peg to old position</span>
+
+        <span class="c1">//printBoard(b);</span>
+        <span class="n">mv</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="n">mv</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// remove this move from the list</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">res</span> <span class="o">&lt;=</span> <span class="n">TERM_CRITERION</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">"Move: %d, %d"</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">bitPos</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>
+            <span class="n">printBoard</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// no solution found</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+ * Backtracking function to solve the board. It investigates all moves in the 4 possible directions. It randomly
+ * selects the first direction to enforce different searching order in case the solver is started several times.
+ * The possible moves for one position can be found very fast with only a dew bitwise operations.
+ */</span>
+<span class="kt">int</span> <span class="nf">backtrack</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// first check transposition table for this particular position</span>
+    <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">getTransposition</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">!=</span> <span class="n">HASHMISS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+
+    <span class="c1">// will contain all possible moves later. Indexes 0-3 will contain the most promising moves in all 4 directions,</span>
+    <span class="c1">// and indexes 4-7 will contain the less promising moves in all directions</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">numTrys</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+    <span class="kt">uint64_t</span> <span class="n">allmv</span><span class="p">[</span><span class="n">numTrys</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">dir</span><span class="p">;</span>
+
+    <span class="c1">// Find all possible moves, sorted according to some characteristics</span>
+    <span class="n">generateMoves</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">allmv</span><span class="p">);</span>
+
+
+    <span class="kt">uint64_t</span> <span class="n">mv</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="n">nomv</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">// Try all possible moves.</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numTrys</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mv</span> <span class="o">=</span> <span class="n">allmv</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">dir</span> <span class="o">=</span> <span class="n">DIRECTIONS</span><span class="p">[</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mi">3</span><span class="p">];</span> <span class="c1">// = i % 4</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mv</span> <span class="o">!=</span> <span class="n">ZERO</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">tryMoves</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">mv</span><span class="p">,</span> <span class="n">dir</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">res</span> <span class="o">&lt;=</span> <span class="n">TERM_CRITERION</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Not neccessary to put position in transposition table</span>
+                <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="c1">// if no moves in specific direction is possible</span>
+            <span class="n">nomv</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nomv</span> <span class="o">==</span> <span class="n">numTrys</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// if no move in any direction was possible</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">bitCount</span><span class="p">(</span><span class="n">b</span><span class="p">);</span> <span class="c1">// count number of pegs left</span>
+    <span class="p">}</span>
+
+    <span class="n">putTransposition</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span> <span class="c1">// no move could lead to a solution</span>
+
+<span class="p">}</span>
+
+
+<span class="cm">/*
+ * Root-node of the solver. Initializes the board and all other necessary variables
+ * and then starts an exhaustive search.
+ */</span>
+<span class="kt">void</span> <span class="nf">solve</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">init</span><span class="p">();</span>
+
+    <span class="c1">// initial board</span>
+    <span class="kt">uint64_t</span> <span class="n">b</span> <span class="o">=</span> <span class="n">BOARD</span><span class="p">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">removePeg</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">57</span><span class="p">);</span> <span class="c1">// remove one peg</span>
+
+    <span class="c1">// Start back-tracking</span>
+    <span class="n">backtrack</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Lets start solving the Diamond-41 peg solitaire problem..."</span><span class="p">);</span>
+    <span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+    <span class="kt">time_t</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">elapsed</span><span class="p">;</span>  <span class="c1">// seconds</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">solve</span><span class="p">();</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">elapsed</span> <span class="o">=</span> <span class="n">difftime</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Time in minutes: %f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">/</span> <span class="mi">60</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/* ****/</span></code></pre></figure>
+
+<h2 id="source-code-for-solving-the-english-peg-solitaire">Source Code for Solving the English Peg Solitaire</h2>
+<p>Save the following code in a file <code class="highlighter-rouge">solitaire-en.cpp</code> and compile with <code class="highlighter-rouge">g++ solitaire-en.cpp</code> and then run the binary file. I wrote this code a long time ago, when I started learning programming. So, you will find many redundant code segments and strange programming styles. Nevertheless, the solver works and delivers exactly the solution which is shown in the above slideshow.</p>
+
+<p>Interestingly, this naive implementation of the problem actually finds the solution very fast (on my computer in less than a second). Most likely, the solver has a good move order (just by chance) which leads to this fast solution. When changing the order of the moves, the solver can require several hours in order to find a correct solution.</p>
+
+<p><code class="highlighter-rouge">solitaire-en.cpp</code></p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;fstream&gt;
+#include &lt;iostream&gt;
+</span>
+<span class="cm">/*Output-Path for the generated moves*/</span>
+<span class="cp">#define PATH "moves.txt"
+</span>
+<span class="cm">/*
+ * Structure of the board. It has a dimension of 9 x 9, to also allow to put a border
+ * around the actual field.
+ */</span>
+<span class="kt">short</span> <span class="kt">int</span> <span class="n">field</span><span class="p">[</span><span class="mi">9</span><span class="p">][</span><span class="mi">9</span><span class="p">];</span>
+
+<span class="cm">/*
+* Tracks the smallest number of pegs left on the board
+*/</span>
+<span class="kt">short</span> <span class="kt">int</span> <span class="n">minimum</span> <span class="o">=</span> <span class="mi">99</span><span class="p">;</span>
+
+<span class="cm">/*
+* Keeps track of the current move sequence during the search
+*/</span>
+<span class="kt">short</span> <span class="kt">int</span> <span class="n">move</span><span class="p">[</span><span class="mi">31</span><span class="p">][</span><span class="mi">3</span><span class="p">];</span>
+
+<span class="cm">/*
+* Initializes the board with proper values.
+*/</span>
+<span class="kt">void</span> <span class="nf">initialize</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="cm">/*
+* The most important function of this program...
+*/</span>
+<span class="kt">void</span> <span class="nf">computation</span><span class="p">(</span><span class="kt">short</span> <span class="n">instance</span><span class="p">);</span>
+
+<span class="cm">/*Counts the number of pegs on the board*/</span>
+<span class="kt">short</span> <span class="kt">int</span> <span class="nf">CountStones</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="cm">/*Writes a found solution to a file*/</span>
+<span class="kt">void</span> <span class="nf">WriteToFile</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">initialize</span><span class="p">();</span>   <span class="c1">// Prepare everyting</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"The solution will be saved in moves.txt."</span><span class="p">;</span>
+    <span class="n">computation</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="c1">// Start exhaustive search</span>
+    <span class="n">WriteToFile</span><span class="p">();</span>  <span class="c1">// Save solution</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"I found a solution...."</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">initialize</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">short</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">9</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">field</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="c1">// Top boundary of the board</span>
+        <span class="n">field</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="c1">// Bottom boundary of the board</span>
+        <span class="n">field</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="c1">// Left boundary of the board</span>
+        <span class="n">field</span><span class="p">[</span><span class="mi">8</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="c1">// Right boundary of the board</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">field</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="cm">/* Fill the corners of the board with twos, since they don't have holes.*/</span>
+    <span class="cm">/* Top left*/</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+
+    <span class="cm">/*To right*/</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+
+    <span class="cm">/*Bottom left*/</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+
+    <span class="cm">/*bottom right*/</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">6</span><span class="p">][</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">7</span><span class="p">][</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+
+    <span class="cm">/*The hole in the middle has to be empty*/</span>
+    <span class="n">field</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="cm">/*Recursive function for backtracking
+
+1. Find a peg
+2. Find neighboring peg and check if there is a hole one further
+3. Peg jumps over the other one into the hole. The peg has to be moved by 2 places and the other peg has to
+be removed. */</span>
+
+<span class="kt">void</span> <span class="nf">computation</span><span class="p">(</span><span class="kt">short</span> <span class="n">instance</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">short</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>              <span class="c1">// Loop variables</span>
+    <span class="n">bool</span> <span class="n">NoPossibilities</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>  <span class="c1">// This variable tracks, if a move could be performed or not from the current position</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>      <span class="c1">// Start with 1, since 0 is the boundary</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  <span class="c1">// The same here...</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// If there is a peg in this hole...</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// If there is another peg on the right...</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="c1">// and if one further there is an empty hole</span>
+                    <span class="p">{</span>
+                        <span class="n">NoPossibilities</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>  <span class="c1">// Set to false, since we have an option for a move</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>         <span class="c1">// Remove peg from its original position</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>       <span class="c1">// Remove the peg over which we jump</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>       <span class="c1">// Put first peg into new hole</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">j</span><span class="p">;</span>   <span class="c1">// Save old x-position of peg</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>   <span class="c1">// Save old y-position of peg</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span>  <span class="c1">// Save direction of the move (20, for right)</span>
+                        <span class="n">computation</span><span class="p">(</span><span class="n">instance</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// recursion step</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">minimum</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>           <span class="c1">// In case a solution was found, stop the search</span>
+                            <span class="k">break</span><span class="p">;</span>               <span class="c1">// stop here...</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>           <span class="c1">// Undo move...</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// If there is another peg on the left...</span>
+                <span class="p">{</span>
+                    <span class="cm">/* almost same as above */</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">NoPossibilities</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">j</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=-</span><span class="mi">20</span><span class="p">;</span>
+                        <span class="n">computation</span><span class="p">(</span><span class="n">instance</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">minimum</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="k">break</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// If there is another peg below ...</span>
+                <span class="p">{</span>
+                    <span class="cm">/* almost same as above */</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">NoPossibilities</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">j</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+                        <span class="n">computation</span><span class="p">(</span><span class="n">instance</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">minimum</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="k">break</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// If there is another peg above ...</span>
+                <span class="p">{</span>
+                    <span class="cm">/* almost same as above */</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">NoPossibilities</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">j</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+                        <span class="n">move</span><span class="p">[</span><span class="n">instance</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=-</span><span class="mi">2</span><span class="p">;</span>
+                        <span class="n">computation</span><span class="p">(</span><span class="n">instance</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">minimum</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="k">break</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                        <span class="n">field</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">NoPossibilities</span><span class="p">)</span> <span class="c1">// If no move could be performed...</span>
+    <span class="p">{</span>
+        <span class="kt">short</span> <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+        <span class="n">count</span><span class="o">=</span><span class="n">CountStones</span><span class="p">();</span>  <span class="c1">// Count remaining pegs</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">count</span><span class="o">==</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">field</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// In case only one peg is left in the center</span>
+            <span class="n">minimum</span><span class="o">=</span><span class="n">count</span><span class="p">;</span>    <span class="c1">// set minimum = 1, which stops the search</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+* Counts the number of pegs on the board
+*/</span>
+<span class="kt">short</span> <span class="kt">int</span> <span class="nf">CountStones</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">short</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>      <span class="c1">// Starts with 1, since 0 is the boarndary</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">8</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>  <span class="c1">// same here....</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">field</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// In case there is a peg at this position</span>
+                <span class="n">count</span><span class="o">++</span><span class="p">;</span>       <span class="c1">// increase counter</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+* Write solution to file....
+*/</span>
+<span class="kt">void</span> <span class="nf">WriteToFile</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">file</span><span class="p">;</span>
+    <span class="kt">short</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+    <span class="n">file</span><span class="p">.</span><span class="n">open</span><span class="p">(</span><span class="n">PATH</span><span class="p">);</span>  <span class="c1">// Create file specified above</span>
+    <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="s">"Explanation: Every move consists of three values.</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="s">"1. X-Position of the peg</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="s">"2. Y-Position of the peg</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="s">"3. Direction, in which the selected peg jumps</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="s">"(20-&gt;right, -20 left, 2 down, -2 up)</span><span class="se">\n\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">31</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="n">move</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+        <span class="n">file</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">file</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/solving-peg-solitaire/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/solving-peg-solitaire/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/solving-peg-solitaire/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/template/using-slideshows-in-jekyll/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

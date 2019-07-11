@@ -1,0 +1,713 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school students starting with programming classes compute the first few Fibonacci numbers with their programs using different iterative or recursive approaches. One reason for its popularity might be that the Fibonacci sequence is closely related to many other fields of math and physics, often in very astonishing ways which one might not expect. Usually, the Fibonacci sequence is defined in a recursive manner. Hence, in order to compute the n-th Fibonacci number all previous Fibonacci numbers have to be computed first. In this blog post we will derive an interesting closed-form solution to directly compute any arbitrary Fibonacci number without the necessity to obtain its predecessors first. Interestingly, we will solve this problem with the help of a tool – the so called Z-Transform – which is actually more common in the field of digital signal processing." />
+<meta property="og:description" content="The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school students starting with programming classes compute the first few Fibonacci numbers with their programs using different iterative or recursive approaches. One reason for its popularity might be that the Fibonacci sequence is closely related to many other fields of math and physics, often in very astonishing ways which one might not expect. Usually, the Fibonacci sequence is defined in a recursive manner. Hence, in order to compute the n-th Fibonacci number all previous Fibonacci numbers have to be computed first. In this blog post we will derive an interesting closed-form solution to directly compute any arbitrary Fibonacci number without the necessity to obtain its predecessors first. Interestingly, we will solve this problem with the help of a tool – the so called Z-Transform – which is actually more common in the field of digital signal processing." />
+<link rel="canonical" href="https://markusthill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" />
+<meta property="og:url" content="https://markusthill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-10T11:00:35+02:00" />
+<script type="application/ld+json">
+{"description":"The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school students starting with programming classes compute the first few Fibonacci numbers with their programs using different iterative or recursive approaches. One reason for its popularity might be that the Fibonacci sequence is closely related to many other fields of math and physics, often in very astonishing ways which one might not expect. Usually, the Fibonacci sequence is defined in a recursive manner. Hence, in order to compute the n-th Fibonacci number all previous Fibonacci numbers have to be computed first. In this blog post we will derive an interesting closed-form solution to directly compute any arbitrary Fibonacci number without the necessity to obtain its predecessors first. Interestingly, we will solve this problem with the help of a tool – the so called Z-Transform – which is actually more common in the field of digital signal processing.","headline":"Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform","dateModified":"2019-07-10T11:00:35+02:00","datePublished":"2019-07-10T11:00:35+02:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2019-07-10T11:00:35+02:00">July 10, 2019</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~5 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+      <h1 class="post-title entry-title">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</h1>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school students starting with programming classes compute the first few Fibonacci numbers with their programs using different iterative or recursive approaches. One reason for its popularity might be that the Fibonacci sequence is closely related to many other fields of math and physics, often in very astonishing ways which one might not expect. Usually, the Fibonacci sequence is defined in a recursive manner. Hence, in order to compute the n-th Fibonacci number all previous Fibonacci numbers have to be computed first. In this blog post we will derive an interesting closed-form solution to directly compute any arbitrary Fibonacci number without the necessity to obtain its predecessors first. Interestingly, we will solve this problem with the help of a tool – the so called Z-Transform – which is actually more common in the field of digital signal processing.</p>
+
+<!--more-->
+<p>The Fibonacci sequence, starting with</p>
+
+<script type="math/tex; mode=display">F_0 = 0, \, F_1=1</script>
+
+<p>can be defined recursively as</p>
+
+<script type="math/tex; mode=display">\begin{align}
+F_n = F_{n-1} + F_{n-2}, \, \, \mbox{for} \, n \in \mathbb{N}_{>1} \label{eq:fibo}
+\end{align}</script>
+
+<p>A simple recursive function in R, implementing the sequence could look like this:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">fibo</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="n">return</span><span class="w"> </span><span class="p">(</span><span class="kc">NaN</span><span class="p">);</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">return</span><span class="w"> </span><span class="p">(</span><span class="m">0</span><span class="p">);</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="n">return</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="p">);</span><span class="w">
+  </span><span class="n">return</span><span class="w"> </span><span class="p">(</span><span class="n">fibo</span><span class="p">(</span><span class="n">n</span><span class="m">-1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">fibo</span><span class="p">(</span><span class="n">n</span><span class="m">-2</span><span class="p">));</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="n">sapply</span><span class="p">(</span><span class="m">0</span><span class="o">:</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">fibo</span><span class="p">)</span></code></pre></figure>
+
+<p>The first 20 elements <script type="math/tex">F_0 \ldots F_{19}</script> of the Fibonacci Sequence are thus:<br />
+0, 1,    1,    2,    3,    5,    8,   13,   21,   34,   55,   89,  144,  233,  377,  610,  987, 1597, 2584, 4181.</p>
+
+<p>Surprisingly (not really, actually, if you think about it) the Fibonacci sequence can also be generated using an IIR (infinite impuls response) filter. Consider the difference equation of an IIR-filter in the form:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+y[n]=y[n-1]+y[n-2]+x[n-1].
+\end{align}</script>
+
+<p>The impuls response of this filter is defined as:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+h[n]=h[n-1]+h[n-2]+\delta[n-1],
+\end{align}</script>
+
+<p>where <script type="math/tex">\delta[n]</script> is the Kronecker Delta-Function. So at the time <script type="math/tex">n=1</script>, we give a single impulse into our system and it starts running and computing a sequence of numbers. We get:
+<script type="math/tex">\begin{align}
+h[0]=0 \\
+h[1]=1 \\
+h[2]=1\\
+h[3]=2\\
+\vdots
+\end{align}</script></p>
+
+<p>Let us now compute the impulse response for the given filter with some code and plot the results. Since the filter coefficients usually have to be passed in a strange way to most functions of the dsp-toolboxes, which requires reading off the coefficients from the transfer function <script type="math/tex">H(z)</script>, let us first compute the transfer function (the Z-transform of our filter in time domain):</p>
+
+<script type="math/tex; mode=display">\begin{align}
+y[n]=y[n-1]+y[n-2]+x[n-1] \\
+\mathcal{Z} \{ y[n] \} = \mathcal{Z} \{ y[n-1] \} + \mathcal{Z} \{ y[n-2] \} + \mathcal{Z} \{ x[n-1] \}\\
+Y(z) = z^{-2}Y(z) + z^{-1}Y(z) + z^{-1}X(z) \\
+Y(z)  - z^{-1}Y(z) - z^{-2}Y(z) = z^{-1}X(z) \\
+Y(z) \big(1- z^{-1} - z^{-2}  \big) = z^{-1}X(z)\\
+H(z)=\frac{Y(z)}{X(z)} = \frac{z^{-1}}{1- z^{-1} - z^{-2}} \label{eq:z-transform}
+\end{align}</script>
+
+<p>Now, we can read off the filter coefficients (from the numerator for the forward coefficients and from the denominator for the reverse coefficients). Hence, the forward coefficients are</p>
+
+<script type="math/tex; mode=display">\begin{align}
+b = [0, 1]
+\end{align}</script>
+
+<p>and the reverse coefficients are</p>
+
+<script type="math/tex; mode=display">\begin{align}
+a = [1,-1,-1].
+\end{align}</script>
+
+<p>Subsequently, we can compute and plot the impulse response of our system.</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">-1</span><span class="p">)</span><span class="w">
+</span><span class="n">h</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">impz</span><span class="p">(</span><span class="n">filt</span><span class="o">=</span><span class="n">b</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">=</span><span class="m">10</span><span class="p">)</span><span class="o">$</span><span class="n">x</span><span class="w"> </span><span class="c1"># compute impulse response for our Filter</span><span class="w">
+
+</span><span class="c1"># Plot the impulse response</span><span class="w">
+</span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">h</span><span class="o">$</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">h</span><span class="o">$</span><span class="n">x</span><span class="p">)</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_segment</span><span class="p">(</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">xend</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">yend</span><span class="o">=</span><span class="n">y</span><span class="p">),</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="s2">"darkgrey"</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">shape</span><span class="o">=</span><span class="m">21</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="o">=</span><span class="s2">"orange"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_text</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">y</span><span class="p">),</span><span class="n">hjust</span><span class="o">=</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">vjust</span><span class="o">=</span><span class="m">-.7</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_light</span><span class="p">(</span><span class="n">base_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">18</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="o">:</span><span class="m">10</span><span class="p">))</span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"n"</span><span class="p">)</span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"h[n]"</span><span class="p">)</span><span class="w">
+</span><span class="n">p</span></code></pre></figure>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2019-07-10-deriving-a-closed-form-solution-of-the-fibonacci-sequence/fibo-impulse-response.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 1:</b>  The impulse response (first 10 values) of our second-order IIR filter. </p>
+      </figcaption>
+    
+</figure>
+
+<p>Not surprisingly, the impulse response corresponds exactly to the Fibonacci sequence.</p>
+
+<p>In Eq. \eqref{eq:z-transform}, we already computed the transfer function of our “Fibonacci”-filter.
+Let us now see, if we can obtain another representation of the impulse response in time domain, which is no longer recursive and which depicts a closed-form description of the Fibonacci numbers. Such a representation would really be astonishing. We will do the following:</p>
+<ol>
+  <li>Compute the partical fraction decomposition of our transfer function in Eq. \eqref{eq:z-transform}</li>
+  <li>Look at the Z-transform of an certain type of infinite series</li>
+  <li>Use the insights from 2. to transform our transfer function back into time domain and removing the recursive structure of the impulse response</li>
+  <li>Take the new impulse response to generate arbitrary Fibonacci numbers immediately</li>
+</ol>
+
+<h1 id="1-partial-fraction-decomposition-of-hz">1. Partial Fraction Decomposition of H(z)</h1>
+<p>Initially, we have to find the poles of our system
+<script type="math/tex">\begin{align}
+H(z)=\frac{Y(z)}{X(z)} = \frac{z^{-1}}{1- z^{-1} - z^{-2}},
+\end{align}</script>
+hence, the roots in the denominator:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+z^2-z-1=0
+\end{align}</script>
+
+<p>The 2 (non-complex) roots can be trivially found to be:
+<script type="math/tex">\begin{align}
+z_{1,2}=\frac{1}{2}(1\pm \sqrt 5).
+\end{align}</script></p>
+
+<p>Now we can write our transfer function as:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+H(z)=\frac{Y(z)}{X(z)} &= \frac{z^{-1}}{1- z^{-1} - z^{-2}} \\
+&= \frac{z^{-1}}{\big(1-\frac{1}{2}(1 +\sqrt 5)z^{-1} \big) \big(1-\frac{1}{2}(1 -\sqrt 5)z^{-1}\big)} \\
+&= \frac{A}{1-\frac{1}{2}(1 +\sqrt 5)z^{-1}} + \frac{B}{1-\frac{1}{2}(1 -\sqrt 5)z^{-1}}
+\end{align} %]]></script>
+
+<p>In order to find the constants <script type="math/tex">A</script> and <script type="math/tex">B</script>, we can multiply with the denominator of each term and evaluate the expression at the poles we found previously (done examplarily here for the constant <script type="math/tex">A</script>):</p>
+
+<script type="math/tex; mode=display">\begin{align}
+z^{-1}\frac{1-\frac{1}{2}(1 +\sqrt 5)z^{-1}}{\big(1-\frac{1}{2}(1 +\sqrt 5)z^{-1} \big) \big(1-\frac{1}{2}(1 -\sqrt 5)z^{-1}\big)} = A + \frac{B \big(1-\frac{1}{2}(1 +\sqrt 5)z^{-1}\big)}{1-\frac{1}{2}(1 -\sqrt 5)z^{-1}} \\
+\frac{z^{-1}}{\big(1-\frac{1}{2}(1 -\sqrt 5)z^{-1}\big)}\Bigg|_{z = \frac{1}{2}(1 +\sqrt 5)} = A + \frac{B \big(1-\frac{1}{2}(1 +\sqrt 5)z^{-1}\big)}{\frac{1}{2}(1 -\sqrt 5)z^{-1}}\bigg|_{z = 1-\frac{1}{2}(1 +\sqrt 5)} \\
+\end{align}</script>
+
+<p>Since the term with the constant <script type="math/tex">B</script> vanishes due to the vanishing numerator, this leads to</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+A &= \frac{z^{-1}}{1-\frac{1}{2}(1 -\sqrt 5)z^{-1}}\Bigg|_{z = \frac{1}{2}(1 +\sqrt 5)} \\
+&= \frac{2(1 +\sqrt 5)^{-1}}{1- \frac{\frac{1}{2}(1 -\sqrt 5)}{\frac{1}{2}(1 +\sqrt 5)}} \\
+&= \frac{2(1 +\sqrt 5)^{-1}}{\frac{1 +\sqrt 5 - (1 -\sqrt 5)}{1 +\sqrt 5}} \\
+&= \frac{2(1 +\sqrt 5)^{-1}(1 +\sqrt 5)}{2\sqrt 5} \\
+&= \frac{1}{\sqrt 5}. \\
+\end{align} %]]></script>
+
+<p>Similarly, we obtain the constant <script type="math/tex">B</script>:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+B  = -A = -\frac{1}{\sqrt 5}.
+\end{align}</script>
+
+<!---
+$$
+\begin{align}
+B  = \frac{1}{2\sqrt 5} (1 -\sqrt 5).
+\end{align}
+$$
+--->
+
+<p>This let’s us finally write our previous transfer function as:</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{align}
+H(z)=\frac{Y(z)}{X(z)} &= \frac{1}{1- z^{-1} - z^{-2}} \\
+&= \frac{1}{\sqrt 5}\frac{1}{1-\frac{1}{2}(1 +\sqrt 5)z^{-1}} - \frac{1}{\sqrt 5}\frac{1}{1-\frac{1}{2}(1 -\sqrt 5)z^{-1}} \label{eq:partialfrac}
+\end{align} %]]></script>
+<!-- dd_--></p>
+
+<h1 id="2-determing-the-inverse-z-transform-of-a-special-transfer-function">2. Determing the inverse Z-Transform of a special Transfer Function</h1>
+<p>In order to transfer back our transfer function in Eq. \eqref{eq:partialfrac} back into the time domain, we have to find a suitable inverse transformation for an expression of the type</p>
+
+<script type="math/tex; mode=display">\begin{align}
+X(z) = \frac{b}{1-az^{-1}}. \label{eq:ztransinfinite}
+\end{align}</script>
+
+<p>This is not a trivial task. However, if we remember the geometric series, we might be able to continue. We notice that the infinite sum</p>
+
+<script type="math/tex; mode=display">b\sum_{n=0}^{\infty} q^k</script>
+
+<p>converges to</p>
+
+<script type="math/tex; mode=display">\begin{align}
+b\sum_{n=0}^{\infty} q^k  = \frac{b}{1-q}, \label{eq:geom}
+\end{align}</script>
+
+<p>if
+<script type="math/tex">% <![CDATA[
+|q|<1 %]]></script>.</p>
+
+<p>If we look at Eq. \eqref{eq:ztransinfinite}, we can see that we have something which is very similar to Eq. \eqref{eq:geom}. By identifying</p>
+
+<script type="math/tex; mode=display">q = az^{-1}</script>
+
+<p>we can write</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+X(z) &= \frac{b}{1-az^{-1}} = b\sum_{n=0}^{\infty} (az^{-1})^n \\
+&= b\sum_{n=0}^{\infty} a^nz^{-n} \label{eq:sumZ} \\
+&= b(1 + az^{-1} + a^2 z^{-2} + \ldots)
+\end{align} %]]></script>
+
+<p>Note that this step assumes that
+<script type="math/tex">% <![CDATA[
+|az^{-1}|<1 %]]></script>
+or
+<script type="math/tex">% <![CDATA[
+|a|<|z| %]]></script>.</p>
+
+<p>For this sum that we found, the inverse Z-transform can now be easily determined:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+x[n] &= \mathcal{Z}^{-1}\big\{X(z)\big\}\\ &= b a^n u[n], \\
+\end{align} %]]></script>
+
+<p>where
+<script type="math/tex">u[n]</script>
+is the unit-step function which turns on at
+<script type="math/tex">n=0.</script>
+This is necessary, since the sum in Eq. \eqref{eq:sumZ} starts with
+<script type="math/tex">n=0</script>
+and
+<script type="math/tex">x[n]</script>
+is not defined (or is zero) for negative indexes.</p>
+
+<p>We can summarize the findings of this section in basically one equation:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\mathcal{Z}\big\{b a^n u[n])\big\} &= \frac{b}{1-az^{-1}}. \label{eq:finalrelation}
+\end{align} %]]></script>
+
+<h1 id="3-inverse-transform-of-the-previous-partial-fraction-decomposition">3. Inverse Transform of the previous Partial Fraction Decomposition</h1>
+<p>No we are ready, to transform Eq. \eqref{eq:partialfrac} back into the time domain by using the relation in Eq. \eqref{eq:finalrelation}.
+Let’s do it. Remember:</p>
+
+<!---H(z)= \frac{\frac{1}{2\sqrt 5} (1 +\sqrt 5)}{1-\frac{1}{2}(1 +\sqrt 5)z^{-1}} - \frac{\frac{1}{2\sqrt 5} (1 -\sqrt 5)}{1-\frac{1}{2}(1 -\sqrt 5)z^{-1}} -->
+<p><script type="math/tex">\begin{align}
+H(z)=\frac{1}{\sqrt 5}\frac{1}{1-\frac{1}{2}(1 +\sqrt 5)z^{-1}} - \frac{1}{\sqrt 5}\frac{1}{1-\frac{1}{2}(1 -\sqrt 5)z^{-1}}
+\end{align}</script></p>
+
+<p>This leads us to:
+<!---&= \Big[\frac{1}{2\sqrt 5} (1 +\sqrt 5)\Big] \cdot \Big[\frac{1}{2}(1 +\sqrt 5)\Big]^n - \Big[\frac{1}{2\sqrt 5} (1 -\sqrt 5)\Big] \cdot \Big[\frac{1}{2}(1 -\sqrt 5)\Big]^n \\--></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+h[n] &= \mathcal{Z}^{-1}\big\{H(z)\big\} \\
+&= \frac{1}{\sqrt 5} \Big[\frac{1}{2}(1 +\sqrt 5)\Big]^{n}u[n] - \frac{1}{\sqrt 5} \Big[\frac{1}{2}(1 -\sqrt 5)\Big]^{n}u[n] \\
+&= \frac{1}{\sqrt 5} \Big[\frac{1}{2}(1 +\sqrt 5)\Big]^{n} - \frac{1}{\sqrt 5} \Big[\frac{1}{2}(1 -\sqrt 5)\Big]^{n}, \, \mbox{for} \, n \ge 0  \label{eq:backintime}
+\end{align} %]]></script>
+
+<p>which – when looking at it closer – is a truely remarkable result. There is no recursive formulation in the impulse response any longer. This means that we can compute any arbitrary Fibonacci number directly using this closed-form solution.</p>
+
+<p>Another interesting observation from above equation is, that the term</p>
+
+<script type="math/tex; mode=display">\frac{1}{2}(1 +\sqrt 5)</script>
+
+<p>is the so called golden ratio
+<script type="math/tex">\varphi.</script>
+The golden ration itself has many interesting properties, which one should take a look at. In this case, we will just use it to simplify our expression above.</p>
+
+<p>Using</p>
+
+<script type="math/tex; mode=display">\varphi = \frac{1 +\sqrt 5}{2}</script>
+
+<p>and the additional relation</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+-\frac{1}{\varphi} &= -\varphi^{-1} = -\frac{2}{1 +\sqrt 5} \\
+&= -\frac{2}{1 +\sqrt 5} \frac{1 -\sqrt 5}{1 -\sqrt 5} \\
+&= -2 \frac{1 -\sqrt 5}{(1 +\sqrt 5)(1 -\sqrt 5)} \\
+&= -2 \frac{1 -\sqrt 5}{1 - 5} \\
+&= -2 \frac{1 -\sqrt 5}{-4} \\
+&= \frac{1 -\sqrt 5}{2} ,
+\end{align} %]]></script>
+
+<p>we can re-write Eq. \eqref{eq:backintime} in the following way:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+h[n] &= \frac{1}{\sqrt 5} \Big[\frac{1}{2}(1 +\sqrt 5)\Big]^{n} - \frac{1}{\sqrt 5} \Big[\frac{1}{2}(1 -\sqrt 5)\Big]^{n} \\
+&= \frac{1}{\sqrt 5} \varphi^{n} - \frac{1}{\sqrt 5} (-\varphi)^{-n} \\
+&= \frac{\varphi^{n} - (-\varphi)^{-n}}{\sqrt 5}\\
+&= \frac{\varphi^{n} - (-\varphi)^{-n}}{2\varphi -1},
+\end{align} %]]></script>
+
+<p>which is – as I find – a really nice formulation of the Fibonacci sequence. (There are also some issues with above representation, but lets forget about them at the moment).</p>
+
+<h1 id="4-compute-arbitrary-fibonacci-numbers-using-the-closed-form-solution">4. Compute arbitrary Fibonacci Numbers using the Closed-Form Solution</h1>
+
+<p>A simple R-function implementing this closed form solution could look like this:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">fibo</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="o">+</span><span class="nf">sqrt</span><span class="p">(</span><span class="m">5</span><span class="p">))</span><span class="o">/</span><span class="m">2</span><span class="w">
+  </span><span class="p">(</span><span class="n">phi</span><span class="o">^</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="o">-</span><span class="n">phi</span><span class="p">)</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="n">phi</span><span class="m">-1</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
+
+<p>Try it out! For exampe, I get the following results in the following for the following cases:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class="w"> </span><span class="n">sapply</span><span class="p">(</span><span class="m">0</span><span class="o">:</span><span class="m">19</span><span class="p">,</span><span class="w"> </span><span class="n">fibo</span><span class="p">)</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="m">0</span><span class="w">  </span><span class="m">1</span><span class="w">  </span><span class="m">1</span><span class="w">  </span><span class="m">2</span><span class="w">  </span><span class="m">3</span><span class="w">  </span><span class="m">5</span><span class="w">  </span><span class="m">8</span><span class="w">  </span><span class="m">13</span><span class="w">  </span><span class="m">21</span><span class="w">  </span><span class="m">34</span><span class="w">  </span><span class="m">55</span><span class="w">  </span><span class="m">89</span><span class="w">  </span><span class="m">144</span><span class="w">  </span><span class="m">233</span><span class="w">  </span><span class="m">377</span><span class="w">  </span><span class="m">610</span><span class="w">  </span><span class="m">987</span><span class="w"> </span><span class="m">1597</span><span class="w"> </span><span class="m">2584</span><span class="w"> </span><span class="m">4181</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class="w"> </span><span class="n">fibo</span><span class="p">(</span><span class="m">57</span><span class="p">)</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="m">365435296162</span></code></pre></figure>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h3>
+      <p>\(   \let\vec\mathbf  \def\myT{\mathsf{T}}  \def\mydelta{\boldsymbol{\delta}}  \def\matr#1{\mathbf #1}\)In this post we derive an increme...&hellip; <a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/conways-game-of-life/" title="Conway's Game of Life">Conway's Game of Life</a></h4>
+        <span>Published on April 13, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

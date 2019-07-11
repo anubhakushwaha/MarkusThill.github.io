@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Diamond-41 Peg Solitaire &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Diamond-41 Peg Solitaire">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/slides/peg-solitaire2.html">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/slides/peg-solitaire2.html">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+  <link type="text/css" rel="stylesheet" href="/lightslider/dist/css/lightslider.css" />
+  <script src="/lightslider/dist/js/lightslider.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow-x: hidden;
+    }
+    img {
+      min-width: 100%
+    }
+  </style>
+</head>
+<body>
+<ul>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie01.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie02.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie03.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie04.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie05.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie06.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie07.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie08.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie09.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie10.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie11.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie12.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie13.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie14.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie15.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie16.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie17.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie18.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie19.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie20.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie21.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie22.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie23.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie24.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie25.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie26.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie27.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie28.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie29.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie30.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie31.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie32.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie33.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie34.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie35.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie36.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie37.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie38.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie39.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie40.png" alt="Peg Solitaire, English version" /></li>
+  <li><img src="https://MarkusThill.github.io/slides/peg-solitaire2/Folie41.png" alt="Peg Solitaire, English version" /></li>
+</ul>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      $("ul").lightSlider({
+        "item": 1,
+        "loop": true,
+        "mode": "fade",
+        "speed": 600,
+        "pause": 2000,
+        "vertical": false,
+        "auto": true,
+        "pauseOnHover": false,
+        "pager": true,
+        "controls": true,
+        "adaptiveHeight": false
+      });
+    });
+    
+</script>
+</body>
+</html>

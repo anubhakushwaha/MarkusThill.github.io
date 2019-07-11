@@ -1,0 +1,876 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>All Posts &#8211; ML & Stats</title>
+<meta name="description" content="An archive of posts.">
+
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="All Posts">
+<meta property="og:description" content="An archive of posts.">
+<meta property="og:url" content="https://MarkusThill.github.io/posts/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/posts/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>All Posts | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="All Posts" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="An archive of posts." />
+<meta property="og:description" content="An archive of posts." />
+<link rel="canonical" href="https://markusthill.github.io/posts/" />
+<meta property="og:url" content="https://markusthill.github.io/posts/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<script type="application/ld+json">
+{"description":"An archive of posts.","headline":"All Posts","@type":"WebPage","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/posts/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post-index">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item active"><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>All Posts</h1>
+      
+        <h2><span class="entry-date"><time>&nbsp;</time></span></h2>
+      
+
+      
+          <p class="entry-reading-time">
+            &nbsp;
+          </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  
+    
+    
+
+    
+    <article>
+      <h2 id="2019-ref">2019</h2>
+      <ul>
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/conways-game-of-life/" title="Conway's Game of Life">Conway's Game of Life</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/verifying-true-positives/" title="Verifying Results based on Precision, Recall and False-Positive-Rate">Verifying Results based on Precision, Recall and False-Positive-Rate</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/limit-of-a-simple-function/" title="A tiny Exercise&#58; Limit of a Simple Function">A tiny Exercise&#58; Limit of a Simple Function</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/a-simple-proof-that-1-2/" title="Don't Drink and Derive&#58; A Simple Proof that 1 = 2">Don't Drink and Derive&#58; A Simple Proof that 1 = 2</a></li>
+
+    
+        
+          </ul>
+        </article>
+        <article>
+          <h2 id="2018-ref" class="year-heading">2018</h2>
+          <ul>
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/computing-large-powers-in-6502-assembler/" title="Computing Large Powers in 6502 Assembler">Computing Large Powers in 6502 Assembler</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/principal-component-analysis/" title="A few Notes on Principal Component Analysis">A few Notes on Principal Component Analysis</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/math/stats/the-sailors-problem/" title="The Monkey and Coconut Problem">The Monkey and Coconut Problem</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/a-few-notes-on-the-runtime-complexity-of-latin-hypercube-sampling/" title="A Few Notes on the Runtime Complexity of Latin Hypercube Sampling">A Few Notes on the Runtime Complexity of Latin Hypercube Sampling</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/vectorizing-summations/" title="Vectorizing Summations and Matrix Identities">Vectorizing Summations and Matrix Identities</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/" title="The Weighted Linear Least Squares Algorithm">The Weighted Linear Least Squares Algorithm</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-final-considerations/" title="Constructing Agents for Connect-4&#58; Final Considerations">Constructing Agents for Connect-4&#58; Final Considerations</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-opening-databases/" title="Constructing Agents for Connect-4&#58; Opening Databases">Constructing Agents for Connect-4&#58; Opening Databases</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-transposition-tables/" title="Constructing Agents for Connect-4&#58; Transposition Tables">Constructing Agents for Connect-4&#58; Transposition Tables</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-move-ordering/" title="Constructing Agents for Connect-4&#58; Move Ordering">Constructing Agents for Connect-4&#58; Move Ordering</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-board-representations/" title="Constructing Agents for Connect-4&#58; Board Representations">Constructing Agents for Connect-4&#58; Board Representations</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-tree-search-algorithms/" title="Constructing Agents for Connect-4&#58; Tree Search Algorithms">Constructing Agents for Connect-4&#58; Tree Search Algorithms</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-introduction-and-tree-search-algorithms/" title="Constructing Agents for Connect-4&#58; Initial Notes">Constructing Agents for Connect-4&#58; Initial Notes</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/buffer-overflows/" title="Buffer Overflow Vulnerabilities">Buffer Overflow Vulnerabilities</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/" title="Online Estimation of the Inverse Covariance Matrix">Online Estimation of the Inverse Covariance Matrix</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/" title="Memory of the exponentially decaying Estimator for Mean and Covariance Matrix">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/onthe-covariance-of-the-weighted-mean/" title="The Covariance of weighted Means">The Covariance of weighted Means</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/" title="Online Estimation of Weighted Sample Mean and Coviarance Matrix">Online Estimation of Weighted Sample Mean and Coviarance Matrix</a></li>
+
+    
+        
+          </ul>
+        </article>
+        <article>
+          <h2 id="2017-ref" class="year-heading">2017</h2>
+          <ul>
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-gaussians/" title="Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions">Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/electronics/choosing-a-voltage-divider-resistor-for-a-ldr/" title="Choosing a Voltage Divider Resistor for a Light Dependent Resistor">Choosing a Voltage Divider Resistor for a Light Dependent Resistor</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/" title="Visualizing High-Dimensional Data With Parallel Coordinates">Visualizing High-Dimensional Data With Parallel Coordinates</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/an-efficient-implementation-of-the-booth-algorithm-in-6502-assembler/" title="A short Implementation of Booth's Multiplication Algorithm in 6502 Assembler">A short Implementation of Booth's Multiplication Algorithm in 6502 Assembler</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/electronics/a-few-properties-of-the-exclusive-or/" title="Interesting Properties of the Exclusive Or (XOR)">Interesting Properties of the Exclusive Or (XOR)</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/soa-few-bit-twiddling-tricks/" title="A few Bit-Twiddling Tricks">A few Bit-Twiddling Tricks</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/solving-peg-solitaire/" title="Solving Peg Solitaire with efficient Bit-Board Representations">Solving Peg Solitaire with efficient Bit-Board Representations</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/using-slideshows-in-jekyll/" title="Using Slideshows in Jekyll">Using Slideshows in Jekyll</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/electronics/control-an-adapter-plug-with-an-esp8266-and-mqtt/" title="Controlling an Adapter Plug with an ESP 8266-01 Wi-Fi Chip and MQTT&#58; A Prototype">Controlling an Adapter Plug with an ESP 8266-01 Wi-Fi Chip and MQTT&#58; A Prototype</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/ml/programming/zalandos-fashion-mnist-dataset/" title="Zalando's Fashion-MNIST Dataset">Zalando's Fashion-MNIST Dataset</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/math/surprising-investment/" title="Surprising Bank Investment">Surprising Bank Investment</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/programming/obsfucated-c-code/" title="Obfuscating a Function &#8211; How not to write Code">Obfuscating a Function &#8211; How not to write Code</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/separating-highD-data/" title="Separating High-Dimensional Data with given Points for the Decision Boundary">Separating High-Dimensional Data with given Points for the Decision Boundary</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/vector%20algebra/a-generalization-of-the-vector-cross-product/" title="A Generalization of the Vector Cross Product">A Generalization of the Vector Cross Product</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/stats/ml/gsampling-with-replacement-random-forest/" title="Euler's Number and its Relationship to Random Forests">Euler's Number and its Relationship to Random Forests</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/stats/ml/gradient-softmax-function-with-cross-entropy/" title="Gradient of the Softmax Function with Cross-Entropy Loss">Gradient of the Softmax Function with Cross-Entropy Loss</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/mahalanbis-chi-squared/" title="The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution">The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/posts-octopress/" title="Creating new Posts in Jekyll with Octopress">Creating new Posts in Jekyll with Octopress</a></li>
+
+    
+        
+          </ul>
+        </article>
+        <article>
+          <h2 id="2016-ref" class="year-heading">2016</h2>
+          <ul>
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/sample-post/" title="Sample Post">Sample Post</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/code-highlighting-post/" title="Syntax Highlighting Post">Syntax Highlighting Post</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/dark-post/" title="Dark Post">Dark Post</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/background-image/" title="Post with a Background Image">Post with a Background Image</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/sample-link-post/" title="Sample Link Post">Sample Link Post</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/video-post/" title="A Post with a Video">A Post with a Video</a></li>
+
+    
+        
+    
+
+    
+    
+
+    
+
+        <li class="entry-title"><a href="https://MarkusThill.github.io/template/sample-post-images/" title="A Post with Images">A Post with Images</a></li>
+
+    
+      </ul>
+    </article>
+    
+
+
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

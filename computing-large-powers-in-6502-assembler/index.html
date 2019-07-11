@@ -1,0 +1,781 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Computing Large Powers in 6502 Assembler &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Computing Large Powers in 6502 Assembler">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/computing-large-powers-in-6502-assembler/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/royal.jpg">
+
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/computing-large-powers-in-6502-assembler/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Computing Large Powers in 6502 Assembler | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Computing Large Powers in 6502 Assembler" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Recently, I had to compute large powers of integers in 65(C)02 assembler. This is actually not that difficult. However, the code can run rather slow, if not implemented efficiently. For example, one can trivially implement the power as a sequence of multiplications as: This approach requires multiplications and can take quite some time to compute for large , especially since the 65(C)02 processor does not have a multiplication unit and multiplications have to be implemented using the Booth-algorithm or something similar. We can do much better than this, if we utilize the following observation:" />
+<meta property="og:description" content="Recently, I had to compute large powers of integers in 65(C)02 assembler. This is actually not that difficult. However, the code can run rather slow, if not implemented efficiently. For example, one can trivially implement the power as a sequence of multiplications as: This approach requires multiplications and can take quite some time to compute for large , especially since the 65(C)02 processor does not have a multiplication unit and multiplications have to be implemented using the Booth-algorithm or something similar. We can do much better than this, if we utilize the following observation:" />
+<link rel="canonical" href="https://markusthill.github.io/computing-large-powers-in-6502-assembler/" />
+<meta property="og:url" content="https://markusthill.github.io/computing-large-powers-in-6502-assembler/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-12-15T13:05:11+01:00" />
+<script type="application/ld+json">
+{"description":"Recently, I had to compute large powers of integers in 65(C)02 assembler. This is actually not that difficult. However, the code can run rather slow, if not implemented efficiently. For example, one can trivially implement the power as a sequence of multiplications as: This approach requires multiplications and can take quite some time to compute for large , especially since the 65(C)02 processor does not have a multiplication unit and multiplications have to be implemented using the Booth-algorithm or something similar. We can do much better than this, if we utilize the following observation:","headline":"Computing Large Powers in 6502 Assembler","dateModified":"2018-12-15T13:05:11+01:00","datePublished":"2018-12-15T13:05:11+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/computing-large-powers-in-6502-assembler/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/computing-large-powers-in-6502-assembler/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" class="feature">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Computing Large Powers in 6502 Assembler</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2018-12-15T13:05:11+01:00">December 15, 2018</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~4 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+            <div class="entry-image-index">
+              <img src="https://MarkusThill.github.io/images/royal.jpg" alt="Computing Large Powers in 6502 Assembler">
+              
+            </div>
+        
+      <h1 class="post-title entry-title">Computing Large Powers in 6502 Assembler</h1>
+      <p>Recently, I had to compute large powers of integers in 65(C)02 assembler. This is actually not that difficult. However, the code can run rather slow, if not implemented efficiently. For example, one can trivially  implement the power <script type="math/tex">x^n</script> as a sequence of multiplications as:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+x^n = x \cdot x \cdot \cdots \cdot x
+\end{align}</script>
+
+<p>This approach requires <script type="math/tex">n-1</script> multiplications and can take quite some time to compute for large <script type="math/tex">n</script>, especially since the 65(C)02 processor does not have a multiplication unit and multiplications have to be implemented using the Booth-algorithm or something similar.</p>
+
+<p>We can do much better than this, if we utilize the following observation:
+<script type="math/tex">% <![CDATA[
+\begin{align}
+x^2 &= x \cdot x \\
+x^4 &= x^2 \cdot x^2 \\
+x^8 &= x^4 \cdot x^4 \\
+\vdots
+\end{align} %]]></script>
+<!--more--></p>
+
+<p>For example, the power <script type="math/tex">x^{13}</script> can be computed as:
+<script type="math/tex">\begin{align}
+x^{13} = x^8 \cdot x^4 \cdot
+\end{align}</script></p>
+
+<p>If we look at the exponent <script type="math/tex">n</script> in binary format, we can see that if the i-th bit is set, then a power of <script type="math/tex">x^{2^i}</script> is needed to compute our actual power <script type="math/tex">x^n</script>. Let us look at our example <script type="math/tex">x^{13}</script> again and write the exponent as binary number:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+(13)_{10} = (1101)_2
+\end{align}</script>
+
+<p>Since the bits 0,2,3 are set, <script type="math/tex">x^{13}</script> is obtained by multiplying <script type="math/tex">x^{2^1}</script>, <script type="math/tex">x^{2^2}</script> and <script type="math/tex">x^{2^3}</script> (<script type="math/tex">x^{2}</script>, <script type="math/tex">x^{4}</script> and <script type="math/tex">x^{8}</script>).</p>
+
+<p>A simple C-Code, implementing our approach, could look like in the following (with the naive slow approach for comparision). Since only 8-byte long-variables are used, the powers cannot actually get that large, but the code could be useful as illustration:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">long</span> <span class="nf">slowBigPower</span><span class="p">(</span><span class="kt">long</span> <span class="n">x</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">exp</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">long</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">exp</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">long</span> <span class="nf">fastBigPower</span><span class="p">(</span><span class="kt">long</span> <span class="n">x</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">exp</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">long</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">exp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">exp</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">exp</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>In the Appendix B, the actual code in 65(C)02 is listed. It may take some time to understand, but it is really useful if large powers of integers with up to 128 bytes have to be computed.</p>
+
+<h1 id="appendix-a-java-code-for-comparison">Appendix A: Java Code for Comparison</h1>
+<div class="github-sample-reference">
+  <div class="author-info">
+    <a href="https://github.com/MarkusThill/65-C-02-Assembler/blob/master/big-powers/BigPowers.java">This Github Sample</a> is by <a href="https://github.com/MarkusThill">MarkusThill</a>
+  </div>
+  <div class="meta-info">
+    big-powers/BigPowers.java <a href="https://github.com/MarkusThill/65-C-02-Assembler/blob/master/big-powers/BigPowers.java">view</a> <a href="https://raw.githubusercontent.com/MarkusThill/65-C-02-Assembler/master/big-powers/BigPowers.java">raw</a>
+  </div>
+</div>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.math.BigInteger</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BigPowers</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">BigInteger</span> <span class="nf">bigPower</span><span class="o">(</span><span class="kt">int</span> <span class="n">base</span><span class="o">,</span> <span class="kt">int</span> <span class="n">exp</span><span class="o">)</span> <span class="o">{</span>
+		<span class="nc">BigInteger</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BigInteger</span><span class="o">(</span><span class="n">base</span> <span class="o">+</span> <span class="s">""</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="na">pow</span><span class="o">(</span><span class="n">exp</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="kt">int</span> <span class="n">base</span> <span class="o">=</span> <span class="mh">0x29</span><span class="o">;</span>
+		<span class="kt">int</span> <span class="n">exp</span><span class="o">=</span><span class="mh">0xBF</span><span class="o">;</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">base</span><span class="o">+</span><span class="s">"^"</span><span class="o">+</span><span class="n">exp</span><span class="o">+</span><span class="s">"="</span><span class="o">);</span>
+		<span class="nc">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">bigPower</span><span class="o">(</span><span class="n">base</span><span class="o">,</span> <span class="n">exp</span><span class="o">).</span><span class="na">toString</span><span class="o">(</span><span class="mi">16</span><span class="o">);</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"\t"</span><span class="o">+</span><span class="n">result</span><span class="o">);</span>
+		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Number of Bytes: "</span> <span class="o">+</span> <span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">length</span><span class="o">()/</span><span class="mi">2</span><span class="o">+</span><span class="n">result</span><span class="o">.</span><span class="na">length</span><span class="o">()%</span><span class="mi">2</span><span class="o">));</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<h1 id="appendix-b-assembler-code">Appendix B: Assembler Code</h1>
+<div class="github-sample-reference">
+  <div class="author-info">
+    <a href="https://github.com/MarkusThill/65-C-02-Assembler/blob/master/big-powers/Big_Powers_128_Byte.asm">This Github Sample</a> is by <a href="https://github.com/MarkusThill">MarkusThill</a>
+  </div>
+  <div class="meta-info">
+    big-powers/Big_Powers_128_Byte.asm <a href="https://github.com/MarkusThill/65-C-02-Assembler/blob/master/big-powers/Big_Powers_128_Byte.asm">view</a> <a href="https://raw.githubusercontent.com/MarkusThill/65-C-02-Assembler/master/big-powers/Big_Powers_128_Byte.asm">raw</a>
+  </div>
+</div>
+
+<figure class="highlight"><pre><code class="language-asm" data-lang="asm">; Computes powers x^n with results of size up to 128 bytes.
+; The following scheme is used:
+; x^2=x*x
+; x^4 = (x^2)*(x^2)
+; x^8 = (x^4)*(x^4)
+; Example:
+; 	x^63 = (x^32)*(x^16)*(x^8)*(x^4)*(x^2)*x
+; 	This requires 5+5=10 multiplications, usually
+;	62 multiplications would be necessary.
+numBytes = 128 ;max is 128
+
+; Pointer
+fakA = 80
+fakB = 82
+prodRes = 84
+
+variableStartAddr= $4500
+
+XYA_TO_STACK.MACRO
+; Save registers to stack
+	PHA
+	TXA
+	PHA
+	TYA
+	PHA
+	.ENDM
+	
+XYA_FROM_STACK.MACRO
+; Get old register values from stack
+	PLA
+	TAY
+	PLA
+	TAX
+	PLA
+	.ENDM
+
+	.ORG $4000
+main:
+	JSR power
+	RTS
+
+
+;====================================================================	
+;====================================================================
+power:
+	XYA_TO_STACK
+	
+	; Reset result nxtSquare
+	LDX #numBytes-1
+	LDA #0
+power_reset:
+	STA result, X
+	STA nxtSquare, X
+	DEX
+	BPL power_reset
+	
+	; Store #1 in result
+	LDA #1
+	STA result
+	
+	; store base in nxtSqaure
+	LDA base
+	STA nxtSquare
+	LDA exponent
+power_loop:
+	LSR
+	PHA
+	BCC power_loop_nxtSquare
+	; Bit was set, multiply nxtSquare with current result
+	
+	;Copy result to temporary variable
+	LDX #numBytes-1
+power_cpyResult:
+	LDA result, X
+	STA result_tmp, X
+	DEX
+	BPL power_cpyResult
+	
+	; Set pointers for multiplication
+	LDA #&lt;nxtSquare
+	STA fakB
+	LDA #&gt;nxtSquare
+	STA fakB+1
+	
+	LDA #&lt;result_tmp
+	STA fakA
+	LDA #&gt;result_tmp
+	STA fakA+1
+	
+	LDA #&lt;result
+	STA prodRes
+	LDA #&gt;result
+	STA prodRes+1
+	
+	JSR multi
+	
+power_loop_nxtSquare:
+	JSR square
+	PLA
+	BNE power_loop
+	
+	XYA_FROM_STACK
+	RTS
+
+;====================================================================	
+;====================================================================
+square:
+	XYA_TO_STACK
+	; Copy last result to nxtPwr
+	LDX #numBytes-1
+square_cpy:
+	LDA nxtSquare, X
+	STA nxtSquare_tmp, X
+	DEX
+	BPL square_cpy
+	
+	; Set pointers for multiplication
+	LDA #&lt;nxtSquare_tmp
+	STA fakA
+	STA fakB
+	LDA #&gt;nxtSquare_tmp
+	STA fakA+1
+	STA fakB+1
+	
+	LDA #&lt;nxtSquare
+	STA prodRes
+	LDA #&gt;nxtSquare
+	STA prodRes+1
+	
+	JSR multi
+	
+	XYA_FROM_STACK
+	RTS
+
+
+
+	
+multi:
+	XYA_TO_STACK
+
+	;Reset Result R
+	LDY #numBytes-1
+	LDA #$00
+multi_reset_R:
+	STA (prodRes), Y
+	DEY
+	BPL multi_reset_R
+
+
+	; Put B to the stack beginning with the highest Byte
+	; and check if B=0
+	; Stack ; 
+	; ----- ;
+	; MSB_B ;
+	; ..... ; 
+	; LSB_B ;
+	;       ; &lt;-SP
+	LDY #numBytes-1
+	LDX #$00 ;count number of Bytes &lt;&gt; 0
+multi_BToStack:
+	LDA (fakB), Y
+	PHA
+	BEQ multi_BToStack_1
+	INX
+multi_BToStack_1:
+	DEY
+	BPL multi_BToStack
+	
+	;check if B=0, in this case X=0
+	DEX
+	BMI multi_end
+
+	; Initialize Loop-Counter
+	LDA #0
+	PHA
+	LDA #numBytes
+	PHA
+	
+	; Multiply with 8 to get Loop-counter
+	TSX
+	LDY #3
+multi_init_LC:
+	ASL $0101, X
+	ROL $0102, X
+	DEY
+	BNE multi_init_LC
+	
+	; auf 2 Byte erweitern!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	; LDA #8*numBytes-1   ;loop-counter
+	; PHA
+	; BPL multi_mainIn
+	
+	; Stack ; 
+	; ----- ;
+	; MSB_B ;
+	;MSB_B+1;
+	;MSB_B+2; 
+	; LSB_B ;
+	;  LC_H ;
+	;  LC_L ;
+	;       ; &lt;-SP
+multi_mainLoop:	
+multi_mainIn:
+	; Check, if we are finished
+	;Verbessern
+	TSX
+	CLC
+	LDA $0101, X ;LSB of LC
+	SBC #$00
+	STA $0101, X
+	
+	LDA $0102, X ;MSB of LC
+	SBC #$00
+	STA $0102, X
+	
+	; If Carry = 0 we end the program
+	BCC multi_end_loop
+	
+	; Shift the result left first
+	LDY #0
+	LDX #numBytes
+	CLC
+multi_shift_result:
+	LDA (prodRes), Y
+	ROL
+	STA (prodRes), Y
+	INY
+	DEX
+	BNE multi_shift_result
+	
+; multi_mainIn:
+	; Shift B left
+	TSX
+	CLC
+	LDY #numBytes
+multi_shift_B:
+	ROL $0103, X
+	INX
+	DEY
+	BNE multi_shift_B
+	
+	; lsb of B is in C-Flag now
+	BCC multi_mainLoop
+	
+	; C-Flag=1, so add A to the current result
+	LDY #0 
+	LDX #numBytes 
+	CLC
+multi_add_A:
+	LDA (fakA), Y
+	ADC (prodRes), Y ;Add Result to A
+	STA (prodRes), Y
+	INY
+	DEX
+	BNE multi_add_A
+	BEQ multi_mainLoop
+multi_end_loop:
+	PLA ;get Loopcounter from stack
+	PLA 
+multi_end:
+	; get numBytes Values: B + Loop-counter from stack
+	LDX #numBytes
+multi_stack_clean:
+	PLA
+	DEX
+	BNE multi_stack_clean 
+	; Get old register values from stack
+	NOP
+	XYA_FROM_STACK
+	RTS
+	
+
+	.ORG variableStartAddr
+;===================================
+result: .Byte $00	
+	.ORG variableStartAddr+numBytes
+nxtSquare: .Byte $00
+	.ORG variableStartAddr+2*numBytes
+nxtSquare_tmp: .Byte $00
+	.ORG variableStartAddr+3*numBytes
+result_tmp: .Byte $00
+	.ORG variableStartAddr+4*numBytes
+base: .BYTE $29
+exponent: .BYTE $BF
+; result should be "9cc3182f708d3bd1cbe52c67a45b468dc370625a0cd9cb38eda8e88922f4ec91f33eecfefaa6675d9460b7b83d111bf9e9b9a485dca5ad0f9da997fe20129df7b96038ff252b8b1dff179112196db207d1fbe79e298aad519c20833b6114f71e6215a3c96e56afef12b29d797f07d4c1f99ef9f64fcec8d94d5074ada5217219"</code></pre></figure>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/computing-large-powers-in-6502-assembler/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/computing-large-powers-in-6502-assembler/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/computing-large-powers-in-6502-assembler/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/principal-component-analysis/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Notes on Machine Learning, Statistics & Programming &#8211; ML & Stats</title>
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta name="keywords" content="Machine Learning Statistics Programming Electronics Internet of Things Smart Home">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes on Machine Learning, Statistics & Programming">
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta property="og:url" content="https://MarkusThill.github.io/page8/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/page8/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Page 8 of 10 for Notes on Machine Learning, Statistics &amp; Programming | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Notes on Machine Learning, Statistics &amp; Programming" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<link rel="canonical" href="https://markusthill.github.io/page8/" />
+<meta property="og:url" content="https://markusthill.github.io/page8/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<link rel="prev" href="https://markusthill.github.io/page7" />
+<link rel="next" href="https://markusthill.github.io/page9" />
+<script type="application/ld+json">
+{"description":"My private blog on Machine Learning, Statistics, Programming and more.","headline":"Notes on Machine Learning, Statistics &amp; Programming","@type":"WebPage","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/page8/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post-index">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Notes on Machine Learning, Statistics & Programming</h1>
+      
+        <h2><span class="entry-date"><time>&nbsp;</time></span></h2>
+      
+
+      
+          <p class="entry-reading-time">
+            &nbsp;
+          </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/math/surprising-investment/" title="Surprising Bank Investment"><img src="https://MarkusThill.github.io/images/bank1s.jpg" alt="Surprising Bank Investment"></a>
+        <div class="image-credit">Image source: <a target="_blank" href="https://www.freepik.com">Designed by Jannoon028 / Freepik</a></div><!-- /.image-credit -->
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-10-11T16:36:06+02:00"><a href="https://MarkusThill.github.io/math/surprising-investment/">October 11, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~2 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/math/surprising-investment/" rel="bookmark" title="Surprising Bank Investment" itemprop="url">Surprising Bank Investment</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Your bank offers you to invest some of your money in a new startup company. If everything goes well, you can keep all the profit that the investment returns after 1 year.
+Additionally, the bank also offers to add a smaller amount of money to the investment, which is returned completely to the bank after this 1 year (but you are allowed to keep the profit of the bank’s portion, in case the investment is successful).
+Since you are excited about this offer, you decide to invest quite some money into this deal.
+In total 1 000 000 $ are invested; you provide the largest share of 99% and the bank the remaining 1%.</p>
+
+<p>However, after one year the bank sends you a letter and informs you that the startup company went bankrupt and some of the invested money is lost. But the bank tells you not to worry too much, since you still own 98% of the remaining money. Certainly, the rest of the remaining money, which is the same amount of money that the bank invested in the beginning, will be payed back to the bank. Should you really not be worried? Think a little about this and guess how much money you actually have left after this false investment, or: how many dollars did you actually loose?</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/math/surprising-investment//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/programming/obsfucated-c-code/" title="Obfuscating a Function &#8211; How not to write Code"><img src="https://MarkusThill.github.io/images/530s.jpg" alt="Obfuscating a Function &#8211; How not to write Code"></a>
+        <div class="image-credit">Image source: <a target="_blank" href="https://www.freepik.com">Designed by nikitabuida / Freepik</a></div><!-- /.image-credit -->
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-10-11T15:01:50+02:00"><a href="https://MarkusThill.github.io/programming/obsfucated-c-code/">October 11, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/programming/obsfucated-c-code/" rel="bookmark" title="Obfuscating a Function &#8211; How not to write Code" itemprop="url">Obfuscating a Function &#8211; How not to write Code</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Some time ago I had to write a pretty simple function, which converts an integer value into some new “format”. The function ended up to be some easy-to-read code. So – for some reasons which I do not remember – I decided to obfuscate the purpose of the function slightly and I ended up with the following:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;stdio.h&gt;
+</span>
+<span class="kt">char</span><span class="o">*</span> <span class="nf">whatDoIdo</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">v</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">z</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mh">0x49</span><span class="p">,</span><span class="mh">0x56</span><span class="p">,</span><span class="mh">0x58</span><span class="p">,</span><span class="mh">0x4c</span><span class="p">,</span><span class="mh">0x43</span><span class="p">,</span><span class="mh">0x44</span><span class="p">,</span><span class="mh">0x4d</span><span class="p">};</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="sc">'\0'</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">v</span><span class="o">/=</span><span class="mi">5</span><span class="o">/</span><span class="p">((</span><span class="n">i</span><span class="o">--+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">x</span><span class="o">&gt;=</span><span class="n">v</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">x</span><span class="o">-=</span><span class="n">v</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="o">&gt;=</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">v</span><span class="o">-</span><span class="n">v</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">%</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">x</span><span class="o">-=</span><span class="n">p</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">i</span><span class="o">%</span><span class="mi">2</span><span class="p">)])</span><span class="o">+</span><span class="mi">1</span>
+          <span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">t</span><span class="p">[</span><span class="mi">200</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"%d : %s"</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">whatDoIdo</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="p">));</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<!--- %* -->
+
+<p>If you run the code for different values of <code class="highlighter-rouge">x</code> in the function <code class="highlighter-rouge">main()</code> you will discover the purpose of function <code class="highlighter-rouge">whatDoIdo()</code> pretty fast. If you are more dedicated, then you can try to decrypt the code and guess it’s functionality without even running it once. Certainly, you should prevent writing code like this at work or university, since your colleagues/classmates or others who have to read your code most likely won’t appreciate this kind of programming style.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/programming/obsfucated-c-code//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/separating-highD-data/" title="Separating High-Dimensional Data with given Points for the Decision Boundary"><img src="https://MarkusThill.github.io/images/2254s.jpg" alt="Separating High-Dimensional Data with given Points for the Decision Boundary"></a>
+        <div class="image-credit">Image source: <a target="_blank" href="https://www.freepik.com">Designed by jcomp / Freepik</a></div><!-- /.image-credit -->
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-10-06T20:42:49+02:00"><a href="https://MarkusThill.github.io/separating-highD-data/">October 06, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~6 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/separating-highD-data/" rel="bookmark" title="Separating High-Dimensional Data with given Points for the Decision Boundary" itemprop="url">Separating High-Dimensional Data with given Points for the Decision Boundary</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>\(
+   \def\matr#1{\mathbf #1}
+   \def\tp{\mathsf T}
+\)</p>
+
+<p>Recently, someone asked me to take a look at a strange problem, which seemed to be quite trivial on the first glance (and actually is, if we put our knowledge of vector and matrix algebra together):
+We have quite a few of <script type="math/tex">n</script>-dimensional data-points <script type="math/tex">\vec x_k \in \mathbb{R}^n</script> (exact knowledge of the actual data is not required here), which belong to one of two classes. For a few cases we know the class, but for many cases we do not. This might appear like a typical classification task, if it was not for one additional curiosity: we actually already know quite some data-points which lie on (or very close to) the decision boundary. This turns our original problem into some sort of regression problem, since we can estimate a hypersurface that fits the decision boundary.
+You also have to think about several problems in this case as well (e.g., how to incorporate those data-points into the model, which do not lie in the boundary region but for which a class label is known), but in this blog post we want to look at another approach, which in the end provides a linear decision boundary.</p>
+
+<p>The problem is illustrated in the figure below.
+<img src="https://MarkusThill.github.io/images/2017-10-06-separating-high-dimensional-data-with-given-points-on-the-cutting-hyperplane/problem.png" alt="Illustration of the Problem" class="image-center" />
+As we can see in the figure, there are data points belonging to 2 different classes (red circles and blue crosses), which are nearly linearly separable. Furthermore we also have points, for which the class labels are unknown (black circles). Our task is, to classify these points based on some suitable decision boundary, which yet has to be found. Finally, we can also see some gray stars in the graph. These are the points for which we already know that they are very close to the actual decision boundary. One particular decision boundary is shown here, which passes exactly through 2 of the gray points.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/separating-highD-data//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/vector%20algebra/a-generalization-of-the-vector-cross-product/" title="A Generalization of the Vector Cross Product"><img src="https://MarkusThill.github.io/images/odrat188s.jpg" alt="A Generalization of the Vector Cross Product"></a>
+        <div class="image-credit">Image source: <a target="_blank" href="https://www.freepik.com">Designed by Bedneyimages / Freepik</a></div><!-- /.image-credit -->
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-10-06T20:33:46+02:00"><a href="https://MarkusThill.github.io/vector%20algebra/a-generalization-of-the-vector-cross-product/">October 06, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~2 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/vector%20algebra/a-generalization-of-the-vector-cross-product/" rel="bookmark" title="A Generalization of the Vector Cross Product" itemprop="url">A Generalization of the Vector Cross Product</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>\(
+   \def\matr#1{\mathbf #1}
+   \def\tp{\mathsf T}
+\)</p>
+
+<p>Imagine you have two 3-dimensional vectors <script type="math/tex">\vec a</script> and <script type="math/tex">\vec b</script> and you require a third vector, which is orthogonal to the first two vectors. How would you compute this vector? Typically, one would compute the cross product of <script type="math/tex">\vec a</script> and <script type="math/tex">\vec b</script> or vice versa. This is easy in three dimensions since we can use the well known relation</p>
+
+<script type="math/tex; mode=display">\vec a \times \vec b =
+\begin{pmatrix}
+a_2b_3 - a_3b_2 \\
+a_3b_1 - a_1b_3 \\
+a_1b_2 - a_2b_1 \\
+\end{pmatrix}.</script>
+
+<p>Also for two dimensions the case is quite simple. However, instead of two vectors <script type="math/tex">\vec a</script> and <script type="math/tex">\vec b</script> you only have one vector <script type="math/tex">\vec a</script> and the orthogonal vector is formally just a linear mapping:</p>
+
+<script type="math/tex; mode=display">\begin{pmatrix}
+a_1 \\
+a_2 \\
+\end{pmatrix} \mapsto
+\begin{pmatrix}
+a_2 \\
+-a_1 \\
+\end{pmatrix}</script>
+
+<p>You can easily check that the inner product of both vectors is zero.
+But what about higher dimensions? For example, how would you define the cross product in 5 dimensions or maybe even in 100 dimensions?</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/vector%20algebra/a-generalization-of-the-vector-cross-product//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/stats/ml/gsampling-with-replacement-random-forest/" title="Euler's Number and its Relationship to Random Forests"><img src="https://MarkusThill.github.io/images/177s.jpg" alt="Euler's Number and its Relationship to Random Forests"></a>
+        <div class="image-credit">Image source: <a target="_blank" href="https://www.freepik.com">Designed by osaba / Freepik</a></div><!-- /.image-credit -->
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-09-07T19:37:32+02:00"><a href="https://MarkusThill.github.io/stats/ml/gsampling-with-replacement-random-forest/">September 07, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~4 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/stats/ml/gsampling-with-replacement-random-forest/" rel="bookmark" title="Euler's Number and its Relationship to Random Forests" itemprop="url">Euler's Number and its Relationship to Random Forests</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Consider the following problem: We have a bowl containing <script type="math/tex">n</script> different balls, all labeled with a unique number. We randomly pick a ball from the bowl, note its number and then put the ball back into the bowl. The order in which the balls are picked is not relevant. In total, <script type="math/tex">k</script> balls are picked in the same way. In combinatorics this problem is typically referred to as combinations with repetition (or sampling with replacement).
+The number of possible samples which can be drawn from the bowl is:</p>
+
+<script type="math/tex; mode=display">\binom{n+k-1}{k}</script>
+
+<p>One particular problem arises when we choose <script type="math/tex">n=k</script>, hence, from a set of <script type="math/tex">n</script> unique elements we randomly draw a sample of size <script type="math/tex">n</script> (always putting the elements back into the set again).
+The image below illustrates the problem. On the left side of the figure we have a set of four unique elements. Several possible samples with <script type="math/tex">k=n</script> drawn from this set are shown on the right side of the arrow. In total, actually 35 possible combinations exist, using the above formula.<br />
+<img src="https://MarkusThill.github.io/images/samplereplace.jpg" alt="Picture description" class="image-center" /></p>
+
+<p>But where is Euler’s number in this problem and what does this have to do with random forests, as suggested by the title of this blog post?</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/stats/ml/gsampling-with-replacement-random-forest//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+
+
+<div class="pagination">
+  <ul class="inline-list">
+    
+    
+      
+        <li><a href="https://MarkusThill.github.io/page7/" class="btn">Previous</a></li>
+      
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/">1</a></li>
+    
+
+    
+    
+      
+      
+      <li>…</li>
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page6/">6</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page7/">7</a></li>
+      
+    
+      
+        <li><strong class="current-page">8</strong></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page9/">9</a></li>
+      
+    
+
+    
+    
+
+    
+      <li><a href="https://MarkusThill.github.io/page10/">10</a></li>
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/page9/" class="btn">Next</a></li>
+    
+  </ul>
+</div>
+
+
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

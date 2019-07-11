@@ -1,0 +1,555 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Notes on Machine Learning, Statistics & Programming &#8211; ML & Stats</title>
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta name="keywords" content="Machine Learning Statistics Programming Electronics Internet of Things Smart Home">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes on Machine Learning, Statistics & Programming">
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta property="og:url" content="https://MarkusThill.github.io/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Notes on Machine Learning, Statistics &amp; Programming | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Notes on Machine Learning, Statistics &amp; Programming" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<link rel="canonical" href="https://markusthill.github.io/" />
+<meta property="og:url" content="https://markusthill.github.io/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<link rel="next" href="https://markusthill.github.io/page2" />
+<script type="application/ld+json">
+{"description":"My private blog on Machine Learning, Statistics, Programming and more.","headline":"Notes on Machine Learning, Statistics &amp; Programming","@type":"WebSite","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/","name":"ML &amp; Stats","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post-index">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Notes on Machine Learning, Statistics & Programming</h1>
+      
+        <h2><span class="entry-date"><time>&nbsp;</time></span></h2>
+      
+
+      
+          <p class="entry-reading-time">
+            &nbsp;
+          </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2019-07-10T11:00:35+02:00"><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">July 10, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~5 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" rel="bookmark" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform" itemprop="url">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school students starting with programming classes compute the first few Fibonacci numbers with their programs using different iterative or recursive approaches. One reason for its popularity might be that the Fibonacci sequence is closely related to many other fields of math and physics, often in very astonishing ways which one might not expect. Usually, the Fibonacci sequence is defined in a recursive manner. Hence, in order to compute the n-th Fibonacci number all previous Fibonacci numbers have to be computed first. In this blog post we will derive an interesting closed-form solution to directly compute any arbitrary Fibonacci number without the necessity to obtain its predecessors first. Interestingly, we will solve this problem with the help of a tool – the so called Z-Transform – which is actually more common in the field of digital signal processing.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/deriving-a-closed-form-solution-of-the-fibonacci-sequence//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2019-05-05T22:12:28+02:00"><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/">May 05, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~2 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" rel="bookmark" title="Derivation of a Weighted Recursive Linear Least Squares Estimator" itemprop="url">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>\( <br />
+  \let\vec\mathbf
+  \def\myT{\mathsf{T}}
+  \def\mydelta{\boldsymbol{\delta}}
+  \def\matr#1{\mathbf #1}
+\)</p>
+
+<p>In this post we derive an incremental version of the weighted least squares estimator, described in a previous <strong><a href="/math/stats/ml/the-weighted-least-squares-algorithm/">blog post</a></strong>.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/derivation-of-a-weighted-recursive-least-squares-estimator//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix"><img src="https://MarkusThill.github.io/images/stats.jpg" alt="Gaussian Distribution With a Diagonal Covariance Matrix"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2019-05-04T13:00:41+02:00"><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/">May 04, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" rel="bookmark" title="Gaussian Distribution With a Diagonal Covariance Matrix" itemprop="url">Gaussian Distribution With a Diagonal Covariance Matrix</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Often, it is convenient to use an alternative representation of a multivariate Gaussian distribution if it is known that the off-diagonals of the covariance matrix only play a minor role. In this case one can assume to have only a diagonal covariance matrix and one can estimate the mean and the variance in each dimension separately and describe the multivariate density function in terms of a product of univariate Gaussians. This is shown in the following.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/gaussian-distribution-with-a-diagonal-covariance-matrix//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/conways-game-of-life/" title="Conway's Game of Life"><img src="https://MarkusThill.github.io/images/gol.png" alt="Conway's Game of Life"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2019-04-13T23:50:48+02:00"><a href="https://MarkusThill.github.io/conways-game-of-life/">April 13, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~4 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/conways-game-of-life/" rel="bookmark" title="Conway's Game of Life" itemprop="url">Conway's Game of Life</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Conway’s Game of Life is a so called zero-player game designed by the British mathematician John Horton Conway in 1970. It only has a initial configuration which can be set by the player and then evolves without any further interactions with the game.</p>
+
+<p>The rules are rather simple. Here is an excerpt from <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">wikipedia.org</a>:</p>
+
+<p><i>The universe of the Game of Life is an infinite, two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, alive or dead, (or populated and unpopulated, respectively). Every cell interacts with its eight neighbors, which are the cells that are horizontally, vertically, or diagonally adjacent. At each step in time, the following transitions occur:</i></p>
+
+<ol>
+  <li><i>Any live cell with fewer than two live neighbors dies, as if by underpopulation.</i></li>
+  <li><i>Any live cell with two or three live neighbors lives on to the next generation.</i></li>
+  <li><i>Any live cell with more than three live neighbors dies, as if by overpopulation.</i></li>
+  <li><i>Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.</i></li>
+</ol>
+
+<p><i>The initial pattern constitutes the seed of the system. The first generation is created by applying the above rules simultaneously to every cell in the seed; births and deaths occur simultaneously, and the discrete moment at which this happens is sometimes called a tick. Each generation is a pure function of the preceding one. The rules continue to be applied repeatedly to create further generations.</i></p>
+
+<p>In this post we will program the game in <script type="math/tex">R</script> and look at a few results.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/conways-game-of-life//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/verifying-true-positives/" title="Verifying Results based on Precision, Recall and False-Positive-Rate"><img src="https://MarkusThill.github.io/images/policebay1.jpg" alt="Verifying Results based on Precision, Recall and False-Positive-Rate"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2019-04-13T21:47:46+02:00"><a href="https://MarkusThill.github.io/verifying-true-positives/">April 13, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~3 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/verifying-true-positives/" rel="bookmark" title="Verifying Results based on Precision, Recall and False-Positive-Rate" itemprop="url">Verifying Results based on Precision, Recall and False-Positive-Rate</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Recently, I read a paper which reported quite impressive results on a time series anomaly detection task with several time series. The paper was already cited by many other researchers and the presented algorithm really seems to perform quite well. However, after doing some calculations, it appears like the results were presented in a way which is a little misleading and strange. But let us take a closer look.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/verifying-true-positives//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+
+
+<div class="pagination">
+  <ul class="inline-list">
+    
+    
+
+    
+    
+      <li><strong class="current-page">1</strong></li>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page2/">2</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page3/">3</a></li>
+      
+    
+
+    
+    
+      <li>…</li>
+    
+
+    
+      <li><a href="https://MarkusThill.github.io/page10/">10</a></li>
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/page2/" class="btn">Next</a></li>
+    
+  </ul>
+</div>
+
+
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

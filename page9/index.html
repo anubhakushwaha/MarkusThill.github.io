@@ -1,0 +1,652 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Notes on Machine Learning, Statistics & Programming &#8211; ML & Stats</title>
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta name="keywords" content="Machine Learning Statistics Programming Electronics Internet of Things Smart Home">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes on Machine Learning, Statistics & Programming">
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta property="og:url" content="https://MarkusThill.github.io/page9/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/page9/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Page 9 of 10 for Notes on Machine Learning, Statistics &amp; Programming | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Notes on Machine Learning, Statistics &amp; Programming" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<link rel="canonical" href="https://markusthill.github.io/page9/" />
+<meta property="og:url" content="https://markusthill.github.io/page9/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<link rel="prev" href="https://markusthill.github.io/page8" />
+<link rel="next" href="https://markusthill.github.io/page10" />
+<script type="application/ld+json">
+{"description":"My private blog on Machine Learning, Statistics, Programming and more.","headline":"Notes on Machine Learning, Statistics &amp; Programming","@type":"WebPage","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/page9/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post-index">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Notes on Machine Learning, Statistics & Programming</h1>
+      
+        <h2><span class="entry-date"><time>&nbsp;</time></span></h2>
+      
+
+      
+          <p class="entry-reading-time">
+            &nbsp;
+          </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/stats/ml/gradient-softmax-function-with-cross-entropy/" title="Gradient of the Softmax Function with Cross-Entropy Loss"><img src="https://MarkusThill.github.io/images/antoine-dautry-428776.jpg" alt="Gradient of the Softmax Function with Cross-Entropy Loss"></a>
+        <div class="image-credit">Image source: <a target="_blank" href="https://unsplash.com">Photo by Antoine Dautry on Unsplash</a></div><!-- /.image-credit -->
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-09-07T19:29:40+02:00"><a href="https://MarkusThill.github.io/stats/ml/gradient-softmax-function-with-cross-entropy/">September 07, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/stats/ml/gradient-softmax-function-with-cross-entropy/" rel="bookmark" title="Gradient of the Softmax Function with Cross-Entropy Loss" itemprop="url">Gradient of the Softmax Function with Cross-Entropy Loss</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>In practice, the so called softmax function is often used for the last layer of a neural network, when several output units are required, in order to squash all outputs in a range of <script type="math/tex">[0,1]</script> in a way that all outputs sum up to one. A typical application is classification where each output could indicate the probability of the input-vector belonging to a corresponding class. When learning the weights of the neural network using the classical backpropagation algorithm, we need to compute the gradient of the loss function. In the following we show how to compute the gradient of a softmax function for the cross entropy loss, if the softmax function is used in the output of the neural network.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/stats/ml/gradient-softmax-function-with-cross-entropy//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/mahalanbis-chi-squared/" title="The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution"><img src="https://MarkusThill.github.io/images/1141s.jpg" alt="The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution"></a>
+        <div class="image-credit">Image source: <a target="_blank" href="https://www.freepik.com">Designed by onlyyouqj / Freepik</a></div><!-- /.image-credit -->
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-09-05T21:18:12+02:00"><a href="https://MarkusThill.github.io/mahalanbis-chi-squared/">September 05, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~6 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/mahalanbis-chi-squared/" rel="bookmark" title="The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution" itemprop="url">The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>In practice, sometimes (multivariate) Gaussian distributions are used for anomaly detection tasks (assuming that the considered data is approx. normally distributed): the parameters of the Gaussian can be estimated using maximum likelihood estimation (MLE) where the maximum likelihood estimate is the sample mean and sample covariance matrix. After the estimating the parameters of the distribution one has to specify a critical value which separates the normal data from the anomalous data. Typically, this critical value is taken from the probability density function (PDF) in such a way that it is smaller than the PDF value of all normal data points in the data set. Then a new data point can be classified as anomalous if the value of the PDF for this new point is below the critical value. Hence, the critical value specifies a boundary which is used to separate normal from anomalous data. In the univariate case the boundary separates the lower and upper tails of the Gaussian from its center (mean). In the 2-dimensional case the boundary is an ellipse around the center and in higher dimensions the boundary can be described by an ellipsoid.
+But what do we do, if want to find a boundary in a way that separates the most unlikely 2% of the data points from a sample from the remaining 99%. In the univariate case, this scenario is simple: We just have to compute the first percentile (1% quantile) and 99th percentile. All points that end up in the specified tails would then be classified as anomalous. For the multivariate case this is not that straightforward any longer, since our boundary has to be described by an ellipsoid. However, there is a way out of this problem, which has to do with a so called Mahalanobis-distance, as we will see in the following.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/mahalanbis-chi-squared//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/template/posts-octopress/" title="Creating new Posts in Jekyll with Octopress"><img src="https://MarkusThill.github.io/images/policebay1.jpg" alt="Creating new Posts in Jekyll with Octopress"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-09-05T20:09:19+02:00"><a href="https://MarkusThill.github.io/template/posts-octopress/">September 05, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/template/posts-octopress/" rel="bookmark" title="Creating new Posts in Jekyll with Octopress" itemprop="url">Creating new Posts in Jekyll with Octopress</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <h2 id="creating-new-posts-and-pages">Creating new Posts and Pages</h2>
+<p>New Posts can easily be created using the gem Octopress. Make sure it is installed. Otherwise install with:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gem <span class="nb">install </span>octopress</code></pre></figure>
+
+<p>Then, the following command will generate a new post in the folder <code class="highlighter-rouge">/_posts</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>octopress new post <span class="s2">"Post Title"</span></code></pre></figure>
+
+<p>In case the post should be created in a specified folder, use:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>octopress new post <span class="s2">"Post Title"</span> <span class="nt">--dir</span> myDir</code></pre></figure>
+
+<p>Furthermore, Octopress allows to create new pages with:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>octopress new page new-page/</code></pre></figure>
+
+<h2 id="highlighting-code">Highlighting Code</h2>
+<p>Highlighting code with Rouge can be done as follows:</p>
+
+<figure class="highlight"><pre><code class="language-jekyll" data-lang="jekyll">{% highlight bash %}
+$ octopress new page new-page/
+{% endhighlight %}</code></pre></figure>
+
+<p>There are many supported languages. Check out <a href="https://github.com/jneen/rouge/wiki/List-of-supported-languages-and-lexers">this website</a> for a list.</p>
+
+<h2 id="search-engine-optimization">Search Engine Optimization</h2>
+<p>There is a nice gem that can do the search engine optimization (SEO) in Jekyll for you. This <a href="https://github.com/jekyll/jekyll-seo-tag">jekyll-seo-plugin</a> can be found on <a href="https://github.com/jekyll/jekyll-seo-tag">GitHub</a>. Basically, you just have to add a   {% seo %}   tag right before the   &lt;\head&gt;   tag of your layout files.
+In order to use the seo-tag check the <a href="https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/installation.md">installation guide</a>.</p>
+
+      
+   
+   
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/template/sample-post/" title="Sample Post"><img src="https://MarkusThill.github.io/images/feature.jpg" alt="Sample Post"></a>
+        <div class="image-credit">Image source: <a target="_blank" href="https://www.dargadgetz.com/ios-8-abstract-wallpaper-pack-for-iphone-5s-5c-and-ipod-touch-retina/">dargadgetz</a></div><!-- /.image-credit -->
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-12-02T00:00:00+01:00"><a href="https://MarkusThill.github.io/template/sample-post/">December 02, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/template/sample-post/" rel="bookmark" title="Sample Post" itemprop="url">Sample Post</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Below is just about everything you’ll need to style in the theme. Check the source code to see the many embedded elements within paragraphs.</p>
+
+<h1 id="heading-1">Heading 1</h1>
+
+<h2 id="heading-2">Heading 2</h2>
+
+<h3 id="heading-3">Heading 3</h3>
+
+<h4 id="heading-4">Heading 4</h4>
+
+<h5 id="heading-5">Heading 5</h5>
+
+<h6 id="heading-6">Heading 6</h6>
+
+<h3 id="body-text">Body text</h3>
+
+<p>Lorem ipsum dolor sit amet, test link adipiscing elit. <strong>This is strong</strong>. Nullam dignissim convallis est. Quisque aliquam.</p>
+
+<p class="image-right"><img src="https://MarkusThill.github.io/images/3953273590_704e3899d5_m.jpg" alt="Smithsonian Image" /></p>
+
+<p><em>This is emphasized</em>. Donec faucibus. Nunc iaculis suscipit dui. 53 = 125. Water is H<sub>2</sub>O. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl. The New York Times <cite>(That’s a citation)</cite>. <u>Underline</u>. Maecenas ornare tortor. Donec sed tellus eget sapien fringilla nonummy. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.</p>
+
+<p>HTML and <abbr title="cascading stylesheets">CSS<abbr> are our tools. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus. Praesent mattis, massa quis luctus fermentum, turpis mi volutpat justo, eu volutpat enim diam eget metus.</abbr></abbr></p>
+
+<p>If you want to show just a part of your post in the come page, add the <code class="highlighter-rouge">&lt;!-- more --&gt;</code> tag to your post content. Everything after this tag will be hidden from the page listing page.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/template/sample-post//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-12-01T00:00:00+01:00"><a href="https://MarkusThill.github.io/template/code-highlighting-post/">December 01, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/template/code-highlighting-post/" rel="bookmark" title="Syntax Highlighting Post" itemprop="url">Syntax Highlighting Post</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Syntax highlighting is a feature that displays source code, in different colors and fonts according to the category of terms. This feature facilitates writing in a structured language such as a programming language or a markup language as both structures and syntax errors are visually distinct. Highlighting does not affect the meaning of the text itself; it is intended only for human readers.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup></p>
+
+<h3 id="rouge-code-blocks">Rouge Code Blocks</h3>
+
+<p>To modify styling and highlight colors edit <code class="highlighter-rouge">/_sass/_rouge.scss</code>.</p>
+
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="nf">#container</span> <span class="p">{</span>
+    <span class="nl">float</span><span class="p">:</span> <span class="nb">left</span><span class="p">;</span>
+    <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span> <span class="m">-240px</span> <span class="m">0</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;nav</span> <span class="na">class=</span><span class="s">"pagination"</span> <span class="na">role=</span><span class="s">"navigation"</span><span class="nt">&gt;</span>
+    {% if page.previous %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ site.url }}{{ page.previous.url }}"</span> <span class="na">class=</span><span class="s">"btn"</span> <span class="na">title=</span><span class="s">"{{ page.previous.title }}"</span><span class="nt">&gt;</span>Previous article<span class="nt">&lt;/a&gt;</span>
+    {% endif %}
+    {% if page.next %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ site.url }}{{ page.next.url }}"</span> <span class="na">class=</span><span class="s">"btn"</span> <span class="na">title=</span><span class="s">"{{ page.next.title }}"</span><span class="nt">&gt;</span>Next article<span class="nt">&lt;/a&gt;</span>
+    {% endif %}
+<span class="nt">&lt;/nav&gt;</span><span class="c">&lt;!-- /.pagination --&gt;</span></code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">Jekyll</span>
+  <span class="k">class</span> <span class="nc">TagIndex</span> <span class="o">&lt;</span> <span class="no">Page</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">dir</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+      <span class="vi">@site</span> <span class="o">=</span> <span class="n">site</span>
+      <span class="vi">@base</span> <span class="o">=</span> <span class="n">base</span>
+      <span class="vi">@dir</span> <span class="o">=</span> <span class="n">dir</span>
+      <span class="vi">@name</span> <span class="o">=</span> <span class="s1">'index.html'</span>
+      <span class="nb">self</span><span class="p">.</span><span class="nf">process</span><span class="p">(</span><span class="vi">@name</span><span class="p">)</span>
+      <span class="nb">self</span><span class="p">.</span><span class="nf">read_yaml</span><span class="p">(</span><span class="no">File</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">'_layouts'</span><span class="p">),</span> <span class="s1">'tag_index.html'</span><span class="p">)</span>
+      <span class="nb">self</span><span class="p">.</span><span class="nf">data</span><span class="p">[</span><span class="s1">'tag'</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag</span>
+      <span class="n">tag_title_prefix</span> <span class="o">=</span> <span class="n">site</span><span class="p">.</span><span class="nf">config</span><span class="p">[</span><span class="s1">'tag_title_prefix'</span><span class="p">]</span> <span class="o">||</span> <span class="s1">'Tagged: '</span>
+      <span class="n">tag_title_suffix</span> <span class="o">=</span> <span class="n">site</span><span class="p">.</span><span class="nf">config</span><span class="p">[</span><span class="s1">'tag_title_suffix'</span><span class="p">]</span> <span class="o">||</span> <span class="s1">'&amp;#8211;'</span>
+      <span class="nb">self</span><span class="p">.</span><span class="nf">data</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"</span><span class="si">#{</span><span class="n">tag_title_prefix</span><span class="si">}#{</span><span class="n">tag</span><span class="si">}</span><span class="s2">"</span>
+      <span class="nb">self</span><span class="p">.</span><span class="nf">data</span><span class="p">[</span><span class="s1">'description'</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"An archive of posts tagged </span><span class="si">#{</span><span class="n">tag</span><span class="si">}</span><span class="s2">."</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<h3 id="standard-code-block">Standard Code Block</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;nav class="pagination" role="navigation"&gt;
+    {% if page.previous %}
+        &lt;a href="{{ site.url }}{{ page.previous.url }}" class="btn" title="{{ page.previous.title }}"&gt;Previous article&lt;/a&gt;
+    {% endif %}
+    {% if page.next %}
+        &lt;a href="{{ site.url }}{{ page.next.url }}" class="btn" title="{{ page.next.title }}"&gt;Next article&lt;/a&gt;
+    {% endif %}
+&lt;/nav&gt;&lt;!-- /.pagination --&gt;
+</code></pre></div></div>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p><a href="https://en.wikipedia.org/wiki/Syntax_highlighting">https://en.wikipedia.org/wiki/Syntax_highlighting</a> <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+      
+   
+   
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+
+
+<div class="pagination">
+  <ul class="inline-list">
+    
+    
+      
+        <li><a href="https://MarkusThill.github.io/page8/" class="btn">Previous</a></li>
+      
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/">1</a></li>
+    
+
+    
+    
+      
+      
+      <li>…</li>
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page7/">7</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page8/">8</a></li>
+      
+    
+      
+        <li><strong class="current-page">9</strong></li>
+      
+    
+
+    
+    
+
+    
+      <li><a href="https://MarkusThill.github.io/page10/">10</a></li>
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/page10/" class="btn">Next</a></li>
+    
+  </ul>
+</div>
+
+
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

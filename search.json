@@ -1,0 +1,403 @@
+[
+  
+    {
+      "title"    : "Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/",
+      "date"     : "2019-07-10 11:00:35 +0200"
+    } ,
+  
+    {
+      "title"    : "Derivation of a Weighted Recursive Linear Least Squares Estimator",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/",
+      "date"     : "2019-05-05 22:12:28 +0200"
+    } ,
+  
+    {
+      "title"    : "Gaussian Distribution With a Diagonal Covariance Matrix",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/",
+      "date"     : "2019-05-04 13:00:41 +0200"
+    } ,
+  
+    {
+      "title"    : "Conway&#39;s Game of Life",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/conways-game-of-life/",
+      "date"     : "2019-04-13 23:50:48 +0200"
+    } ,
+  
+    {
+      "title"    : "Verifying Results based on Precision, Recall and False-Positive-Rate",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/verifying-true-positives/",
+      "date"     : "2019-04-13 21:47:46 +0200"
+    } ,
+  
+    {
+      "title"    : "A tiny Exercise&amp;#58; Limit of a Simple Function",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/limit-of-a-simple-function/",
+      "date"     : "2019-02-21 14:03:44 +0100"
+    } ,
+  
+    {
+      "title"    : "Don&#39;t Drink and Derive&amp;#58; A Simple Proof that 1 = 2",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/a-simple-proof-that-1-2/",
+      "date"     : "2019-02-11 20:35:18 +0100"
+    } ,
+  
+    {
+      "title"    : "Computing Large Powers in 6502 Assembler",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/computing-large-powers-in-6502-assembler/",
+      "date"     : "2018-12-15 13:05:11 +0100"
+    } ,
+  
+    {
+      "title"    : "A few Notes on Principal Component Analysis",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/principal-component-analysis/",
+      "date"     : "2018-10-17 11:48:39 +0200"
+    } ,
+  
+    {
+      "title"    : "The Monkey and Coconut Problem",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/math/stats/the-sailors-problem/",
+      "date"     : "2018-07-06 20:06:57 +0200"
+    } ,
+  
+    {
+      "title"    : "A Few Notes on the Runtime Complexity of Latin Hypercube Sampling",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/a-few-notes-on-the-runtime-complexity-of-latin-hypercube-sampling/",
+      "date"     : "2018-03-13 16:40:57 +0100"
+    } ,
+  
+    {
+      "title"    : "Vectorizing Summations and Matrix Identities",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/vectorizing-summations/",
+      "date"     : "2018-03-13 00:47:20 +0100"
+    } ,
+  
+    {
+      "title"    : "The Weighted Linear Least Squares Algorithm",
+      "category" : "",
+      "tags"     : "Least Squares, Regression, Weighted Least Squares, OLS, WLS",
+      "url"      : "https://MarkusThill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/",
+      "date"     : "2018-03-13 00:46:46 +0100"
+    } ,
+  
+    {
+      "title"    : "Constructing Agents for Connect-4&amp;#58; Final Considerations",
+      "category" : "",
+      "tags"     : "Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards",
+      "url"      : "https://MarkusThill.github.io/programming/connect-4-final-considerations/",
+      "date"     : "2018-02-20 20:51:36 +0100"
+    } ,
+  
+    {
+      "title"    : "Constructing Agents for Connect-4&amp;#58; Opening Databases",
+      "category" : "",
+      "tags"     : "Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards",
+      "url"      : "https://MarkusThill.github.io/programming/connect-4-opening-databases/",
+      "date"     : "2018-02-20 18:24:45 +0100"
+    } ,
+  
+    {
+      "title"    : "Constructing Agents for Connect-4&amp;#58; Transposition Tables",
+      "category" : "",
+      "tags"     : "Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards",
+      "url"      : "https://MarkusThill.github.io/programming/connect-4-transposition-tables/",
+      "date"     : "2018-02-19 23:09:33 +0100"
+    } ,
+  
+    {
+      "title"    : "Constructing Agents for Connect-4&amp;#58; Move Ordering",
+      "category" : "",
+      "tags"     : "Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards",
+      "url"      : "https://MarkusThill.github.io/programming/connect-4-move-ordering/",
+      "date"     : "2018-02-17 17:21:56 +0100"
+    } ,
+  
+    {
+      "title"    : "Constructing Agents for Connect-4&amp;#58; Board Representations",
+      "category" : "",
+      "tags"     : "Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards",
+      "url"      : "https://MarkusThill.github.io/programming/connect-4-board-representations/",
+      "date"     : "2018-02-14 11:10:18 +0100"
+    } ,
+  
+    {
+      "title"    : "Constructing Agents for Connect-4&amp;#58; Tree Search Algorithms",
+      "category" : "",
+      "tags"     : "Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards",
+      "url"      : "https://MarkusThill.github.io/programming/connect-4-tree-search-algorithms/",
+      "date"     : "2018-02-12 15:31:46 +0100"
+    } ,
+  
+    {
+      "title"    : "Constructing Agents for Connect-4&amp;#58; Initial Notes",
+      "category" : "",
+      "tags"     : "Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards",
+      "url"      : "https://MarkusThill.github.io/programming/connect-4-introduction-and-tree-search-algorithms/",
+      "date"     : "2018-02-09 16:00:51 +0100"
+    } ,
+  
+    {
+      "title"    : "Buffer Overflow Vulnerabilities",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/buffer-overflows/",
+      "date"     : "2018-02-05 12:18:34 +0100"
+    } ,
+  
+    {
+      "title"    : "Online Estimation of the Inverse Covariance Matrix",
+      "category" : "",
+      "tags"     : "Online, Gaussians, Covariances, Maximum Likelihood Estimation",
+      "url"      : "https://MarkusThill.github.io/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/",
+      "date"     : "2018-02-03 00:59:52 +0100"
+    } ,
+  
+    {
+      "title"    : "Memory of the exponentially decaying Estimator for Mean and Covariance Matrix",
+      "category" : "",
+      "tags"     : "Online, Gaussians, Covariances, Maximum Likelihood Estimation",
+      "url"      : "https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/",
+      "date"     : "2018-02-03 00:55:52 +0100"
+    } ,
+  
+    {
+      "title"    : "The Covariance of weighted Means",
+      "category" : "",
+      "tags"     : "Online, Gaussians, Covariances, Maximum Likelihood Estimation",
+      "url"      : "https://MarkusThill.github.io/math/stats/ml/onthe-covariance-of-the-weighted-mean/",
+      "date"     : "2018-01-18 13:41:30 +0100"
+    } ,
+  
+    {
+      "title"    : "Online Estimation of Weighted Sample Mean and Coviarance Matrix",
+      "category" : "",
+      "tags"     : "Online, Gaussians, Covariances, Maximum Likelihood Estimation",
+      "url"      : "https://MarkusThill.github.io/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/",
+      "date"     : "2018-01-13 21:05:00 +0100"
+    } ,
+  
+    {
+      "title"    : "Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions",
+      "category" : "",
+      "tags"     : "Online, Gaussians, Covariances, Maximum Likelihood Estimation",
+      "url"      : "https://MarkusThill.github.io/math/stats/ml/online-estimation-of-gaussians/",
+      "date"     : "2017-11-20 22:03:56 +0100"
+    } ,
+  
+    {
+      "title"    : "Choosing a Voltage Divider Resistor for a Light Dependent Resistor",
+      "category" : "",
+      "tags"     : "Electronics",
+      "url"      : "https://MarkusThill.github.io/electronics/choosing-a-voltage-divider-resistor-for-a-ldr/",
+      "date"     : "2017-11-16 16:09:20 +0100"
+    } ,
+  
+    {
+      "title"    : "Visualizing High-Dimensional Data With Parallel Coordinates",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/",
+      "date"     : "2017-11-07 16:16:41 +0100"
+    } ,
+  
+    {
+      "title"    : "A short Implementation of Booth&#39;s Multiplication Algorithm in 6502 Assembler",
+      "category" : "",
+      "tags"     : "Assembler 6502 Booth Multiplication",
+      "url"      : "https://MarkusThill.github.io/programming/an-efficient-implementation-of-the-booth-algorithm-in-6502-assembler/",
+      "date"     : "2017-11-04 23:27:18 +0100"
+    } ,
+  
+    {
+      "title"    : "Interesting Properties of the Exclusive Or (XOR)",
+      "category" : "",
+      "tags"     : "Electronics Boolean Algebra",
+      "url"      : "https://MarkusThill.github.io/electronics/a-few-properties-of-the-exclusive-or/",
+      "date"     : "2017-11-02 23:15:15 +0100"
+    } ,
+  
+    {
+      "title"    : "A few Bit-Twiddling Tricks",
+      "category" : "",
+      "tags"     : "bit twiddling hacks performance speed",
+      "url"      : "https://MarkusThill.github.io/programming/soa-few-bit-twiddling-tricks/",
+      "date"     : "2017-10-24 01:04:55 +0200"
+    } ,
+  
+    {
+      "title"    : "Solving Peg Solitaire with efficient Bit-Board Representations",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/solving-peg-solitaire/",
+      "date"     : "2017-10-24 00:13:54 +0200"
+    } ,
+  
+    {
+      "title"    : "Using Slideshows in Jekyll",
+      "category" : "",
+      "tags"     : "Slideshows",
+      "url"      : "https://MarkusThill.github.io/template/using-slideshows-in-jekyll/",
+      "date"     : "2017-10-18 14:45:46 +0200"
+    } ,
+  
+    {
+      "title"    : "Controlling an Adapter Plug with an ESP 8266-01 Wi-Fi Chip and MQTT&amp;#58; A Prototype",
+      "category" : "",
+      "tags"     : "IoT, Electronics, ESP8266",
+      "url"      : "https://MarkusThill.github.io/programming/electronics/control-an-adapter-plug-with-an-esp8266-and-mqtt/",
+      "date"     : "2017-10-12 19:55:53 +0200"
+    } ,
+  
+    {
+      "title"    : "Zalando&#39;s Fashion-MNIST Dataset",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/ml/programming/zalandos-fashion-mnist-dataset/",
+      "date"     : "2017-10-12 15:55:12 +0200"
+    } ,
+  
+    {
+      "title"    : "Surprising Bank Investment",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/math/surprising-investment/",
+      "date"     : "2017-10-11 16:36:06 +0200"
+    } ,
+  
+    {
+      "title"    : "Obfuscating a Function &amp;#8211; How not to write Code",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/programming/obsfucated-c-code/",
+      "date"     : "2017-10-11 15:01:50 +0200"
+    } ,
+  
+    {
+      "title"    : "Separating High-Dimensional Data with given Points for the Decision Boundary",
+      "category" : "",
+      "tags"     : "Classification, Multidimensionality",
+      "url"      : "https://MarkusThill.github.io/separating-highD-data/",
+      "date"     : "2017-10-06 20:42:49 +0200"
+    } ,
+  
+    {
+      "title"    : "A Generalization of the Vector Cross Product",
+      "category" : "",
+      "tags"     : "Vectors, Cross Product, High Dimensions, Generalization, Multi Dimensionality",
+      "url"      : "https://MarkusThill.github.io/vector%20algebra/a-generalization-of-the-vector-cross-product/",
+      "date"     : "2017-10-06 20:33:46 +0200"
+    } ,
+  
+    {
+      "title"    : "Euler&#39;s Number and its Relationship to Random Forests",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/stats/ml/gsampling-with-replacement-random-forest/",
+      "date"     : "2017-09-07 19:37:32 +0200"
+    } ,
+  
+    {
+      "title"    : "Gradient of the Softmax Function with Cross-Entropy Loss",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/stats/ml/gradient-softmax-function-with-cross-entropy/",
+      "date"     : "2017-09-07 19:29:40 +0200"
+    } ,
+  
+    {
+      "title"    : "The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "https://MarkusThill.github.io/mahalanbis-chi-squared/",
+      "date"     : "2017-09-05 21:18:12 +0200"
+    } ,
+  
+    {
+      "title"    : "Creating new Posts in Jekyll with Octopress",
+      "category" : "",
+      "tags"     : "SEO, Search Engine Optimization",
+      "url"      : "https://MarkusThill.github.io/template/posts-octopress/",
+      "date"     : "2017-09-05 20:09:19 +0200"
+    } ,
+  
+    {
+      "title"    : "Sample Post",
+      "category" : "",
+      "tags"     : "sample post",
+      "url"      : "https://MarkusThill.github.io/template/sample-post/",
+      "date"     : "2016-12-02 00:00:00 +0100"
+    } ,
+  
+    {
+      "title"    : "Syntax Highlighting Post",
+      "category" : "",
+      "tags"     : "sample post, code, highlighting",
+      "url"      : "https://MarkusThill.github.io/template/code-highlighting-post/",
+      "date"     : "2016-12-01 00:00:00 +0100"
+    } ,
+  
+    {
+      "title"    : "Dark Post",
+      "category" : "",
+      "tags"     : "sample post",
+      "url"      : "https://MarkusThill.github.io/template/dark-post/",
+      "date"     : "2016-11-30 00:00:00 +0100"
+    } ,
+  
+    {
+      "title"    : "Post with a Background Image",
+      "category" : "",
+      "tags"     : "sample post",
+      "url"      : "https://MarkusThill.github.io/template/background-image/",
+      "date"     : "2016-11-29 00:00:00 +0100"
+    } ,
+  
+    {
+      "title"    : "Sample Link Post",
+      "category" : "",
+      "tags"     : "sample post, link post",
+      "url"      : "https://MarkusThill.github.io/template/sample-link-post/",
+      "date"     : "2016-11-28 00:00:00 +0100"
+    } ,
+  
+    {
+      "title"    : "A Post with a Video",
+      "category" : "",
+      "tags"     : "sample post, video",
+      "url"      : "https://MarkusThill.github.io/template/video-post/",
+      "date"     : "2016-11-27 00:00:00 +0100"
+    } ,
+  
+    {
+      "title"    : "A Post with Images",
+      "category" : "",
+      "tags"     : "sample post, images, test",
+      "url"      : "https://MarkusThill.github.io/template/sample-post-images/",
+      "date"     : "2016-11-26 00:00:00 +0100"
+    } 
+  
+]

@@ -1,0 +1,639 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Memory of the exponentially decaying Estimator for Mean and Covariance Matrix &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="Online, Gaussians, Covariances, Maximum Likelihood Estimation">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Memory of the exponentially decaying Estimator for Mean and Covariance Matrix">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/stats.jpg">
+
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Memory of the exponentially decaying Estimator for Mean and Covariance Matrix | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Memory of the exponentially decaying Estimator for Mean and Covariance Matrix" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="\( \def\myX{\mathbf{x}} \def\myM{\mathbf{M}} \def\myY{\mathbf{y}} \def\mySigma{\mathbf{\Sigma}} \def\myM{\mathbf{M}} \def\myT{\mathsf{T}} \) This post is part 4 of a series of five articles: Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions Online Estimation of Weighted Sample Mean and Coviarance Matrix The Covariance of weighted Means Memory of the exponentially decaying Estimator for Mean and Covariance Matrix Online Estimation of the Inverse Covariance Matrix Due to the exponentially decaying weights, the estimator described in the previous post has a limited historic memory, since older observations fade out more and more with every new data point. With such an approach, it is possible to adapt the parameters to drifting (changing) distributions, however, at cost of less accuracy when the data generating process is a stationary distribution. This means, for example, that for forgetting factors , the (co-) variances of the mean vector do not converge to zero for large sample sizes and there will always be some fixed amount of noise left in the estimation, depending on the “rate” of forgetting (specified by ). So one could ask the following 2 questions: If we compute a weighted mean with forgetting factor , how is this mean distributed, hence, what is and ? What is the memory of an estimator with exponentially decaying weights? Hence: For which sample size , when computing the ordinary mean (without forgetting) instead, can we obtain the same distribution parameters and ? This means that we are basically looking for an corresponding ordinary estimator which only takes into account the last data points in order to compute the mean." />
+<meta property="og:description" content="\( \def\myX{\mathbf{x}} \def\myM{\mathbf{M}} \def\myY{\mathbf{y}} \def\mySigma{\mathbf{\Sigma}} \def\myM{\mathbf{M}} \def\myT{\mathsf{T}} \) This post is part 4 of a series of five articles: Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions Online Estimation of Weighted Sample Mean and Coviarance Matrix The Covariance of weighted Means Memory of the exponentially decaying Estimator for Mean and Covariance Matrix Online Estimation of the Inverse Covariance Matrix Due to the exponentially decaying weights, the estimator described in the previous post has a limited historic memory, since older observations fade out more and more with every new data point. With such an approach, it is possible to adapt the parameters to drifting (changing) distributions, however, at cost of less accuracy when the data generating process is a stationary distribution. This means, for example, that for forgetting factors , the (co-) variances of the mean vector do not converge to zero for large sample sizes and there will always be some fixed amount of noise left in the estimation, depending on the “rate” of forgetting (specified by ). So one could ask the following 2 questions: If we compute a weighted mean with forgetting factor , how is this mean distributed, hence, what is and ? What is the memory of an estimator with exponentially decaying weights? Hence: For which sample size , when computing the ordinary mean (without forgetting) instead, can we obtain the same distribution parameters and ? This means that we are basically looking for an corresponding ordinary estimator which only takes into account the last data points in order to compute the mean." />
+<link rel="canonical" href="https://markusthill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/" />
+<meta property="og:url" content="https://markusthill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-03T00:55:52+01:00" />
+<script type="application/ld+json">
+{"description":"\\( \\def\\myX{\\mathbf{x}} \\def\\myM{\\mathbf{M}} \\def\\myY{\\mathbf{y}} \\def\\mySigma{\\mathbf{\\Sigma}} \\def\\myM{\\mathbf{M}} \\def\\myT{\\mathsf{T}} \\) This post is part 4 of a series of five articles: Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions Online Estimation of Weighted Sample Mean and Coviarance Matrix The Covariance of weighted Means Memory of the exponentially decaying Estimator for Mean and Covariance Matrix Online Estimation of the Inverse Covariance Matrix Due to the exponentially decaying weights, the estimator described in the previous post has a limited historic memory, since older observations fade out more and more with every new data point. With such an approach, it is possible to adapt the parameters to drifting (changing) distributions, however, at cost of less accuracy when the data generating process is a stationary distribution. This means, for example, that for forgetting factors , the (co-) variances of the mean vector do not converge to zero for large sample sizes and there will always be some fixed amount of noise left in the estimation, depending on the “rate” of forgetting (specified by ). So one could ask the following 2 questions: If we compute a weighted mean with forgetting factor , how is this mean distributed, hence, what is and ? What is the memory of an estimator with exponentially decaying weights? Hence: For which sample size , when computing the ordinary mean (without forgetting) instead, can we obtain the same distribution parameters and ? This means that we are basically looking for an corresponding ordinary estimator which only takes into account the last data points in order to compute the mean.","headline":"Memory of the exponentially decaying Estimator for Mean and Covariance Matrix","dateModified":"2018-02-03T00:55:52+01:00","datePublished":"2018-02-03T00:55:52+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" class="feature">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2018-02-03T00:55:52+01:00">February 03, 2018</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~5 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+            <div class="entry-image-index">
+              <img src="https://MarkusThill.github.io/images/stats.jpg" alt="Memory of the exponentially decaying Estimator for Mean and Covariance Matrix">
+              
+            </div>
+        
+      <h1 class="post-title entry-title">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</h1>
+      <p>\( <br />
+  \def\myX{\mathbf{x}}
+  \def\myM{\mathbf{M}}
+  \def\myY{\mathbf{y}}
+  \def\mySigma{\mathbf{\Sigma}}
+  \def\myM{\mathbf{M}}
+  \def\myT{\mathsf{T}}
+\)
+This post is part 4 of a series of five articles:</p>
+<ol>
+  <li><a href="/math/stats/ml/online-estimation-of-gaussians/">Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</a></li>
+  <li><a href="/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/">Online Estimation of Weighted Sample Mean and Coviarance Matrix</a></li>
+  <li><a href="/math/stats/ml/onthe-covariance-of-the-weighted-mean/">The Covariance of weighted Means</a></li>
+  <li><strong><a href="/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</a></strong></li>
+  <li><a href="/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/">Online Estimation of the Inverse Covariance Matrix</a></li>
+</ol>
+
+<p>Due to the exponentially decaying weights, the estimator described in the previous post has a limited historic memory, since older observations fade out more and more with every new data point. With such an approach, it is possible to adapt the parameters to drifting (changing) distributions, however, at cost of less accuracy when the data generating process is a stationary distribution. This means, for example, that for forgetting factors <script type="math/tex">% <![CDATA[
+\lambda<1 %]]></script>, the (co-) variances of the mean vector do not converge to zero for large sample sizes <script type="math/tex">n</script> and there will always be some fixed amount of noise left in the estimation, depending on the “rate” of forgetting (specified by <script type="math/tex">\lambda</script>). So one could ask the following 2 questions:</p>
+<ol>
+  <li>If we compute a weighted mean <script type="math/tex">\bar{X}</script> with forgetting factor <script type="math/tex">\lambda</script>, how is this mean distributed, hence, what is <script type="math/tex">\mu_{\bar{X}}</script> and <script type="math/tex">\mySigma_{\bar{X}}</script>?</li>
+  <li>What is the memory <script type="math/tex">n_{mem}</script> of an estimator with exponentially decaying weights? Hence: For which sample size <script type="math/tex">n_{mem}</script>, when computing the ordinary mean (without forgetting) instead, can we obtain the same distribution parameters <script type="math/tex">\mu_{\bar{X}}</script> and <script type="math/tex">\mySigma_{\bar{X}}</script>? This means that we are basically looking for an corresponding ordinary estimator which only takes into account the last <script type="math/tex">n_{mem}</script> data points in order to compute the mean.</li>
+</ol>
+
+<!--more-->
+
+<p>Intuitively, one could guess for question 2., that the sample size <script type="math/tex">n</script> for the ordinary mean corresponds to the value of the normalization factor <script type="math/tex">W_n</script>, since <script type="math/tex">W_n</script> converges for large <script type="math/tex">n</script> – according to
+<script type="math/tex">\begin{align}
+W_n = \sum_{i=1}^n w'_i = \sum_{i=1}^n \lambda^{(n-i)} = \frac{1-\lambda^n}{1-\lambda}
+\end{align}</script>
+ – towards a fixed value (for <script type="math/tex">% <![CDATA[
+\lambda < 1 %]]></script>):</p>
+
+<script type="math/tex; mode=display">\begin{align}
+\lim_{n\to\infty} W_n = \lim_{n\to\infty} \frac{1-\lambda^n}{1-\lambda} = \frac{1}{1-\lambda}.
+\end{align}</script>
+
+<p>For a forgetting factor of <script type="math/tex">\lambda=0.99</script>, <script type="math/tex">W_n</script> would converge towards <script type="math/tex">W_n = 100</script>. This would correspond to a sample size <script type="math/tex">n</script>, when the unweighted mean is computed. Let us verify this in a small simulation with <script type="math/tex">\lambda = .99</script>:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="w">  </span><span class="n">require</span><span class="p">(</span><span class="n">mvtnorm</span><span class="p">)</span><span class="w">
+  </span><span class="n">require</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+  </span><span class="n">require</span><span class="p">(</span><span class="n">reshape2</span><span class="p">)</span><span class="w">
+
+  </span><span class="n">N_weighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10000</span><span class="w">
+  </span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.99</span><span class="w">
+  </span><span class="n">realCov</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">2</span><span class="p">)</span><span class="w">
+  </span><span class="n">realMu</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="w">
+  </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lambda</span><span class="w"> </span><span class="o">^</span><span class="p">(</span><span class="n">N_weighted</span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="n">N_weighted</span><span class="p">))</span><span class="w">
+  </span><span class="n">W_N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="w">
+  </span><span class="n">oneSimulation</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="c1">#</span><span class="w">
+    </span><span class="c1"># The sample size of the unweighted mean corresponds to W_N</span><span class="w">
+    </span><span class="c1">#</span><span class="w">
+    </span><span class="n">X_unweighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="nf">round</span><span class="p">(</span><span class="n">W_N</span><span class="p">),</span><span class="n">Sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">realCov</span><span class="p">,</span><span class="w">  </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">realMu</span><span class="p">,</span><span class="w"> </span><span class="n">tol</span><span class="o">=</span><span class="w"> </span><span class="m">1e-13</span><span class="p">)</span><span class="w">
+    </span><span class="n">unweightedMean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">apply</span><span class="p">(</span><span class="n">X_unweighted</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="n">mean</span><span class="p">)</span><span class="w">
+    </span><span class="c1">#</span><span class="w">
+    </span><span class="c1"># Take a larger sample size for the weighted mean, to demonstrate</span><span class="w">
+    </span><span class="c1"># its limited memory</span><span class="w">
+    </span><span class="c1">#</span><span class="w">
+    </span><span class="n">X_weighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">N_weighted</span><span class="p">,</span><span class="n">Sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">realCov</span><span class="p">,</span><span class="w">  </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">realMu</span><span class="p">,</span><span class="w"> </span><span class="n">tol</span><span class="o">=</span><span class="w"> </span><span class="m">1e-13</span><span class="p">)</span><span class="w">
+    </span><span class="n">weightedMean</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">apply</span><span class="p">(</span><span class="n">sweep</span><span class="p">(</span><span class="n">X_weighted</span><span class="p">,</span><span class="n">MARGIN</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">`*`</span><span class="p">),</span><span class="m">2</span><span class="p">,</span><span class="n">sum</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">W_N</span><span class="w">
+    </span><span class="nf">c</span><span class="p">(</span><span class="n">unweightedMean</span><span class="p">,</span><span class="w"> </span><span class="n">weightedMean</span><span class="p">)</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+
+  </span><span class="n">Sim</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">replicate</span><span class="p">(</span><span class="m">100000</span><span class="p">,</span><span class="w"> </span><span class="n">oneSimulation</span><span class="p">())</span><span class="w">
+  </span><span class="n">meanUnweighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">Sim</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">,])</span><span class="w">
+  </span><span class="n">meanWeighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">Sim</span><span class="p">[</span><span class="m">3</span><span class="o">:</span><span class="m">4</span><span class="p">,])</span><span class="w">
+  </span><span class="n">covMeanUnweighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">var</span><span class="p">(</span><span class="n">meanUnweighted</span><span class="p">)</span><span class="w">
+  </span><span class="n">covMeanWeighted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">var</span><span class="p">(</span><span class="n">meanWeighted</span><span class="p">)</span><span class="w">
+
+  </span><span class="n">covMeanUnweighted</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">covMeanWeighted</span><span class="w">
+
+  </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">unweighted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meanUnweighted</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">weighted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meanWeighted</span><span class="p">[,</span><span class="m">1</span><span class="p">])</span><span class="w">
+  </span><span class="n">dfPlot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">id.vars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">())</span><span class="w">
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">dfPlot</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">variable</span><span class="p">,</span><span class="w"> </span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">variable</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">geom_density</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">theme_bw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">13</span><span class="p">),</span><span class="w">
+          </span><span class="n">axis.title</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">15</span><span class="p">),</span><span class="w">
+          </span><span class="n">legend.text</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">13</span><span class="p">),</span><span class="w">
+          </span><span class="n">legend.title</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">15</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">scale_fill_discrete</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">expression</span><span class="p">(</span><span class="s2">"Mean"</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="m">1</span><span class="p">]))</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">scale_colour_discrete</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">expression</span><span class="p">(</span><span class="s2">"Mean"</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="m">1</span><span class="p">]))</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Distribution of the unweighted and weighted Sample Mean"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="m">16</span><span class="p">,</span><span class="w"> </span><span class="n">face</span><span class="o">=</span><span class="s2">"bold"</span><span class="p">))</span></code></pre></figure>
+
+<p>If we look at the element-wise ratios of the estimated covariance matrices for the unweighted and weighted mean, we notice, that the memory <script type="math/tex">n_{mem}</script> of the weighted estimator has to be larger than our initial guess <script type="math/tex">W_n=100</script>:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class="w"> </span><span class="n">covMeanUnweighted</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">covMeanWeighted</span><span class="w">
+
+       </span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">     </span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">,]</span><span class="w"> </span><span class="m">1.987378</span><span class="w"> </span><span class="m">1.968643</span><span class="w">
+</span><span class="p">[</span><span class="m">2</span><span class="p">,]</span><span class="w"> </span><span class="m">1.968643</span><span class="w"> </span><span class="m">1.998786</span></code></pre></figure>
+
+<p>Also, the visualizations of the distributions of the sample means are not the same, as the following diagram illustrates for the estimated mean of <script type="math/tex">X_1</script> (for <script type="math/tex">X_2</script>, we would obtain a similar graph):</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2018-01-13-online-estimation-of-weighted-sample-mean-and-coviarance-matrix/distriMeans.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 1:</b>  Comparison of the distributions of sample means for the unweighted and weighted case. Both sample means seem to be normally distributed. Our initial guess that the memory <script type="math/tex">n_{mem}</script> of the weighted estimator corresponds to the sum of all weights <script type="math/tex">W_n</script> appears to be wrong, if we look at the two distributions. The memory of the weighted estimator must be larger, since its variance is smaller than for the unweighted estimator with a sample size of <script type="math/tex">W_n</script>. </p>
+      </figcaption>
+    
+</figure>
+
+<p>Hence, we have to find another way to estimate the memory <script type="math/tex">n_{mem}</script>. We can do this by actually computing the covariance matrix for the weighted mean. The derivations are shown <a href="/math/stats/ml/onthe-covariance-of-the-weighted-mean/">in another article</a>, in which the following resulting equation is found:</p>
+
+<p><script type="math/tex">% <![CDATA[
+\begin{align}
+  \mbox{cov}(\bar{X}_n,\bar{Y}_n) &= \sum_{i=1}^{n} w_i^2 \mbox{cov}(X_i,Y_i) \\
+ &= \mbox{cov}(X,Y) \sum_{i=1}^{n} w_i^2.
+\end{align} %]]></script> <!---_ --></p>
+
+<p>If we extend the above equation to our scenario with exponentially decaying weights, we get:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+  \sum_{i=1}^n w_i^2 &= \sum_{i=1}^n \Big(\frac{\lambda^{n-i}}{W_n}\Big)^2 = \sum_{i=1}^n \frac{(\lambda^{n-i})^2}{W_n^2}\\
+  &= \sum_{i=1}^n \frac{\lambda^{2(n-i)}}{\Big( \sum_{i=1}^n \lambda^{n-i} \Big)^2}\\
+  &= \sum_{i=1}^n \frac{\lambda^{2(n-i)}}{\Big(\frac{1-\lambda^n}{1-\lambda} \Big)^2}\\
+  &=  \Big(\frac{1-\lambda}{1-\lambda^n} \Big)^2 \sum_{i=1}^n \lambda^{2(n-i)}\\
+  &=  \Big(\frac{1-\lambda}{1-\lambda^n} \Big)^2 \frac{1-\lambda^{2n}}{1-\lambda^2}. \\
+\end{align} %]]></script>
+
+<p>For <script type="math/tex">% <![CDATA[
+0<\lambda<1 %]]></script> and large <script type="math/tex">n</script>, the above equation converges towards</p>
+
+<script type="math/tex; mode=display">\begin{align}
+  \lim_{n\to\infty} \sum_{i=1}^n w_i^2 = \lim_{n\to\infty} \Big(\frac{1-\lambda}{1-\lambda^n} \Big)^2 \frac{1-\lambda^{2n}}{1-\lambda^2} = \frac{(1-\lambda)^2}{1-\lambda^2} \\
+\end{align}</script>
+
+<p>Due to the central limit theorem, we know that the ordinary mean vector <script type="math/tex">\mathbf{\bar X}_n</script> is distributed as</p>
+
+<script type="math/tex; mode=display">\begin{align}
+  \mathbf{\bar X}_n \sim \mathcal{N} \big(\mu_X, \frac{1}{n}\mySigma\big),
+\end{align}</script>
+
+<p>so that we have to solve the following correspondence for <script type="math/tex">n_{mem}</script>:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+  \mySigma\frac{1}{n_{mem}} &= \mySigma \cdot \sum_{i=1}^n w_i^2 \\
+  n_{mem} &= \frac{1}{\mySigma \cdot \sum_{i=1}^n w_i^2} \\
+  n_{mem} &= \Big(\frac{1-\lambda^n}{1-\lambda} \Big)^2 \frac{1-\lambda^2}{1-\lambda^{2n}}, \\
+\end{align} %]]></script>
+
+<p>which, for large sample sizes <script type="math/tex">n</script>, converges to:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+  \lim_{n\to\infty} n_{mem} &= \frac{1-\lambda^2}{(1-\lambda)^2} \\
+  &= \frac{1-\lambda^2}{(1-\lambda)^2} \cdot \frac{1+\lambda}{1+\lambda} \\
+  &= \frac{1+\lambda}{1-\lambda} \cdot \frac{1-\lambda^2}{(1+\lambda)(1-\lambda)} \\
+  &= \frac{1+\lambda}{1-\lambda} \cdot \frac{1-\lambda^2}{1-\lambda^2} \\
+  &= \frac{1+\lambda}{1-\lambda}
+\end{align} %]]></script>
+
+<p>For our previous example with <script type="math/tex">\lambda=.99</script>, this would mean that the memory of the estimator is approx. <script type="math/tex">n_{mem} \approx 199</script>.</p>
+
+<p>Now let us replace the sample size of the unweighted mean <code class="highlighter-rouge">X_unweighted</code> in the R-script of the previous example and then run the code again. This time we get get:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class="w"> </span><span class="n">covMeanUnweighted</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">covMeanWeighted</span><span class="w">
+
+       </span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">     </span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">,]</span><span class="w"> </span><span class="m">0.9961787</span><span class="w"> </span><span class="m">1.068541</span><span class="w">
+</span><span class="p">[</span><span class="m">2</span><span class="p">,]</span><span class="w"> </span><span class="m">1.0685406</span><span class="w"> </span><span class="m">1.022556</span></code></pre></figure>
+
+<p>and also corresponding density plot for the first component of the mean vector indicates that <script type="math/tex">n_{mem} \approx 199</script> is now the correct value:</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2018-01-13-online-estimation-of-weighted-sample-mean-and-coviarance-matrix/distriMeans2.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 2:</b>  Comparison of the distributions of sample means for the unweighted and weighted case. Both sample means seem to be normally distributed. This time we set <script type="math/tex">n_{mem} = \frac{1-\lambda^2}{(1-\lambda)^2} =199</script>, which appears to be the correct value. </p>
+      </figcaption>
+    
+</figure>
+
+<p>We can also take a look at how the estimator can track the arithmetic mean of a time series with concept changes, as shown in the figure below.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2018-01-13-online-estimation-of-weighted-sample-mean-and-coviarance-matrix/forgetting.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 3:</b>  Comparison of several estimators with different forgetting factors <script type="math/tex">Q=\lambda</script> for the estimation of an arithmetic mean of a time series with concept changes. The original time series is a data stream sampled from a normal distribution. For illustrative purposes, each curve tracks a different time series with different means. At the point <script type="math/tex">n=5000</script> all time series undergo a sudden change in their mean. Depending on the forgetting factor, this change can be tracked more or less well. </p>
+      </figcaption>
+    
+</figure>
+
+<p>As we can see, forgetting factors close to 1 can reduce the variance in the estimated mean, but have the drawback, that they cannot track sudden changes in the time series sufficiently fast. On the other side, smaller forgetting factors have a rather large variance in the estimated mean but they can track changes in the time series much faster.</p>
+
+<p>The above figure can be generated with the following R-Code:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">require</span><span class="p">(</span><span class="n">mvtnorm</span><span class="p">)</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">MASS</span><span class="p">)</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">parallel</span><span class="p">)</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">reshape2</span><span class="p">)</span><span class="w">
+
+</span><span class="n">getMeanSeries</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w">
+    </span><span class="n">mm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w">
+    </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">rnorm</span><span class="p">(</span><span class="m">10000</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="o">=</span><span class="n">mm</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="c1">#, rnorm(10000, mean = -5), rnorm(10000, mean = 0)  #</span><span class="w">
+    </span><span class="n">X</span><span class="p">[</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">5000</span><span class="p">)]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">X</span><span class="p">[</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">5000</span><span class="p">)]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">5</span><span class="w">
+    </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w">
+    </span><span class="n">covErrs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+    </span><span class="n">Ncount</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">0</span><span class="w">
+    </span><span class="n">QSum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w">
+    </span><span class="n">myMeans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myVars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="nf">length</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="w">
+    </span><span class="n">M</span><span class="o">=</span><span class="m">0</span><span class="w">
+    </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w">
+      </span><span class="n">QSum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Q</span><span class="o">*</span><span class="n">QSum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="w">
+      </span><span class="n">delta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mean</span><span class="w">
+      </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">delta</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">QSum</span><span class="w">
+      </span><span class="n">myMeans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mean</span><span class="w">
+      </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Q</span><span class="o">*</span><span class="n">M</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">myMeans</span><span class="p">[</span><span class="n">i</span><span class="m">-1</span><span class="p">])</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">myMeans</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="w">
+      </span><span class="n">myVars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">QSum</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="n">return</span><span class="w"> </span><span class="p">(</span><span class="n">myMeans</span><span class="p">)</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+
+  </span><span class="n">M</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">lapply</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">.999</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0.99</span><span class="p">,</span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0.9</span><span class="p">,</span><span class="m">0</span><span class="p">)),</span><span class="w"> </span><span class="n">getMeanSeries</span><span class="p">)</span><span class="w">
+  </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">do.call</span><span class="p">(</span><span class="n">cbind</span><span class="p">,</span><span class="w"> </span><span class="n">M</span><span class="p">)</span><span class="w">
+  </span><span class="n">colnames</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Q=1"</span><span class="p">,</span><span class="s2">"Q=0.999"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Q=0.99"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Q=0.9"</span><span class="p">)</span><span class="w">
+  </span><span class="n">dfPlot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="w">
+  </span><span class="n">colnames</span><span class="p">(</span><span class="n">dfPlot</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Forgetting"</span><span class="p">,</span><span class="w"> </span><span class="s2">"value"</span><span class="p">)</span><span class="w">
+  </span><span class="n">levels</span><span class="p">(</span><span class="n">dfPlot</span><span class="o">$</span><span class="n">Forgetting</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Q=1"</span><span class="p">,</span><span class="s2">"Q=0.999"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Q=0.99"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Q=0.9"</span><span class="p">)</span><span class="w">
+  </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dfPlot</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="n">Forgetting</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"n"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"estimated mean"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">theme_bw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">theme</span><span class="p">(</span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">25</span><span class="p">))</span><span class="w">
+  </span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></code></pre></figure>
+
+<!---# TODO
+- 2 ways to compute memory: 1. based on CLT, 2. based on how long it takes to track a set-point change -->
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="https://MarkusThill.github.io/tags#Online" title="Pages tagged Online" class="tag"><span class="term">Online</span></a><a href="https://MarkusThill.github.io/tags#Gaussians" title="Pages tagged Gaussians" class="tag"><span class="term">Gaussians</span></a><a href="https://MarkusThill.github.io/tags#Covariances" title="Pages tagged Covariances" class="tag"><span class="term">Covariances</span></a><a href="https://MarkusThill.github.io/tags#Maximum Likelihood Estimation" title="Pages tagged Maximum Likelihood Estimation" class="tag"><span class="term">Maximum Likelihood Estimation</span></a></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/math/stats/ml/onthe-covariance-of-the-weighted-mean/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

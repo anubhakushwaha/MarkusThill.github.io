@@ -1,0 +1,706 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/mahalanbis-chi-squared/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/1141s.jpg">
+
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/mahalanbis-chi-squared/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In practice, sometimes (multivariate) Gaussian distributions are used for anomaly detection tasks (assuming that the considered data is approx. normally distributed): the parameters of the Gaussian can be estimated using maximum likelihood estimation (MLE) where the maximum likelihood estimate is the sample mean and sample covariance matrix. After the estimating the parameters of the distribution one has to specify a critical value which separates the normal data from the anomalous data. Typically, this critical value is taken from the probability density function (PDF) in such a way that it is smaller than the PDF value of all normal data points in the data set. Then a new data point can be classified as anomalous if the value of the PDF for this new point is below the critical value. Hence, the critical value specifies a boundary which is used to separate normal from anomalous data. In the univariate case the boundary separates the lower and upper tails of the Gaussian from its center (mean). In the 2-dimensional case the boundary is an ellipse around the center and in higher dimensions the boundary can be described by an ellipsoid. But what do we do, if want to find a boundary in a way that separates the most unlikely 2% of the data points from a sample from the remaining 99%. In the univariate case, this scenario is simple: We just have to compute the first percentile (1% quantile) and 99th percentile. All points that end up in the specified tails would then be classified as anomalous. For the multivariate case this is not that straightforward any longer, since our boundary has to be described by an ellipsoid. However, there is a way out of this problem, which has to do with a so called Mahalanobis-distance, as we will see in the following." />
+<meta property="og:description" content="In practice, sometimes (multivariate) Gaussian distributions are used for anomaly detection tasks (assuming that the considered data is approx. normally distributed): the parameters of the Gaussian can be estimated using maximum likelihood estimation (MLE) where the maximum likelihood estimate is the sample mean and sample covariance matrix. After the estimating the parameters of the distribution one has to specify a critical value which separates the normal data from the anomalous data. Typically, this critical value is taken from the probability density function (PDF) in such a way that it is smaller than the PDF value of all normal data points in the data set. Then a new data point can be classified as anomalous if the value of the PDF for this new point is below the critical value. Hence, the critical value specifies a boundary which is used to separate normal from anomalous data. In the univariate case the boundary separates the lower and upper tails of the Gaussian from its center (mean). In the 2-dimensional case the boundary is an ellipse around the center and in higher dimensions the boundary can be described by an ellipsoid. But what do we do, if want to find a boundary in a way that separates the most unlikely 2% of the data points from a sample from the remaining 99%. In the univariate case, this scenario is simple: We just have to compute the first percentile (1% quantile) and 99th percentile. All points that end up in the specified tails would then be classified as anomalous. For the multivariate case this is not that straightforward any longer, since our boundary has to be described by an ellipsoid. However, there is a way out of this problem, which has to do with a so called Mahalanobis-distance, as we will see in the following." />
+<link rel="canonical" href="https://markusthill.github.io/mahalanbis-chi-squared/" />
+<meta property="og:url" content="https://markusthill.github.io/mahalanbis-chi-squared/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-09-05T21:18:12+02:00" />
+<script type="application/ld+json">
+{"description":"In practice, sometimes (multivariate) Gaussian distributions are used for anomaly detection tasks (assuming that the considered data is approx. normally distributed): the parameters of the Gaussian can be estimated using maximum likelihood estimation (MLE) where the maximum likelihood estimate is the sample mean and sample covariance matrix. After the estimating the parameters of the distribution one has to specify a critical value which separates the normal data from the anomalous data. Typically, this critical value is taken from the probability density function (PDF) in such a way that it is smaller than the PDF value of all normal data points in the data set. Then a new data point can be classified as anomalous if the value of the PDF for this new point is below the critical value. Hence, the critical value specifies a boundary which is used to separate normal from anomalous data. In the univariate case the boundary separates the lower and upper tails of the Gaussian from its center (mean). In the 2-dimensional case the boundary is an ellipse around the center and in higher dimensions the boundary can be described by an ellipsoid. But what do we do, if want to find a boundary in a way that separates the most unlikely 2% of the data points from a sample from the remaining 99%. In the univariate case, this scenario is simple: We just have to compute the first percentile (1% quantile) and 99th percentile. All points that end up in the specified tails would then be classified as anomalous. For the multivariate case this is not that straightforward any longer, since our boundary has to be described by an ellipsoid. However, there is a way out of this problem, which has to do with a so called Mahalanobis-distance, as we will see in the following.","headline":"The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution","dateModified":"2017-09-05T21:18:12+02:00","datePublished":"2017-09-05T21:18:12+02:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/mahalanbis-chi-squared/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/mahalanbis-chi-squared/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" class="feature">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2017-09-05T21:18:12+02:00">September 05, 2017</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~6 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+            <div class="entry-image-index">
+              <img src="https://MarkusThill.github.io/images/1141s.jpg" alt="The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution">
+              <div class="image-credit">Image source: <a target="_blank" href="https://www.freepik.com">Designed by onlyyouqj / Freepik</a></div><!-- /.image-credit -->
+            </div>
+        
+      <h1 class="post-title entry-title">The Relationship between the Mahalanobis Distance and the Chi-Squared Distribution</h1>
+      <p>In practice, sometimes (multivariate) Gaussian distributions are used for anomaly detection tasks (assuming that the considered data is approx. normally distributed): the parameters of the Gaussian can be estimated using maximum likelihood estimation (MLE) where the maximum likelihood estimate is the sample mean and sample covariance matrix. After the estimating the parameters of the distribution one has to specify a critical value which separates the normal data from the anomalous data. Typically, this critical value is taken from the probability density function (PDF) in such a way that it is smaller than the PDF value of all normal data points in the data set. Then a new data point can be classified as anomalous if the value of the PDF for this new point is below the critical value. Hence, the critical value specifies a boundary which is used to separate normal from anomalous data. In the univariate case the boundary separates the lower and upper tails of the Gaussian from its center (mean). In the 2-dimensional case the boundary is an ellipse around the center and in higher dimensions the boundary can be described by an ellipsoid.
+But what do we do, if want to find a boundary in a way that separates the most unlikely 2% of the data points from a sample from the remaining 99%. In the univariate case, this scenario is simple: We just have to compute the first percentile (1% quantile) and 99th percentile. All points that end up in the specified tails would then be classified as anomalous. For the multivariate case this is not that straightforward any longer, since our boundary has to be described by an ellipsoid. However, there is a way out of this problem, which has to do with a so called Mahalanobis-distance, as we will see in the following.</p>
+
+<!--more-->
+<p>\(
+   \def\matr#1{\mathbf #1}
+   \def\tp{\mathsf T}
+\)</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<h3 id="multiplication-of-a-matrix-with-its-transpose">Multiplication of a Matrix with its Transpose</h3>
+<p>Generally, the product of a <script type="math/tex">n \times \ell</script> matrix <script type="math/tex">\matr A</script> and a <script type="math/tex">\ell \times p</script> matrix <script type="math/tex">\matr B</script> is defined as:</p>
+
+<script type="math/tex; mode=display">(\matr A \matr B)_{ij}=\sum_{k=1}^m \matr A_{ik} \matr B_{kj}</script>
+
+<p>Then, the multiplication of a matrix <script type="math/tex">\matr A</script> with its transpose <script type="math/tex">\matr A^\tp</script> can be written as:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+(\matr A \matr A^\mathsf T)_{ij} &= \sum_{k=1}^\ell \matr A_{ik} \matr A^\mathsf T_{kj} \\
+&= \sum_{k=1}^\ell \matr A_{ik} \matr A_{jk} \\
+\matr A \matr A^\mathsf T &= \sum_{k=1}^\ell \vec a_{k} \vec a_{k}^\tp \label{eq:matrixProductWithTranspose}
+\end{align} %]]></script>
+
+<p>where <script type="math/tex">\vec a_{k}</script> is the <script type="math/tex">k</script>th column vector of matrix <script type="math/tex">\matr A</script>.
+Another trivial relation required later is as follows:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+x &= \vec a^\mathsf T \vec b \\
+y &= \vec b^\mathsf T \vec a = x^\mathsf T=x \\
+xy &= \vec a^\mathsf T \vec b \, \vec b^\mathsf T \vec a = x^2 \\
+&= (\vec a^\mathsf T \vec b)^2 \label{eq:multOfTwoSkalars}
+\end{align} %]]></script>
+
+<h3 id="inverse-of-a-matrix-product">Inverse of a Matrix-Product</h3>
+<p><script type="math/tex">\begin{align}
+(\matr{A} \matr B)^{-1} = \matr B^{-1}\matr A^{-1} \label{eq:inverseProduct}
+\end{align}</script>
+since
+<script type="math/tex">% <![CDATA[
+\begin{align}	( \matr A  \matr B)(\matr B^{-1} \matr  A^{-1})
+&= (\matr A(\matr  B  \matr B^{-1})) \matr A^{-1} \\
+&= ( \matr  A\mathbf{I}) \matr A^{-1} \\&= \matr A  \matr A^{-1} \\&= \mathbf{I}
+\end{align} %]]></script></p>
+
+<h3 id="eigenvalues-and-eigenvectors">Eigenvalues and Eigenvectors</h3>
+<p>For a matrix <script type="math/tex">\matr A</script> solve:
+<script type="math/tex">\begin{equation}
+  \matr{A} \vec{u} = \lambda \vec{u}
+\end{equation}</script></p>
+
+<p>A value <script type="math/tex">\lambda</script> which fulfills the equation is called an eigenvalue of <script type="math/tex">\matr A</script> and the corresponding vector <script type="math/tex">\vec\mu</script>  is called eigenvector. When the eigenvectors of <script type="math/tex">\matr A</script> are arranged in a matrix <script type="math/tex">\matr U</script>, we have:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr{A} \matr{U} &=
+\matr{U} \matr{\Lambda}\\
+\matr{A} &= \matr{U} \matr{\Lambda} \matr{U}^{-1} \label{eq:eigendecomp}
+\end{align} %]]></script>
+
+<p>where <script type="math/tex">\matr \Lambda</script> is a diagonal matrix containing the eigenvalues <script type="math/tex">\lambda_i</script> of the corresponding eigenvectors. This representation, where the matrix is represented in terms of its eigenvalues and eigenvectors is also called eigenvalue decomposition. For symmetric matrices <script type="math/tex">\matr{A}</script>, the eigenvectors are orthogonal (orthonormal) and the matrix <script type="math/tex">\matr{U}</script> is orthogonal as well (the product with its transpose is the identity matrix). In this case <script type="math/tex">\matr{U}^{-1}=\matr{U}^{T}</script>, and equation <script type="math/tex">\eqref{eq:eigendecomp}</script> can be written as:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr{A} &= \matr{U} \matr{\Lambda} \matr{U}^{T}
+\end{align} %]]></script>
+
+<p>In this case, also the square root of <script type="math/tex">\matr A</script> (written here as <script type="math/tex">\matr A^{\frac{1}{2}}</script>) – such that <script type="math/tex">\matr A^{\frac{1}{2}}\matr A^{\frac{1}{2}}=A</script> – can be easily found to be:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr A^{\frac{1}{2}} &= \matr{U} \matr{\Lambda}^{\frac{1}{2}} \matr{U}^{T} \label{eq:sqrtSymMatrix}
+\end{align} %]]></script>
+
+<p>since</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr A^{\frac{1}{2}} \cdot \matr A^{\frac{1}{2}} &= \matr{U} \matr{\Lambda}^{\frac{1}{2}} \matr{U}^{T} \matr{U} \matr{\Lambda}^{\frac{1}{2}} \matr{U}^{T} \\
+&=\matr{U} \matr{\Lambda}^{\frac{1}{2}} \matr I \matr{\Lambda}^{\frac{1}{2}} \matr{U}^{T} \\
+&= \matr{U} \matr{\Lambda} \matr{U}^{T} \\
+&= \matr A
+\end{align} %]]></script>
+
+<p>The eigenvalue decomposition of the inverse of a matrix <script type="math/tex">\matr A</script> can be computed as follows, using the relation described in equation <script type="math/tex">\eqref{eq:inverseProduct}</script> and the associative property of the matrix product:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr{A}^{-1} &= \big( \matr U \matr \Lambda \matr U^{-1} \big) \\
+&= \big(  \matr U^{-1} \big)^{-1} \matr \Lambda^{-1}   \matr U^{-1}\\
+&=  \matr U \matr \Lambda^{-1}   \matr U^{-1}\\
+&=  \matr U \matr \Lambda^{-1}   \matr U^{T}\label{eq:eigenvalueInverse} \\
+\end{align} %]]></script>
+
+<p>Note that <script type="math/tex">\Lambda^{-1}</script> is again a diagonal matrix containing the inverse eigenvalues of <script type="math/tex">\matr{A}</script>.</p>
+
+<h3 id="linear-affine-transform-of-a-normally-distributed-random-variable">Linear Affine Transform of a Normally Distributed Random Variable</h3>
+
+<p>Assume we apply a linear affine transform to a random variable <script type="math/tex">X \thicksim N(\vec \mu_x, \Sigma_x)</script> with a mean vector <script type="math/tex">\vec\mu_x</script>  and a covariance matrix <script type="math/tex">\Sigma_x</script> in order to create a new random variable <script type="math/tex">Y</script>:</p>
+
+<script type="math/tex; mode=display">Y=\matr A X + \vec b.</script>
+
+<p>One can compute the new mean <script type="math/tex">\vec\mu_y</script> and covariance matrix <script type="math/tex">\Sigma_y</script> for <script type="math/tex">Y</script>:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\vec \mu_y &= E \{ Y \} \\
+&=E \{\matr A X + \vec b  \} \\
+&= \matr A E \{\matr  X \} + \vec b \\
+&= \matr A \vec \mu_x + \vec b \label{eq:AffineLinearTransformMean} \\
+\end{align} %]]></script>
+
+<p>and</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr \Sigma_y &= E \{ (Y - \vec \mu_y) (Y - \vec \mu_y)^\tp \} \\
+&= E \{ \big[(\matr A X + \vec b) - (\matr A \vec \mu_x + \vec b) \big] \big[(\matr A X + \vec b) - (\matr A \vec \mu_x + \vec b) \big]^\tp \} \\
+&= E \{ \big[\matr A (X -  \vec \mu_x) \big] \big[\matr A (X -  \vec \mu_x  ) \big]^\tp \} \\
+&= E \{ \matr A (X -  \vec \mu_x) (X -  \vec \mu_x  )^\tp \matr A^\tp \} \\
+&= \matr A E \{  (X -  \vec \mu_x) (X -  \vec \mu_x  )^\tp  \}  \matr A^\tp\\
+&= \matr A \matr \Sigma_x \matr A^\tp \label{eq:AffineLinearTransformCovariance}\\
+\end{align} %]]></script>
+
+<h2 id="quantile-estimation-for-multivariate-gaussian-distributions">Quantile Estimation for multivariate Gaussian Distributions</h2>
+<ul>
+  <li>Calculating quantiles for multivariate normal distributions is not that trivial as in the one-dimensional case, since we cannot simply compute the integral in the tails of the distribution</li>
+  <li>The quantiles in the bivariate case can be seen as ellipses, in higher dimensions as ellipsoids</li>
+  <li>The Mahalanobis distance is an interesting measure to describe all points on the surface of an ellipsoid.</li>
+  <li>More formal: The usual quantile definition requires a random variable: The p-quantile for a random distribution is the value that fulfills . In the case of a multivariate normal distribution we can take the squared Mahalanobis distance  between a point of the multivariate normal distribution and its mean as such a random variable. Then the p-quantile computation will answer the following question: Which value  is required so that a random point  fulfills ? In other words, when we pick a random point  from the distribution, it will have with probability p a squared Mahalanobis distance equal or smaller than . The set of points with  forms an ellipsoid.</li>
+  <li>In a naive solution one can use a Monte Carlo approach to sample the multivariate normal distribution and compute the quantile based on the Mahalanobis distances of the elements of the sample</li>
+  <li>However, this Monte Carlo approach is rather computationally inefficient, especially if quantiles have to be computed very often</li>
+  <li>One can show that the squared Mahalanobis distance of a Gaussian distribution is actually Chi-Square distributed.</li>
+</ul>
+
+<h3 id="empirical-results-suggesting-that-the-mahalanobis-distance-is-chi-square-distributed">Empirical Results suggesting that the Mahalanobis Distance is Chi-Square distributed</h3>
+<p>In a Quantile-Quantile Plot one can see that quantiles of the Mahalanobis distance of a sample drawn from a Gaussian distribution is very similar to the corresponding quantiles computed on the Chi-Square distribution. The following R-script shows this:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">Matrix</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">MASS</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">DIM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="n">nSample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000</span><span class="w">
+
+</span><span class="n">Posdef</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">ev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">runif</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="n">Z</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="n">ncol</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">^</span><span class="m">2</span><span class="p">))</span><span class="w">
+  </span><span class="n">decomp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">qr</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span><span class="w">
+  </span><span class="n">Q</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">qr.Q</span><span class="p">(</span><span class="n">decomp</span><span class="p">)</span><span class="w">
+  </span><span class="n">R</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">qr.R</span><span class="p">(</span><span class="n">decomp</span><span class="p">)</span><span class="w">
+  </span><span class="n">d</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="n">R</span><span class="p">)</span><span class="w">
+  </span><span class="n">ph</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w">
+  </span><span class="n">O</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">Q</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="n">ph</span><span class="p">)</span><span class="w">
+  </span><span class="n">Z</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">O</span><span class="p">)</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">O</span><span class="w">
+  </span><span class="nf">return</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="n">Sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Posdef</span><span class="p">(</span><span class="n">DIM</span><span class="p">)</span><span class="w">
+</span><span class="n">muhat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">DIM</span><span class="p">)</span><span class="w">
+
+
+</span><span class="n">sample</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">nSample</span><span class="p">,</span><span class="w"> </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">muhat</span><span class="p">,</span><span class="w"> </span><span class="n">Sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sigma</span><span class="p">)</span><span class="w">
+</span><span class="n">C</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">.5</span><span class="o">*</span><span class="nf">log</span><span class="p">(</span><span class="n">det</span><span class="p">(</span><span class="m">2</span><span class="o">*</span><span class="nb">pi</span><span class="o">*</span><span class="n">Sigma</span><span class="p">))</span><span class="w">
+</span><span class="n">mahaDist2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mahalanobis</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sample</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="o">=</span><span class="n">muhat</span><span class="p">,</span><span class="n">cov</span><span class="o">=</span><span class="n">Sigma</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#</span><span class="w">
+</span><span class="c1"># Interestingly, the Mahalanobis distance of samples follows a Chi-Square distribution</span><span class="w">
+</span><span class="c1"># with d degrees of freedom</span><span class="w">
+</span><span class="c1">#</span><span class="w">
+</span><span class="n">pps</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">100</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="m">100+1</span><span class="p">)</span><span class="w">
+</span><span class="n">qq1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sapply</span><span class="p">(</span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pps</span><span class="p">,</span><span class="w"> </span><span class="n">FUN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="n">quantile</span><span class="p">(</span><span class="n">mahaDist2</span><span class="p">,</span><span class="w"> </span><span class="n">probs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">})</span><span class="w">
+</span><span class="n">qq2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">sapply</span><span class="p">(</span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pps</span><span class="p">,</span><span class="w"> </span><span class="n">FUN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">qchisq</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="o">=</span><span class="n">ncol</span><span class="p">(</span><span class="n">Sigma</span><span class="p">))</span><span class="w">
+
+</span><span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">qEmp</span><span class="o">=</span><span class="w"> </span><span class="n">qq1</span><span class="p">,</span><span class="w"> </span><span class="n">qChiSq</span><span class="o">=</span><span class="n">qq2</span><span class="p">)</span><span class="w">
+</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dat</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">qEmp</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">qChiSq</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Sample quantile"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Chi-Squared Quantile"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_abline</span><span class="p">(</span><span class="n">slope</span><span class="o">=</span><span class="m">1</span><span class="p">)</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></code></pre></figure>
+
+<!--- %* -->
+
+<p><img src="https://MarkusThill.github.io/images/Q-Q-Plot.png" alt="Picture description" class="image-center" /></p>
+
+<h3 id="the-squared-mahalanobis-distance-follows-a-chi-square-distribution-more-formal-derivation">The squared Mahalanobis Distance follows a Chi-Square Distribution: More formal Derivation</h3>
+<p>The Mahalanobis distance between two points <script type="math/tex">\vec x</script> and <script type="math/tex">\vec y</script> is defined as</p>
+
+<script type="math/tex; mode=display">d(\vec x,\vec y) = \sqrt{(\vec x -\vec y )^\tp \matr \Sigma^{-1} (\vec x - \vec y)}</script>
+
+<p>Thus, the squared Mahalanobis distance of a random vector \matr X and the center \vec \mu of a multivariate Gaussian distribution is defined as:
+<script type="math/tex">\begin{align}
+D = d(\matr X,\vec \mu)^2 = (\matr X -\vec \mu )^\tp \matr \Sigma^{-1} (\matr X - \vec \mu ) \label{eq:sqMahalanobis}
+\end{align}</script></p>
+
+<p>where <script type="math/tex">\matr \Sigma</script> is a <script type="math/tex">\ell \times \ell</script> covariance matrix and <script type="math/tex">\vec \mu</script> is the mean vector. In order to achieve a different representation of <script type="math/tex">D</script> one can first perform an eigenvalue decomposition on <script type="math/tex">\matr \Sigma^{-1}</script> which is (with Eq. <script type="math/tex">\eqref{eq:eigenvalueInverse}</script> and assuming orthonormal eigenvectors):</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr \Sigma^{-1} &= \matr U \matr \Lambda^{-1} \matr U^{-1} \\
+&= \matr U \matr \Lambda^{-1} \matr U^{T} \\
+\end{align} %]]></script>
+
+<p>With Eq. <script type="math/tex">\eqref{eq:matrixProductWithTranspose}</script> we get:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr \Sigma^{-1} &= \sum_{k=1}^\ell \lambda_k^{-1} \vec u_{k} \vec u_{k}^\tp \label{eq:SigmaInverseAsSum}
+\end{align} %]]></script>
+
+<p>where <script type="math/tex">\vec u_{k}</script> is the <script type="math/tex">k</script>th eigenvector of the corresponding eigenvalue <script type="math/tex">\lambda_k</script>. Plugging \eqref{eq:SigmaInverseAsSum} back into \eqref{eq:sqMahalanobis} results in:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+D &= (\matr X -\vec \mu )^\tp \matr \Sigma^{-1} (\matr X - \vec \mu ) \\
+ &= (\matr X -\vec \mu )^\tp \Bigg( \sum_{k=1}^\ell \lambda_k^{-1} \vec u_{k} \vec u_{k}^\tp \Bigg) (\matr X - \vec \mu ) \\
+&= \sum_{k=1}^\ell \lambda_k^{-1} (\matr X -\vec \mu )^\tp   \vec u_{k} \vec u_{k}^\tp  (\matr X - \vec \mu )
+\end{align} %]]></script>
+
+<p>With Eq. \eqref{eq:multOfTwoSkalars} one gets:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+D &= \sum_{k=1}^\ell \lambda_k^{-1} \Big[ \vec u_{k}^\tp  (\matr X - \vec \mu ) \Big]^2\\
+&= \sum_{k=1}^\ell  \Big[ \lambda_k^{-\frac{1}{2}} \vec u_{k}^\tp  (\matr X - \vec \mu ) \Big]^2\\
+&= \sum_{k=1}^\ell Y_k^2
+\end{align} %]]></script>
+
+<p>where <script type="math/tex">Y_k</script> is a new random variable based on an affine linear transform of the random vector <script type="math/tex">\matr X</script>. According to Eq. \eqref{eq:AffineLinearTransformMean} , we have <script type="math/tex">\matr Z = (\matr X - \vec \mu ) \thicksim N(\vec 0,\Sigma)</script>.  If we set <script type="math/tex">\vec a_{k}^\tp = \lambda_k^{-\frac{1}{2}} \vec u_{k}^\tp</script> then we get <script type="math/tex">Y_k = \vec a_{k}^\tp \matr Z = \lambda_k^{-\frac{1}{2}} \vec u_{k}^\tp \matr Z</script>. Note that <script type="math/tex">Y_k</script> is now a random Variable drawn from a univariate normal distribution <script type="math/tex">Y_k \thicksim N(0,\sigma_k^2)</script>, where, according to \eqref{eq:AffineLinearTransformCovariance}:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\sigma_k^2 &= \vec a_{k}^\tp \Sigma \vec a_{k}\\
+&= \lambda_k^{-\frac{1}{2}} \vec u_{k}^\tp \Sigma \lambda_k^{-\frac{1}{2}} \vec u_{k} \\
+&= \lambda_k^{-1} \vec u_{k}^\tp \Sigma \vec u_{k} \label{eq:smallSigma}
+\end{align} %]]></script>
+
+<p>If we insert</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr \Sigma &= \sum_{j=1}^\ell \lambda_j \vec u_{j} \vec u_{j}^\tp
+\end{align} %]]></script>
+
+<p>into Eq. \eqref{eq:smallSigma}, we get:
+<script type="math/tex">% <![CDATA[
+\begin{align}
+\sigma_k^2 &= \lambda_k^{-1} \vec u_{k}^\tp \Sigma \vec u_{k} \\
+&= \lambda_k^{-1} \vec u_{k}^\tp \Bigg( \sum_{j=1}^\ell \lambda_j \vec u_{j} \vec u_{j}^\tp \Bigg) \vec u_{k} \\
+&=   \sum_{j=1}^\ell \lambda_k^{-1} \vec u_{k}^\tp \lambda_j \vec u_{j} \vec u_{j}^\tp \vec u_{k}   \\
+&=   \sum_{j=1}^\ell \lambda_k^{-1} \lambda_j \vec u_{k}^\tp  \vec u_{j} \vec u_{j}^\tp \vec u_{k}   \\
+\end{align} %]]></script></p>
+
+<p>Since all eigenvectors <script type="math/tex">\vec u_{i}</script> are pairwise orthonormal the dotted products <script type="math/tex">\vec u_{k}^\tp  \vec u_{j}</script> and <script type="math/tex">\vec u_{j}^\tp \vec u_{k}</script> will be zero for <script type="math/tex">j \neq k</script>. Only for the case <script type="math/tex">j = k</script> we get:
+<script type="math/tex">% <![CDATA[
+\begin{align}
+\sigma_k^2 &= \lambda_k^{-1} \lambda_k \vec u_{k}^\tp  \vec u_{k} \vec u_{k}^\tp \vec u_{k}   \\
+&= \lambda_k^{-1} \lambda_k   ||\vec u_{k}||^2 ||\vec u_{k}||^2   \\
+&= \lambda_k^{-1} \lambda_k   ||\vec u_{k}||^2 ||\vec u_{k}||^2   \\
+&= 1,
+\end{align} %]]></script></p>
+
+<p>since the the norm <script type="math/tex">||\vec u_{k}||</script> of a orthonormal eigenvector is equal to 1.
+The squared Mahalanobis  distance can be expressed as:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+D &= \sum_{k=1}^\ell Y_k^2
+\end{align} %]]></script>
+
+<p>where
+<script type="math/tex">Y_k \thicksim N(0,1).</script></p>
+
+<p>Now the Chi-square distribution with <script type="math/tex">\ell</script>  degrees of freedom is exactly defined as being the distribution of a variable which is the sum of the squares of <script type="math/tex">\ell</script>  random variables being standard normally distributed.
+Hence, <script type="math/tex">D</script> is Chi-square distributed with <script type="math/tex">\ell</script> degrees of freedom.</p>
+
+<h3 id="derivation-based-on-the-whitening-property-of-the-mahalanobis-distance">Derivation based on the Whitening Property of the Mahalanobis Distance</h3>
+<p>Since the inverse <script type="math/tex">\matr \Sigma^{-1}</script>  of the covariance matrix <script type="math/tex">\matr \Sigma</script>  is also a symmetric matrix, its squareroot can be found – based on Eq. \eqref{eq:sqrtSymMatrix} – to be a symmetric matrix . In this case we can write the squared Mahalanobis distance as
+<script type="math/tex">% <![CDATA[
+\begin{align}
+D  &= (\matr X -\vec \mu )^\tp \matr \Sigma^{-1} (\matr X - \vec \mu ) \\
+   &= (\matr X -\vec \mu )^\tp \matr \Sigma^{-\frac{1}{2}} \matr \Sigma^{-\frac{1}{2}} (\matr X - \vec \mu )\\
+   &= \Big( \matr \Sigma^{-\frac{1}{2}} (\matr X -\vec \mu ) \Big)^\tp  \Big(\matr \Sigma^{-\frac{1}{2}} (\matr X - \vec \mu ) \Big) \\
+   &= \matr Y^\tp \matr Y \\
+   &= ||\matr Y||^2 \\
+   &= \sum_{k=1}^\ell Y_k^2
+\end{align} %]]></script></p>
+
+<p>The multiplication <script type="math/tex">\matr Y = \matr W \matr Z</script>, with <script type="math/tex">\matr W=\matr \Sigma^{-\frac{1}{2}}</script> and <script type="math/tex">\matr Z= \matr X -\vec \mu</script> is typically reffered to as a whitening transform, where in this case <script type="math/tex">\matr W=\matr \Sigma^{-\frac{1}{2}}</script> is the so called Mahalanobis (or ZCA) whitening matrix. <script type="math/tex">\matr Y</script>  has zero mean, since <script type="math/tex">(\matr X - \vec \mu ) \thicksim N(\vec 0,\Sigma)</script>. Due to the (linear) whitening transform the new covariance matrix <script type="math/tex">\matr \Sigma_y</script> is the identity matrix <script type="math/tex">\matr I</script>, as shown in the following (using the property in Eq. \eqref{eq:AffineLinearTransformCovariance}):</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\matr \Sigma_y &= \matr W \matr \Sigma \matr W^\tp \\
+&= \matr \Sigma^{-\frac{1}{2}} \matr \Sigma \Big( \matr \Sigma^{-\frac{1}{2}} \Big)^\tp \\
+&= \matr \Sigma^{-\frac{1}{2}} \Big(\matr \Sigma^{\frac{1}{2}}\matr \Sigma^{\frac{1}{2}} \Big) \Big( \matr \Sigma^{-\frac{1}{2}} \Big)^\tp \\
+&= \matr \Sigma^{-\frac{1}{2}} \Big(\matr \Sigma^{\frac{1}{2}}\matr \Sigma^{\frac{1}{2}} \Big) \matr \Sigma^{-\frac{1}{2}} \\
+&= \Big(\matr \Sigma^{-\frac{1}{2}} \matr \Sigma^{\frac{1}{2}} \Big) \Big(\matr \Sigma^{\frac{1}{2}} \matr \Sigma^{-\frac{1}{2}}\Big) \\
+&= \matr I
+\end{align} %]]></script>
+
+<p>Hence, all elements <script type="math/tex">Y_k</script> in the random vector <script type="math/tex">\matr Y</script> are random variables drawn from independent normal distributions <script type="math/tex">Y_k \thicksim N(0,1)</script>, which leads us to the same conclusion as before, that <script type="math/tex">D</script> is Chi-square distributed with <script type="math/tex">\ell</script> degrees of freedom.</p>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/mahalanbis-chi-squared/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/mahalanbis-chi-squared/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/mahalanbis-chi-squared/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/template/posts-octopress/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

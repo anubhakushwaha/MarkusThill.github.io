@@ -1,0 +1,728 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>The Weighted Linear Least Squares Algorithm &#8211; ML & Stats</title>
+<meta name="description" content="In this blog post we are going to take a look at the so called weighted linear least squares estimator, which is very similar to the ordinary linear least squares, but with one slight modification. while the ordinary estimator assumes that the errors of all data points have the same variance (which is typically referred to as homoscedasticity) and therefore assigns the same weight to the errors in the objective function, the weighted counterpart allows us to weight every single error individually. This is especially then interesting in cases, where we are working in a heteroscedastic setting, hence, when the variability in the errors cannot be assumed to be the same.">
+<meta name="keywords" content="Least Squares, Regression, Weighted Least Squares, OLS, WLS">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Weighted Linear Least Squares Algorithm">
+<meta property="og:description" content="In this blog post we are going to take a look at the so called weighted linear least squares estimator, which is very similar to the ordinary linear least squares, but with one slight modification. while the ordinary estimator assumes that the errors of all data points have the same variance (which is typically referred to as homoscedasticity) and therefore assigns the same weight to the errors in the objective function, the weighted counterpart allows us to weight every single error individually. This is especially then interesting in cases, where we are working in a heteroscedastic setting, hence, when the variability in the errors cannot be assumed to be the same.">
+<meta property="og:url" content="https://MarkusThill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/stats.jpg">
+
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>The Weighted Linear Least Squares Algorithm | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="The Weighted Linear Least Squares Algorithm" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this blog post we are going to take a look at the so called weighted linear least squares estimator, which is very similar to the ordinary linear least squares, but with one slight modification. while the ordinary estimator assumes that the errors of all data points have the same variance (which is typically referred to as homoscedasticity) and therefore assigns the same weight to the errors in the objective function, the weighted counterpart allows us to weight every single error individually. This is especially then interesting in cases, where we are working in a heteroscedastic setting, hence, when the variability in the errors cannot be assumed to be the same." />
+<meta property="og:description" content="In this blog post we are going to take a look at the so called weighted linear least squares estimator, which is very similar to the ordinary linear least squares, but with one slight modification. while the ordinary estimator assumes that the errors of all data points have the same variance (which is typically referred to as homoscedasticity) and therefore assigns the same weight to the errors in the objective function, the weighted counterpart allows us to weight every single error individually. This is especially then interesting in cases, where we are working in a heteroscedastic setting, hence, when the variability in the errors cannot be assumed to be the same." />
+<link rel="canonical" href="https://markusthill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/" />
+<meta property="og:url" content="https://markusthill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-03-13T00:46:46+01:00" />
+<script type="application/ld+json">
+{"description":"In this blog post we are going to take a look at the so called weighted linear least squares estimator, which is very similar to the ordinary linear least squares, but with one slight modification. while the ordinary estimator assumes that the errors of all data points have the same variance (which is typically referred to as homoscedasticity) and therefore assigns the same weight to the errors in the objective function, the weighted counterpart allows us to weight every single error individually. This is especially then interesting in cases, where we are working in a heteroscedastic setting, hence, when the variability in the errors cannot be assumed to be the same.","headline":"The Weighted Linear Least Squares Algorithm","dateModified":"2018-03-13T00:46:46+01:00","datePublished":"2018-03-13T00:46:46+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" class="feature">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>The Weighted Linear Least Squares Algorithm</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2018-03-13T00:46:46+01:00">March 13, 2018</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~7 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+            <div class="entry-image-index">
+              <img src="https://MarkusThill.github.io/images/stats.jpg" alt="The Weighted Linear Least Squares Algorithm">
+              
+            </div>
+        
+      <h1 class="post-title entry-title">The Weighted Linear Least Squares Algorithm</h1>
+      <p>\( <br />
+  \def\myT{\mathsf{T}}
+  \def\myPhi{\mathbf{\Phi}}
+\)</p>
+
+<p>In this blog post we are going to take a look at the so called weighted linear least squares estimator, which is very similar to the ordinary linear least squares, but with one slight modification: while the ordinary estimator assumes that the errors of all data points have the same variance (which is typically referred to as homoscedasticity) and therefore assigns the same weight to the errors in the objective function, the weighted counterpart allows us to weight every single error individually. This is especially then interesting in cases, where we are working in a heteroscedastic setting, hence, when the variability in the errors cannot be assumed to be the same.</p>
+
+<!--more-->
+
+<h1 id="the-ordinary-least-squares-estimator">The ordinary Least Squares Estimator</h1>
+
+<p>Let us start with the definition of a linear function (a function linear in its parameters):</p>
+
+<script type="math/tex; mode=display">\begin{align}
+y = \theta_0 + \theta_1 \phi_1(x_1, x_2, \ldots x_\ell) + \theta_2 \phi_2(x_1, x_2, \ldots x_\ell) + \ldots + \theta_k \phi_k(x_1, x_2, \ldots x_\ell) \label{eq:linearModel}
+\end{align}</script>
+
+<p>where <script type="math/tex">\theta_i</script> is the i-th parameter of the linear model (<script type="math/tex">\theta_0</script> is the so called bias) and <script type="math/tex">\phi_i</script> returns a scalar which is computed based on the inputs <script type="math/tex">x_1, x_2, \ldots x_\ell</script>. Since <script type="math/tex">y</script> is linear in its parameters <script type="math/tex">\theta_i</script>, there is no requirement for <script type="math/tex">\phi_i</script> being a linear function. So <script type="math/tex">\phi_i</script> could for example simply be <script type="math/tex">\phi_i=x_i</script>, a polynomial or a radial basis function or something completely else. For reasons of simplicity we write equation \eqref{eq:linearModel} in the following as:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+y &= \theta_0 + \theta_1 \phi_1 + \theta_2 \phi_2 + \ldots + \theta_k \phi_k \\
+&= \theta_0 + \sum_{j=1}^{k} \theta_j \phi_j \\
+&= \vec{\theta}^\myT \vec{\phi},
+\end{align} %]]></script>
+
+<p>with</p>
+
+<script type="math/tex; mode=display">\begin{align}
+\vec{\phi} = \begin{pmatrix} 1 \\ \phi_1 \\ \vdots \\ \phi_k \end{pmatrix}, \ \ \
+\vec{\theta} = \begin{pmatrix} \theta_0 \\ \theta_1 \\ \vdots \\ \theta_k \end{pmatrix}.
+ \label{eq:theta}
+\end{align}</script>
+
+<p>Now let us assume that we have collected a set of <script type="math/tex">n</script> data-points <script type="math/tex">(\vec{x}^{(1)}, y_*^{(1)}), (\vec{x}^{(2)}, y_*^{(2)}), \ldots (\vec{x}^{(n)}, y_*^{(n)})</script> for which we want to build a linear model.
+For the ordinary linear least squares estimator, the well known equation for ridge regression can be found which determines the parameters <script type="math/tex">\theta_i</script> of the linear model, by minimizing the sum of squared errors + the L2 penalty for regularization (where <script type="math/tex">\lambda</script> is the so called regularization parameter):</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+E &= \sum_{i=1}^n \big(y^{(i)} - y^{(i)}_*\big)^2 + \sum_{j=1}^k \theta_j^2 \\
+&= \sum_{i=1}^n \big(\theta_0 + \theta_1 \phi_1^{(i)}  + \ldots + \theta_k \phi_k^{(i)} - y^{(i)}_*\big)^2 + \lambda \sum_{j=1}^k \theta_j^2 \label{eq:MSE}
+\end{align} %]]></script>
+
+<p>which leads to well know equation for ridge regression:</p>
+
+<script type="math/tex; mode=display">\vec{\theta} = (\myPhi^\myT \myPhi + \lambda \mathbf{I})^{-1} \myPhi^\myT \vec{y}_*,</script>
+
+<p>where <script type="math/tex">\myPhi</script> a <script type="math/tex">n \times (k+1)</script> matrix:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\myPhi = \begin{pmatrix}
+1 & \big(\vec{\phi}^{(1)}\big)^\myT \\
+1 & \big(\vec{\phi}^{(2)}\big)^\myT \\
+\vdots & \vdots \\
+1 & \big(\vec{\phi}^{(n)}\big)^\myT.  \label{eq:Phi}\\
+\end{pmatrix}
+\end{align} %]]></script>
+
+<p>and <script type="math/tex">\vec{y}_*</script> is a <script type="math/tex">n</script>-dimensional vector:
+<script type="math/tex">\begin{align}
+\vec{y}_* = \begin{pmatrix} y_*^{(1)} \\ y_*^{(2)} \\ \vdots \\ y_*^{(n)} \end{pmatrix}.
+\end{align}</script></p>
+
+<h2 id="weighted-least-squares-estimator">Weighted Least Squares Estimator</h2>
+
+<p>Now let us add a tiny change to equation \eqref{eq:MSE}. We simply introduce a weight parameter <script type="math/tex">w_i</script>, with which can weight the errors of the individual data points (we also add some factors of <script type="math/tex">\frac{1}{2}</script> for convenience, but which do not change the equation fundamentally):</p>
+
+<script type="math/tex; mode=display">\begin{align}
+E = \frac{1}{2}\sum_{i=1}^n w_i \big(\theta_0 + \theta_1 \phi_1^{(i)}  + \ldots + \theta_k \phi_k^{(i)} - y^{(i)}_*\big)^2 + \frac{1}{2} \lambda \sum_{j=0}^k \theta_j^2
+\end{align}</script>
+
+<p>In order to minimize the error <script type="math/tex">E</script> defined in above equation, let us first compute the gradient and set it to zero:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\frac{\partial E}{\partial \theta_0} &= \sum_{i=1}^n w_i \big(\theta_0 + \theta_1 \phi_1^{(i)}  + \ldots + \theta_k \phi_k^{(i)} - y^{(i)}_*\big) + \lambda \theta_0 = 0\\
+\frac{\partial E}{\partial \theta_1} &= \sum_{i=1}^n w_i \big(\theta_0 + \theta_1 \phi_1^{(i)}  + \ldots + \theta_k \phi_k^{(i)} - y^{(i)}_*\big)\phi_1^{(i)} + \lambda \theta_1 = 0\\
+\vdots \\
+\frac{\partial E}{\partial \theta_k} &= \sum_{i=1}^n w_i \big(\theta_0 + \theta_1 \phi_1^{(i)}  + \ldots + \theta_k \phi_k^{(i)} - y^{(i)}_*\big)\phi_k^{(i)} + \lambda \theta_k = 0\\
+\end{align} %]]></script>
+
+<p>Now let us try to vectorize above equations and bring them in matrix form. First lets us bring all terms with <script type="math/tex">-y^{(i)}_*</script> to the other side of the equation:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\sum_{i=1}^n w_i \big(\theta_0 + \theta_1 \phi_1^{(i)}  + \ldots + \theta_k \phi_k^{(i)} \big) + \lambda \theta_0 &= \sum_{i=1}^n w_i y^{(i)}_*\\
+\sum_{i=1}^n w_i \big(\theta_0 + \theta_1 \phi_1^{(i)}  + \ldots + \theta_k \phi_k^{(i)} \big)\phi_1^{(i)} + \lambda \theta_1 &= \sum_{i=1}^n w_i y^{(i)}_* \phi_1^{(i)}\\
+\vdots \\
+\sum_{i=1}^n w_i \big(\theta_0 + \theta_1 \phi_1^{(i)}  + \ldots + \theta_k \phi_k^{(i)} \big)\phi_k^{(i)} + \lambda \theta_k &= \sum_{i=1}^n w_i y^{(i)}_* \phi_k^{(i)}\\
+\end{align} %]]></script>
+
+<p>In the next step we can specify a vector <script type="math/tex">\vec{\theta}</script>, such as in \eqref{eq:theta} and write:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\begin{bmatrix}
+\lambda + \sum_{i=1}^n w_i &  \sum_{i=1}^n w_i \phi_1^{(i)}  & \ldots & \sum_{i=1}^n w_i \phi_k^{(i)} \\
+\sum_{i=1}^n w_i \phi_1^{(i)} & \lambda + \sum_{i=1}^n w_i \phi_1^{(i)} \phi_1^{(i)}  & \ldots & \sum_{i=1}^n w_i \phi_k^{(i)} \phi_1^{(i)} \\
+\vdots & \vdots & \ddots & \vdots \\
+\sum_{i=1}^n w_i \phi_k^{(i)} & \sum_{i=1}^n w_i \phi_1^{(i)} \phi_k^{(i)}  & \ldots & \lambda + \sum_{i=1}^n w_i \phi_k^{(i)} \phi_k^{(i)} \\
+\end{bmatrix} \cdot
+\begin{bmatrix}
+\theta_0 \\
+\theta_1 \\
+\vdots \\
+\theta_k
+\end{bmatrix} =
+\begin{bmatrix}
+\sum_{i=1}^n w_i y^{(i)}_* \\
+\sum_{i=1}^n \phi_1^{(i)} w_i y^{(i)}_*  \\
+\vdots \\
+\sum_{i=1}^n \phi_k^{(i)} w_i y^{(i)}_*
+\end{bmatrix} \label{eq:weightedLSMatrix1}
+\end{align} %]]></script>
+
+<p>Now, let us again define <script type="math/tex">\myPhi</script> in the same way as in \eqref{eq:Phi} and introduce a <script type="math/tex">n \times n</script> matrix <script type="math/tex">\mathbf{W}</script>, which contains all weights <script type="math/tex">w_i</script> on its diagonal:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\mathbf{W} =
+\begin{bmatrix}
+  w_1 & 0 & \ldots & 0 \\
+  0 & w_2 & \ldots & 0 \\
+  \vdots & \vdots & \ddots & \vdots \\
+  0 & 0 & \ldots & w_n
+\end{bmatrix}
+\end{align} %]]></script>
+
+<p>If we take a look at the correspondence table <a href="Test">HERE TODO</a>, we can now significantly simplify Eq.  \eqref{eq:weightedLSMatrix1}:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+  \big(\myPhi^\myT \mathbf{W} \myPhi + \lambda \mathbf{I} \big) \vec{\theta} = \myPhi^\myT \mathbf{W} \vec{y}_*
+\end{align}</script>
+
+<p>With above equation we can finally find the desired parameters of the linear model with weighted squared residuals:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+  \vec{\theta} = \big(\myPhi^\myT \mathbf{W} \myPhi + \lambda \mathbf{I} \big)^{-1} \myPhi^\myT \mathbf{W} \vec{y}_*
+\end{align}</script>
+
+<p>Since <script type="math/tex">\mathbf{W}</script> is an <script type="math/tex">n \times n</script> matrix, one should avoid in practice to actually generate this diagonal matrix for large datasets. Instead, for a diagonal <script type="math/tex">n \times n</script> weight matrix <script type="math/tex">\mathbf{W} = \mbox{diag}(\vec{w})</script> and an <script type="math/tex">(k+1) \times n</script> matrix <script type="math/tex">\mathbf{\Psi} = \myPhi^\myT</script>, one could directly use the relation:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+ \mathbf{\Psi} \cdot \mathbf{W} = \mathbf{\Psi} \cdot \mbox{diag}(\vec{w}) =
+ \begin{bmatrix}
+ w_1 \psi_{1,1} & w_2 \psi_{1,2} & \ldots &w_n \psi_{1,n} \\
+ w_1 \psi_{2,1} & w_2 \psi_{2,2} & \ldots &w_n \psi_{2,n} \\
+ \vdots & \vdots & \ddots & \vdots \\
+ w_1 \psi_{k+1,1} & w_2 \psi_{k+1,1} & \ldots &w_n \psi_{k+1,n} \\
+ \end{bmatrix}
+\end{align} %]]></script>
+
+<p>Hence, each column has to be simply multiplied with its corresponding weight.</p>
+
+<h1 id="example">Example</h1>
+<p>Let us take a look at a small example: Assume we have sampled some data from a stochastic linear function</p>
+
+<script type="math/tex; mode=display">\begin{align}
+f(x) = y(x) + \epsilon(x) = m \cdot x + b + \epsilon(x)
+\end{align}</script>
+
+<p>where <script type="math/tex">\epsilon(x)</script> is some random noise which we do not know. The data sample could look like this:</p>
+<center>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2018-03-13-the-weighted-least-squares-algorithm/plot1.png" alt="alt and id" width="700px" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 1:</b>  A data sample for which we want to fit a linear model. </p>
+      </figcaption>
+    
+</figure>
+
+</center>
+
+<p>We evaluated each <script type="math/tex">x</script> several times and can observe that the noise seems to vary for each value of <script type="math/tex">x</script>. The linear correlation between the two variables in the plot is quite apparent, although it is not that clear, how to fit the line through the data points. For those <script type="math/tex">x</script> for which we have a large spread in the observed values, it is difficult to estimate where the line should approximately pass through. Also, outliers might have large impact on the estimation of the parameters of the linear model. Hence, we can assign weights to each <script type="math/tex">x</script> which are higher for those <script type="math/tex">x</script> which have a small spread in their values and vice versa. A reasonable weight could be the inverse of the variance in each <script type="math/tex">x</script> so that we get:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+w_i = \frac{1}{\sigma_{x_i}^2}
+\end{align}</script>
+
+<p>where <script type="math/tex">\sigma_{x_i}^2</script> is the variance in <script type="math/tex">x=x_i</script>. Now let us apply both, the linear least squares estimator and its weighted version to the collected data and see what happens:</p>
+
+<center>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2018-03-13-the-weighted-least-squares-algorithm/plot2.png" alt="alt and id" width="700px" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 2:</b>  Linear model fits for the dataset. The real curve is represented by the red line. The green line is based on the estimation of the conventional linear least squares estimator and the blue line is the estimate of the weighted linear least squares estimator. </p>
+      </figcaption>
+    
+</figure>
+
+</center>
+
+<p>As we can see the estimate of the weighted linear least squares estimator is much closer to the real line than the conventional estimator. Since this might just be a coincidence for this particular dataset, let us repeat the procedure several thousand times. For this, we specify the real line to be</p>
+
+<script type="math/tex; mode=display">y(x) = x + 2</script>
+
+<p>and set the noise <script type="math/tex">\epsilon(x)</script> to be normally distributed with zero mean and a standard deviation <script type="math/tex">\sigma_x</script> which is selected randomly with the probabilities <script type="math/tex">\mathbb P(\sigma_x=1) = 3/4</script> and <script type="math/tex">\mathbb P(\sigma_x=5) = 1/4</script>.
+In each run we create a dataset with <script type="math/tex">N=55</script> points (<script type="math/tex">x\in \{-5,-4, \ldots, 4, 5 \}</script> and 5 points for each <script type="math/tex">x</script>) and compute the error for the weighted and unweighted linear least squares estimator in the slope <script type="math/tex">m</script> and intercept <script type="math/tex">b</script>. Then we repeat each run 10 000 times and sum up the squared errors (SSE) of both estimators for both parameters. The output of our simulation is:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">SSE</span><span class="w"> </span><span class="n">unweighted</span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="w">  </span><span class="n">SSE</span><span class="w"> </span><span class="n">unweighted</span><span class="o">:</span><span class="w"> </span><span class="n">m</span><span class="w">   </span><span class="n">SSE</span><span class="w"> </span><span class="n">weighted</span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="w">   </span><span class="n">SSE</span><span class="w"> </span><span class="n">weighted</span><span class="o">:</span><span class="w"> </span><span class="n">m</span><span class="w">
+          </span><span class="m">1275.48</span><span class="w">             </span><span class="m">124.82</span><span class="w">            </span><span class="m">410.00</span><span class="w">             </span><span class="m">40.65</span></code></pre></figure>
+
+<p>As we can see, for this example, the error of the weighted estimator is about 1/3 (approx. <script type="math/tex">1/\sqrt 3</script> for the sum of absolut errors) of its unweighted counterpart for the intercept <script type="math/tex">b</script> and the slope <script type="math/tex">m</script>. Finally, let us plot some histograms for the errors of the two estimators:</p>
+<center>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2018-03-13-the-weighted-least-squares-algorithm/plot3.png" alt="alt and id" width="700px" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 3:</b>  Histograms of the errors in the estimations of the intercept <script type="math/tex">b</script> and the slope <script type="math/tex">m</script> for the unweighted and weighted least squares. The black lines specify the intervals containing 95% of the observed errors. </p>
+      </figcaption>
+    
+</figure>
+
+</center>
+<p>Also in the above figure we can see that the weighted estimator generally produces smaller errors, since the curves have sharper spikes around zero. The sources for all reported results can be found in the appendix.</p>
+
+<h1 id="appendix">Appendix</h1>
+<div class="github-sample-reference">
+  <div class="author-info">
+    <a href="https://github.com/MarkusThill/MarkusThill.github.io.working/blob/master/images/2018-03-13-the-weighted-least-squares-algorithm/weightedLSE.R">This Github Sample</a> is by <a href="https://github.com/MarkusThill">MarkusThill</a>
+  </div>
+  <div class="meta-info">
+    images/2018-03-13-the-weighted-least-squares-algorithm/weightedLSE.R <a href="https://github.com/MarkusThill/MarkusThill.github.io.working/blob/master/images/2018-03-13-the-weighted-least-squares-algorithm/weightedLSE.R">view</a> <a href="https://raw.githubusercontent.com/MarkusThill/MarkusThill.github.io.working/master/images/2018-03-13-the-weighted-least-squares-algorithm/weightedLSE.R">raw</a>
+  </div>
+</div>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">library</span><span class="p">(</span><span class="n">tidyr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">reshape2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">MASS</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+
+</span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="w">     </span><span class="c1"># number of points for each x</span><span class="w">
+</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="w">     </span><span class="c1"># offset of linear function</span><span class="w">
+</span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w">     </span><span class="c1"># slope of the linear function</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-5</span><span class="o">:</span><span class="m">5</span><span class="w">  </span><span class="c1"># range to generate points for the linear function</span><span class="w">
+
+
+</span><span class="n">testWeightedLS</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">doPlot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="c1"># Generate data points around the line with different variances for each x</span><span class="w">
+  </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">sapply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">rnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">sd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sample</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">5</span><span class="p">),</span><span class="m">1</span><span class="p">))))))</span><span class="w">
+  </span><span class="n">dataAligned</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w">  </span><span class="n">variable.name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"key"</span><span class="p">,</span><span class="w"> </span><span class="n">id.vars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">))</span><span class="w">
+  
+  </span><span class="c1"># Data used for training the models</span><span class="w">
+  </span><span class="n">xTrain</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dataAligned</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+  </span><span class="n">yTrain</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dataAligned</span><span class="p">[,</span><span class="m">3</span><span class="p">]</span><span class="w">
+  
+  </span><span class="c1"># Estimate the parameters for the unweighted least squares estimator</span><span class="w">
+  </span><span class="n">thetaNoW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ginv</span><span class="p">(</span><span class="n">cbind</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">xTrain</span><span class="p">))</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">yTrain</span><span class="w">
+  
+  </span><span class="c1"># compute variance for each x</span><span class="w">
+  </span><span class="n">estVars</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cbind</span><span class="p">(</span><span class="n">data</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">apply</span><span class="p">(</span><span class="n">data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">data</span><span class="p">))],</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">var</span><span class="p">))</span><span class="w">
+  </span><span class="n">w</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">sapply</span><span class="p">(</span><span class="n">xTrain</span><span class="p">,</span><span class="w"> </span><span class="n">FUN</span><span class="o">=</span><span class="k">function</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="n">estVars</span><span class="p">[</span><span class="n">which</span><span class="p">(</span><span class="n">estVars</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">i</span><span class="p">),</span><span class="m">2</span><span class="p">])</span><span class="w">
+  
+  </span><span class="c1"># Weighting matrix W based on the variance for each x</span><span class="w">
+  </span><span class="c1"># n x n matrix! Should be done differently for larger data sets</span><span class="w">
+  </span><span class="n">W</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">diag</span><span class="p">(</span><span class="m">1</span><span class="o">/</span><span class="n">w</span><span class="p">)</span><span class="w">
+  
+  </span><span class="c1"># Compute the parameters for the weighted least squares estimator</span><span class="w">
+  </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cbind</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="n">xTrain</span><span class="p">)</span><span class="w">
+  </span><span class="n">tXW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">W</span><span class="w">
+  </span><span class="n">thetaW</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ginv</span><span class="p">(</span><span class="w"> </span><span class="n">tXW</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">tXW</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">yTrain</span><span class="w">
+  
+  </span><span class="k">if</span><span class="p">(</span><span class="n">doPlot</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xTrain</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">yTrain</span><span class="p">)</span><span class="w">
+    </span><span class="n">plotDf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="w"> </span><span class="n">id.vars</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"x"</span><span class="p">))</span><span class="w">
+    </span><span class="n">cc</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">sl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">thetaNoW</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="n">thetaW</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">m</span><span class="p">),</span><span class="w"> 
+                     </span><span class="n">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">thetaNoW</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="n">thetaW</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">b</span><span class="p">),</span><span class="w"> 
+                     </span><span class="n">Estimator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'unweighted'</span><span class="p">,</span><span class="s1">'weighted'</span><span class="p">,</span><span class="s1">'real'</span><span class="p">))</span><span class="w">
+    </span><span class="n">p</span><span class="o">&lt;-</span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plotDf</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">value</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+      </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+      </span><span class="n">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">25</span><span class="p">)</span><span class="w"> 
+    </span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w">
+    
+    </span><span class="n">p</span><span class="o">&lt;-</span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plotDf</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">value</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+        </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+        </span><span class="n">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">25</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+        </span><span class="n">geom_abline</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cc</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">slope</span><span class="w"> </span><span class="o">=</span><span class="n">sl</span><span class="p">,</span><span class="w"> </span><span class="n">intercept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">int</span><span class="p">,</span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Estimator</span><span class="p">))</span><span class="w">
+
+    </span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w">
+        
+  </span><span class="p">}</span><span class="w">
+  
+  </span><span class="c1"># Compute error of estimated parameters</span><span class="w">
+  </span><span class="nf">c</span><span class="p">(</span><span class="n">thetaNoW</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">m</span><span class="p">),</span><span class="w"> </span><span class="n">thetaW</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">m</span><span class="p">))</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="n">runErrs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">replicate</span><span class="p">(</span><span class="m">10000</span><span class="p">,</span><span class="w"> </span><span class="n">testWeightedLS</span><span class="p">()))</span><span class="w">
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">runErrs</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Error unweighted LSE: b"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Error unweighted LSE: m"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Error weighted LSE: b"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Error weighted LSE: m"</span><span class="p">)</span><span class="w">
+</span><span class="n">apply</span><span class="p">((</span><span class="n">runErrs</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="p">)</span><span class="w"> </span><span class="c1"># Compute the variance of the estimated paramters</span><span class="w">
+</span><span class="n">apply</span><span class="p">((</span><span class="n">runErrs</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">)</span><span class="w"> </span><span class="c1"># Compute the sum of squared errors of the estimated paramters</span><span class="w">
+</span><span class="n">apply</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">runErrs</span><span class="p">),</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">)</span><span class="w"> </span><span class="c1"># Compute the sum of squared errors of the estimated paramters</span><span class="w">
+
+</span><span class="c1"># Prepare data for histogram</span><span class="w">
+</span><span class="n">errs_b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">runErrs</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">3</span><span class="p">)]</span><span class="w">
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">errs_b</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"unweighted"</span><span class="p">,</span><span class="w"> </span><span class="s2">"weighted"</span><span class="p">)</span><span class="w">
+</span><span class="n">histData_b</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">melt</span><span class="p">(</span><span class="n">errs_b</span><span class="p">)[,</span><span class="m">-1</span><span class="p">],</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"b"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">errs_m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">runErrs</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">4</span><span class="p">)]</span><span class="w">
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">errs_m</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"unweighted"</span><span class="p">,</span><span class="w"> </span><span class="s2">"weighted"</span><span class="p">)</span><span class="w">
+</span><span class="n">histData_m</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">melt</span><span class="p">(</span><span class="n">errs_m</span><span class="p">)[,</span><span class="m">-1</span><span class="p">],</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"m"</span><span class="p">)</span><span class="w">
+
+</span><span class="n">histData</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">histData_b</span><span class="p">,</span><span class="w"> </span><span class="n">histData_m</span><span class="p">)</span><span class="w">
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">histData</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"method"</span><span class="p">,</span><span class="w"> </span><span class="s2">"error"</span><span class="p">,</span><span class="w"> </span><span class="s2">"param"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Compute 2.5% and 97.5% quantiles</span><span class="w">
+</span><span class="n">d</span><span class="m">2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">histData</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="n">param</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarize</span><span class="p">(</span><span class="n">lower</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantile</span><span class="p">(</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">probs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.025</span><span class="p">),</span><span class="w">
+            </span><span class="n">upper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantile</span><span class="p">(</span><span class="n">error</span><span class="p">,</span><span class="w"> </span><span class="n">probs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.975</span><span class="p">))</span><span class="w">
+
+</span><span class="c1"># Plot Histogram</span><span class="w">
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">histData</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">error</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">method</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">param</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_density</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">method</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">theme_bw</span><span class="p">(</span><span class="n">base_size</span><span class="o">=</span><span class="m">25</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_vline</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">xintercept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lower</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_vline</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">xintercept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">upper</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">xlim</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span></code></pre></figure>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="https://MarkusThill.github.io/tags#Least Squares" title="Pages tagged Least Squares" class="tag"><span class="term">Least Squares</span></a><a href="https://MarkusThill.github.io/tags#Regression" title="Pages tagged Regression" class="tag"><span class="term">Regression</span></a><a href="https://MarkusThill.github.io/tags#Weighted Least Squares" title="Pages tagged Weighted Least Squares" class="tag"><span class="term">Weighted Least Squares</span></a><a href="https://MarkusThill.github.io/tags#OLS" title="Pages tagged OLS" class="tag"><span class="term">OLS</span></a><a href="https://MarkusThill.github.io/tags#WLS" title="Pages tagged WLS" class="tag"><span class="term">WLS</span></a></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/math/stats/ml/the-weighted-least-squares-algorithm/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/programming/connect-4-final-considerations/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

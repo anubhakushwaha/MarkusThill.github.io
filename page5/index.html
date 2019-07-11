@@ -1,0 +1,669 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Notes on Machine Learning, Statistics & Programming &#8211; ML & Stats</title>
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta name="keywords" content="Machine Learning Statistics Programming Electronics Internet of Things Smart Home">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes on Machine Learning, Statistics & Programming">
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta property="og:url" content="https://MarkusThill.github.io/page5/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/page5/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Page 5 of 10 for Notes on Machine Learning, Statistics &amp; Programming | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Notes on Machine Learning, Statistics &amp; Programming" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<link rel="canonical" href="https://markusthill.github.io/page5/" />
+<meta property="og:url" content="https://markusthill.github.io/page5/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<link rel="prev" href="https://markusthill.github.io/page4" />
+<link rel="next" href="https://markusthill.github.io/page6" />
+<script type="application/ld+json">
+{"description":"My private blog on Machine Learning, Statistics, Programming and more.","headline":"Notes on Machine Learning, Statistics &amp; Programming","@type":"WebPage","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/page5/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post-index">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Notes on Machine Learning, Statistics & Programming</h1>
+      
+        <h2><span class="entry-date"><time>&nbsp;</time></span></h2>
+      
+
+      
+          <p class="entry-reading-time">
+            &nbsp;
+          </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/buffer-overflows/" title="Buffer Overflow Vulnerabilities"><img src="https://MarkusThill.github.io/images/stack.jpg" alt="Buffer Overflow Vulnerabilities"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-02-05T12:18:34+01:00"><a href="https://MarkusThill.github.io/buffer-overflows/">February 05, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~42 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/buffer-overflows/" rel="bookmark" title="Buffer Overflow Vulnerabilities" itemprop="url">Buffer Overflow Vulnerabilities</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>Buffer overflows continue to be one of the most common security vulnerabilities in current software and are usually the result of incorrectly constructed programs. Buffer overflows occur when too small memory areas are reserved for a given amount of data, which usually overwrites adjacent areas of the memory, which can also contain sensitive data, among other things.
+Sensitive data is information for controlling the program flow or the process memory, but also pointers.
+Buffer overflows are critical vulnerabilities in software because attackers can often manipulate sensitive data in such a way that infected malware can be successfully executed on the target system.
+Most of today’s computer systems are based on the Von-Neumann architecture. With such systems, data and programs are stored in the same memory, making it easy for attackers to exploit buffer overflow vulnerabilities. However, the weak points in themselves only arise through negligent programming, the exploitation of which is merely fostered by the von Neumann architecture. In many programming languages, such as C / C++, the check for memory overflows is usually left to the programmer, who often forgets it completely or implements it incorrectly. <br />
+Buffer overflows in JAVA are practically impossible, since the programs run in a runtime that detects and prevents memory area overflows. Also, interpreted programming languages are rarely affected.</p>
+
+<p>In order to keep things simple, in this blog post we will take a look at buffer overflows on x86/IA-32 architectures. However, for newer architectures the techniques discussed here are very similar.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/buffer-overflows//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/" title="Online Estimation of the Inverse Covariance Matrix"><img src="https://MarkusThill.github.io/images/stats.jpg" alt="Online Estimation of the Inverse Covariance Matrix"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-02-03T00:59:52+01:00"><a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/">February 03, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~2 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/" rel="bookmark" title="Online Estimation of the Inverse Covariance Matrix" itemprop="url">Online Estimation of the Inverse Covariance Matrix</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>This post is part 5 of a series of five articles:</p>
+<ol>
+  <li><a href="/math/stats/ml/online-estimation-of-gaussians/">Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</a></li>
+  <li><a href="/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/">Online Estimation of Weighted Sample Mean and Coviarance Matrix</a></li>
+  <li><a href="/math/stats/ml/onthe-covariance-of-the-weighted-mean/">The Covariance of weighted Means</a></li>
+  <li><a href="/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</a></li>
+  <li><strong><a href="/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/">Online Estimation of the Inverse Covariance Matrix</a></strong></li>
+</ol>
+
+<p>\( <br />
+  \def\myX{\mathbf{x}}
+  \def\myM{\mathbf{M}}
+  \def\myY{\mathbf{y}}
+  \def\mySigma{\mathbf{\Sigma}}
+  \def\myM{\mathbf{M}}
+  \def\myT{\mathsf{T}}
+\)</p>
+
+<p>In practice, it is often required to estimate the inverse of the covariance matrix of a Gaussian distribution, for example, when only a Mahalanobis distance between points has to be computed. In an online setting it can be quite expensive to compute the inverse of the covariance matrix again for each new point arriving, since the complexity of the matrix inverse is <script type="math/tex">\mathcal{O(n^3)}</script>. As we will see in the following, it is not necessary to estimate the covariance matrix, if only its inverse is needed and furthermore, the inverse can be adapted incrementally in an efficient manner. The results are shown for the general case with a weighted exponentially decaying estimator.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/" title="Memory of the exponentially decaying Estimator for Mean and Covariance Matrix"><img src="https://MarkusThill.github.io/images/stats.jpg" alt="Memory of the exponentially decaying Estimator for Mean and Covariance Matrix"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-02-03T00:55:52+01:00"><a href="https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">February 03, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~5 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/" rel="bookmark" title="Memory of the exponentially decaying Estimator for Mean and Covariance Matrix" itemprop="url">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>\( <br />
+  \def\myX{\mathbf{x}}
+  \def\myM{\mathbf{M}}
+  \def\myY{\mathbf{y}}
+  \def\mySigma{\mathbf{\Sigma}}
+  \def\myM{\mathbf{M}}
+  \def\myT{\mathsf{T}}
+\)
+This post is part 4 of a series of five articles:</p>
+<ol>
+  <li><a href="/math/stats/ml/online-estimation-of-gaussians/">Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</a></li>
+  <li><a href="/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/">Online Estimation of Weighted Sample Mean and Coviarance Matrix</a></li>
+  <li><a href="/math/stats/ml/onthe-covariance-of-the-weighted-mean/">The Covariance of weighted Means</a></li>
+  <li><strong><a href="/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</a></strong></li>
+  <li><a href="/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/">Online Estimation of the Inverse Covariance Matrix</a></li>
+</ol>
+
+<p>Due to the exponentially decaying weights, the estimator described in the previous post has a limited historic memory, since older observations fade out more and more with every new data point. With such an approach, it is possible to adapt the parameters to drifting (changing) distributions, however, at cost of less accuracy when the data generating process is a stationary distribution. This means, for example, that for forgetting factors <script type="math/tex">% <![CDATA[
+\lambda<1 %]]></script>, the (co-) variances of the mean vector do not converge to zero for large sample sizes <script type="math/tex">n</script> and there will always be some fixed amount of noise left in the estimation, depending on the “rate” of forgetting (specified by <script type="math/tex">\lambda</script>). So one could ask the following 2 questions:</p>
+<ol>
+  <li>If we compute a weighted mean <script type="math/tex">\bar{X}</script> with forgetting factor <script type="math/tex">\lambda</script>, how is this mean distributed, hence, what is <script type="math/tex">\mu_{\bar{X}}</script> and <script type="math/tex">\mySigma_{\bar{X}}</script>?</li>
+  <li>What is the memory <script type="math/tex">n_{mem}</script> of an estimator with exponentially decaying weights? Hence: For which sample size <script type="math/tex">n_{mem}</script>, when computing the ordinary mean (without forgetting) instead, can we obtain the same distribution parameters <script type="math/tex">\mu_{\bar{X}}</script> and <script type="math/tex">\mySigma_{\bar{X}}</script>? This means that we are basically looking for an corresponding ordinary estimator which only takes into account the last <script type="math/tex">n_{mem}</script> data points in order to compute the mean.</li>
+</ol>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/math/stats/ml/onthe-covariance-of-the-weighted-mean/" title="The Covariance of weighted Means"><img src="https://MarkusThill.github.io/images/stats.jpg" alt="The Covariance of weighted Means"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-01-18T13:41:30+01:00"><a href="https://MarkusThill.github.io/math/stats/ml/onthe-covariance-of-the-weighted-mean/">January 18, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~2 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/onthe-covariance-of-the-weighted-mean/" rel="bookmark" title="The Covariance of weighted Means" itemprop="url">The Covariance of weighted Means</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>This post is part 3 of a series of five articles:</p>
+<ol>
+  <li><a href="/math/stats/ml/online-estimation-of-gaussians/">Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</a></li>
+  <li><a href="/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/">Online Estimation of Weighted Sample Mean and Coviarance Matrix</a></li>
+  <li><strong><a href="/math/stats/ml/onthe-covariance-of-the-weighted-mean/">The Covariance of weighted Means</a></strong></li>
+  <li><a href="/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</a></li>
+  <li><a href="/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/">Online Estimation of the Inverse Covariance Matrix</a></li>
+</ol>
+
+<p>\( <br />
+  \def\myX{\mathbf{x}}
+  \def\myM{\mathbf{M}}
+  \def\myY{\mathbf{y}}
+  \def\mySigma{\mathbf{\Sigma}}
+  \def\myM{\mathbf{M}}
+  \def\myT{\mathsf{T}}
+\)</p>
+
+<!--- ## Covariance of the weighted Mean -->
+
+<p>Typically, when computes the conventional sample mean, the covariances of the sample mean vector <script type="math/tex">\bar{\myX}_n</script> (note: here we are actually talking about the covariance matrix for the sample mean <script type="math/tex">\bar{\myX}_n</script> and not the estimated covariance matrix of the sample itself. This is somewhat similar to the computation of the standard error of the mean.) will tend to zero as the sample size <script type="math/tex">n</script> grows larger. Similarly to the standard error of the mean which can be expressed as</p>
+
+<script type="math/tex; mode=display">\begin{align}
+  \sigma_\bar{X}^2 = \frac{\sigma^2}{n},
+\end{align}</script>
+
+<p>the expected covariance matrix <script type="math/tex">\Sigma_\bar{X}</script> is</p>
+
+<script type="math/tex; mode=display">\begin{align}
+  \Sigma_\bar{X} = \frac{1}{n} \Sigma,
+\end{align}</script>
+
+<p>which indicates, that for a sufficiently large sample <script type="math/tex">n</script>, the estimated mean <script type="math/tex">\bar{\myX}_n</script> will most likely be rather close (under the typical conditions) to the real mean <script type="math/tex">\mathbf \mu_X</script> of the underlying distribution.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/math/stats/ml/onthe-covariance-of-the-weighted-mean//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/" title="Online Estimation of Weighted Sample Mean and Coviarance Matrix"><img src="https://MarkusThill.github.io/images/stats.jpg" alt="Online Estimation of Weighted Sample Mean and Coviarance Matrix"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-01-13T21:05:00+01:00"><a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/">January 13, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~3 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/" rel="bookmark" title="Online Estimation of Weighted Sample Mean and Coviarance Matrix" itemprop="url">Online Estimation of Weighted Sample Mean and Coviarance Matrix</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>This post is part 2 of a series of five articles:</p>
+<ol>
+  <li><a href="/math/stats/ml/online-estimation-of-gaussians/">Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</a></li>
+  <li><strong><a href="/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/">Online Estimation of Weighted Sample Mean and Coviarance Matrix</a></strong></li>
+  <li><a href="/math/stats/ml/onthe-covariance-of-the-weighted-mean/">The Covariance of weighted Means</a></li>
+  <li><a href="/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</a></li>
+  <li><a href="/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/">Online Estimation of the Inverse Covariance Matrix</a></li>
+</ol>
+
+<p>\( <br />
+  \def\myX{\mathbf{x}}
+  \def\myM{\mathbf{M}}
+  \def\myY{\mathbf{y}}
+  \def\mySigma{\mathbf{\Sigma}}
+  \def\myM{\mathbf{M}}
+  \def\myT{\mathsf{T}}
+\)</p>
+
+<p>In certain cases, one might want to compute weighted a arithmetic mean and a sample covariance (matrix), if certain points of the sample should contribute more to the final mean (covariances) than others. For example, it could be reasonable to give larger weight to more recent data points, if the statistics (e.g. mean) of the underlying distribution change over time (concept drifts). In such cases we would want the estimator to track the changes in the data generating distribution and forget about older knowledge. But also other scenarios are thinkable, in which a weighting of the data points might be useful.
+In this section we want to define the weighted arithmetic mean and weighted sample covariance, explore a few properties related to these weighted statistics and then design an estimator for multivariate Gaussians which exhibits some sort of forgetting.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+
+
+<div class="pagination">
+  <ul class="inline-list">
+    
+    
+      
+        <li><a href="https://MarkusThill.github.io/page4/" class="btn">Previous</a></li>
+      
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/">1</a></li>
+    
+
+    
+    
+      
+      
+      <li>…</li>
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page3/">3</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page4/">4</a></li>
+      
+    
+      
+        <li><strong class="current-page">5</strong></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page6/">6</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page7/">7</a></li>
+      
+    
+
+    
+    
+      <li>…</li>
+    
+
+    
+      <li><a href="https://MarkusThill.github.io/page10/">10</a></li>
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/page6/" class="btn">Next</a></li>
+    
+  </ul>
+</div>
+
+
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

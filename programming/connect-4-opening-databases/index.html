@@ -1,0 +1,796 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Constructing Agents for Connect-4&#58; Opening Databases &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Constructing Agents for Connect-4&#58; Opening Databases">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/programming/connect-4-opening-databases/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/programming/connect-4-opening-databases/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Constructing Agents for Connect-4: Opening Databases | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Constructing Agents for Connect-4: Opening Databases" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This post is the 6th part of a series of 7 articles: Constructing Agents for Connect-4: Initial Notes Constructing Agents for Connect-4: Tree Search Algorithms Constructing Agents for Connect-4: Board Representations Constructing Agents for Connect-4: Move Ordering Constructing Agents for Connect-4: Transposition Tables Constructing Agents for Connect-4: Opening Databases Constructing Agents for Connect-4: Final Considerations As with many other games, the further course and outcome of a game for Connect-4 is already dependent on the opening phase. For example, the 1st player must place his first stone in the middle column to win the game. In all other cases, only a draw is reached or the game is even lost. For this reason, a strong player must be able to control the opening in order to avoid own mistakes and to be able to punish the opponent’s mistakes immediately. Often, however, it is very difficult to analyze the positions of the opening phase, because a high search depth is necessary to determine the exact game theoretical values. In order to master the opening phase, many games therefore use opening books, which usually were created with high computing effort. These can typically give the computer program an advantage and save a lot of computing time during the opening phase. For games like Connect-4, there is another advantage: During the course of the game, the state space decreases further and further, so that after leaving the opening book, individual positions can often be correctly evaluated without further assistance and in acceptable time." />
+<meta property="og:description" content="This post is the 6th part of a series of 7 articles: Constructing Agents for Connect-4: Initial Notes Constructing Agents for Connect-4: Tree Search Algorithms Constructing Agents for Connect-4: Board Representations Constructing Agents for Connect-4: Move Ordering Constructing Agents for Connect-4: Transposition Tables Constructing Agents for Connect-4: Opening Databases Constructing Agents for Connect-4: Final Considerations As with many other games, the further course and outcome of a game for Connect-4 is already dependent on the opening phase. For example, the 1st player must place his first stone in the middle column to win the game. In all other cases, only a draw is reached or the game is even lost. For this reason, a strong player must be able to control the opening in order to avoid own mistakes and to be able to punish the opponent’s mistakes immediately. Often, however, it is very difficult to analyze the positions of the opening phase, because a high search depth is necessary to determine the exact game theoretical values. In order to master the opening phase, many games therefore use opening books, which usually were created with high computing effort. These can typically give the computer program an advantage and save a lot of computing time during the opening phase. For games like Connect-4, there is another advantage: During the course of the game, the state space decreases further and further, so that after leaving the opening book, individual positions can often be correctly evaluated without further assistance and in acceptable time." />
+<link rel="canonical" href="https://markusthill.github.io/programming/connect-4-opening-databases/" />
+<meta property="og:url" content="https://markusthill.github.io/programming/connect-4-opening-databases/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-20T18:24:45+01:00" />
+<script type="application/ld+json">
+{"description":"This post is the 6th part of a series of 7 articles: Constructing Agents for Connect-4: Initial Notes Constructing Agents for Connect-4: Tree Search Algorithms Constructing Agents for Connect-4: Board Representations Constructing Agents for Connect-4: Move Ordering Constructing Agents for Connect-4: Transposition Tables Constructing Agents for Connect-4: Opening Databases Constructing Agents for Connect-4: Final Considerations As with many other games, the further course and outcome of a game for Connect-4 is already dependent on the opening phase. For example, the 1st player must place his first stone in the middle column to win the game. In all other cases, only a draw is reached or the game is even lost. For this reason, a strong player must be able to control the opening in order to avoid own mistakes and to be able to punish the opponent’s mistakes immediately. Often, however, it is very difficult to analyze the positions of the opening phase, because a high search depth is necessary to determine the exact game theoretical values. In order to master the opening phase, many games therefore use opening books, which usually were created with high computing effort. These can typically give the computer program an advantage and save a lot of computing time during the opening phase. For games like Connect-4, there is another advantage: During the course of the game, the state space decreases further and further, so that after leaving the opening book, individual positions can often be correctly evaluated without further assistance and in acceptable time.","headline":"Constructing Agents for Connect-4: Opening Databases","dateModified":"2018-02-20T18:24:45+01:00","datePublished":"2018-02-20T18:24:45+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/programming/connect-4-opening-databases/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/programming/connect-4-opening-databases/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Constructing Agents for Connect-4&#58; Opening Databases</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2018-02-20T18:24:45+01:00">February 20, 2018</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~13 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+      <h1 class="post-title entry-title">Constructing Agents for Connect-4&#58; Opening Databases</h1>
+      <p>This post is the 6th part of a series of 7 articles:</p>
+<ol>
+  <li><a href="/programming/connect-4-introduction-and-tree-search-algorithms/">Constructing Agents for Connect-4: Initial Notes</a></li>
+  <li><a href="/programming/connect-4-tree-search-algorithms/">Constructing Agents for Connect-4: Tree Search Algorithms</a></li>
+  <li><a href="/programming/connect-4-board-representations/">Constructing Agents for Connect-4: Board Representations</a></li>
+  <li><a href="/programming/connect-4-move-ordering/">Constructing Agents for Connect-4: Move Ordering</a></li>
+  <li><a href="/programming/connect-4-transposition-tables/">Constructing Agents for Connect-4: Transposition Tables</a></li>
+  <li><strong><a href="/programming/connect-4-opening-databases/">Constructing Agents for Connect-4: Opening Databases</a></strong></li>
+  <li><a href="/programming/connect-4-final-considerations/">Constructing Agents for Connect-4: Final Considerations</a></li>
+</ol>
+
+<p>As with many other games, the further course and outcome of a game for Connect-4 is already dependent on the opening phase. For example, the 1st player must place his first stone in the middle column to win the game. In all other cases, only a draw is reached or the game is even lost. For this reason, a strong player must be able to control the opening in order to avoid own mistakes and to be able to punish the opponent’s mistakes immediately. Often, however, it is very difficult to analyze the positions of the opening phase, because a high search depth is necessary to determine the exact game theoretical values.<br />
+In order to master the opening phase, many games therefore use opening books, which usually were created with high computing effort. These can typically give the computer program an advantage and save a lot of computing time during the opening phase. For games like Connect-4, there is another advantage: During the course of the game, the state space decreases further and further, so that after leaving the opening book, individual positions can often be correctly evaluated without further assistance and in acceptable time.</p>
+
+<!--more-->
+
+<div class="alert">
+  <!--<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
+  <i class="fa fa-info-circle"></i><strong> &nbsp;&nbsp;Note:</strong> The related Java framework for <em>Connect-4</em> is available on GitHub and can be downloaded from: <a href="http://github.com/MarkusThill/Connect-Four">http://github.com/MarkusThill/Connect-Four</a>.
+</div>
+
+<h2 id="the-8-ply-database">The 8-ply Database</h2>
+
+<p>The first extensive database, which is also usable for other programmers, was published by John Tromp in 1994. The calculation of the database was carried out on several computers and lasted 40,000 hours (approx. four and a half years). The strongest Connect-4 programs - including Mustrum and a program by John Tromp himself - use this database in some way.
+The database contains all non-terminal positions with eight stones, but all positions which are identical after mirroring along the middle column are only present in one variant in the database. Of the total of 67,557 positions, 44,473 (65.83%) positions lead to the 1st player’s win, 16,635 (24.62%) to a defeat and 6,449 (9,55%) to a draw.
+However, all positions with at least one immediate threat to either player have not been calculated. As a result, the database is not quite complete.
+Positions with an immediate threat to the player who is moving next don’t have to be included in the database, as he will win the game in the next ply anyway. However, since positions with an immediate threat to the the player to move can be neutralized in the next ply and the game is then continued, it is not possible to make a direct assessment of these situations using the opening database.
+The missing positions had to be calculated and added to the database. A total of 19,336 positions were missing, which were analyzed with an early version of our Alpha Beta agent on a Pentium-4 computer in about two weeks. The now complete 8-Ply database consists of 86,893 positions and assigns the theoretical outcome of the game (victory / defeat / draw from the point of view of the player to move) to each position.
+Thus, all positions with eight stones and less easily can be evaluated by the alpha-beta algorithm, which cancels the search for eight stones and retrieves the result from the database. This enables an exact evaluation of positions with eight or fewer stones within a few milliseconds. After leaving the opening book, the alpha beta agent - created in the course of our work - can analyze practically all positions in less than one second. This is quite sufficient for most purposes. Only a few positions with 9-12 pieces can lead to a slightly longer thinking time (up to 10 seconds).</p>
+
+<h2 id="the-12-ply-database">The 12-ply Database</h2>
+
+<p>The 8-Ply Opening Database, which was reviewed in the previous section, has a major drawback that is not immediately obvious: all of the positions contain scores for a win, loss or draw. However, no statement can be made as to how far victories or defeats are away from the current position. However, these distances are particularly important for the 2nd player in order to prevent early defeats. For this reason, an alpha-beta agent often has to search beyond the limits of the opening book in order to avoid bad moves for the trailing player.
+This information could also be helpful for the 1st player. Although it always wins in perfect play, early wins should generally be given preference. For this reason, and in order to achieve further runtime advantages, it was decided to have a further opening database - this time, however, with all game positions with 12 pieces - calculated.<br />
+For this purpose, all possible legal 4,200,899 positions were determined. Here too, identical positions (mirrored at the middle column) were only stored in one variant. This leads to significant savings in memory and computing time. <br />
+Subsequently, the individual positions were analyzed and the theoretical result including distance to the end of the game was determined. The computation was carried out on a Pentium-4 computer and took about three weeks.
+To validate the results obtained, an 8-Ply database was created from the 12-Ply database and compared with the existing database. For simple position evaluations without the need of distances, a 12 ply database is sufficient, which contains only information on win/loss or draw of the positions. In this case, a separate opening book is also available. As described below, it requires less than 1/3 of the original memory requirements.
+Furthermore, a 10-Ply-database was created, which is not really used in this project.</p>
+
+<h2 id="compressing-the-databases-with-suitable-representations">Compressing the Databases with suitable Representations</h2>
+
+<p>Since the individual databases contain many game positions, a suitable coding of the individual positions has to be found, which minimizes the required memory. This can be done by taking advantage of the fact that all positions in a database contain the same number of stones which is comparatively small. The coding of a game state in 2 x 42 bit does not seem to make sense here, since the 12-Ply database with 4,200,899 positions alone would require about 50 MB of memory.
+Instead, we will look at a coding that corresponds to a Huffman coding and exploits the gravity character of the game. The following observation is important: Above an empty field there can only be more empty fields. For a clear description of a state of play, it is therefore sufficient to list the stones of both players for each column in a defined order, without the empty fields being relevant. Only the columns have to be separated from each other. In addition to the two possible stones, only a separator character is needed to achieve a unique encoding. This is illustrated in the figure below.</p>
+
+<center>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2018-02-09-connect-4-introduction-and-tree-search-algorithms/huffman.png" alt="alt and id" width="400px" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 1:</b>  Huffman encoding of the two possible stones (S1 &amp; S2) and the separator character (TR). </p>
+      </figcaption>
+    
+</figure>
+
+</center>
+
+<p>To code a position, proceed as follows: The columns are evaluated from left to right, the cells within the columns from bottom to top. Depending on the configuration of the respective fields, the corresponding code word is appended to the current sequence. If an empty field is reached, append the code word for the separator to the sequence and proceed to the next column. Once all columns have been processed, no separator is required for the last column and the sequence is complete. This means that a total of six separators and four or six stones are required for both players. For this reason, the code word of length one is assigned to the separator.
+The player who moves does not need to be coded, as he can be determined from the position itself, so the state of play is completely described by the position. If the position is coded, the value of the position is appended to the sequence for the sake of simplicity. If there are no distances to the end of the game, two bits are sufficient to rate the position as a win/defeat of the 1st player or draw. This means that a position with eight or twelve stones including evaluation can be coded in exactly three or four bytes. The following Figure shows an example of how to code a position with eight blocks.</p>
+
+<center>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2018-02-09-connect-4-introduction-and-tree-search-algorithms/encodingExample.png" alt="alt and id" width="600px" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 2:</b>  Encoding of a game position with eight stones: 24 bits (3 bytes) are required. The last two bits represent the value of the position. In this case, the 1st player is expected to win in the course of the game. The position would be encoded as 0 10 11 10 0 0 11 10 11 10 11 0 0 0 11. </p>
+      </figcaption>
+    
+</figure>
+
+</center>
+
+<p>Five bytes are reserved for the 12-ply database with the respective distances to the end of the game, whereby the fifth byte contains the value. The following representation is used for this:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+v_i = \begin{cases}
+100 - distance, & \text{for win of 1st player} \\
+-100 + distance, & \text{for loss of 1st player}\\
+0, & \text{for a draw}
+\end{cases} %]]></script>
+
+<p>where the distance indicates the theoretical distance to the end of the game from the current position (consisting of 12 stones).</p>
+
+<h2 id="further-compressing-of-the-databases">Further Compressing of the Databases</h2>
+
+<p>If you consider the fact that all databases are complete and therefore contain all necessary legal positions, you can further reduce the size of the databases with the simple position evaluations (victory / defeat / draw). If you remove all positions from the 8- and 12-ply database with an expected win of the 1st player - which make up about 60% of the positions in both databases - the exact evaluation of a position can still be done. If a position does not show up in the database, it is simply assumed that the 1st player will win. However, the mirrored variant of the position must also be taken into consideration.
+This step reduces the 8-Ply database from 86,893 (250 kB) to 34,286 game positions (100 kB). The new 12-Ply database now contains 1,735,945 positions (6.6 MB) of originally 4,200,899 (16.0 MB).
+Since it is impossible to discard any position in the 12-Ply database with the exact winning distances (otherwise the distance information would be lost), all 4,200,899 positions corresponding to a size of 20.0 MB are kept in it.
+Due to the fact that under certain circumstances a high number of accesses to the databases could occur in a very short time, they should be loaded into the working memory at runtime. To speed up the search within the databases, they have been sorted so that you can use the binary search. This reduces the complexity of the search to O (log (n)), which means a significant increase compared to the linear search. In many cases, the mirrored variant of a position has to be searched in the database as well. As a result, the maximum number of accesses per position is approx. 2x 15 (8-Ply database), 2x21 (12-Ply database without winning distances) and 2x 22 (12-Ply database with exact winning distances).</p>
+
+<h2 id="downloading-the-databases">Downloading the Databases</h2>
+<p>The databases can all be downloaded from GitHub:</p>
+
+<ol>
+  <li><a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/openingBook/book.dat">The 8-Ply database</a></li>
+  <li><a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/openingBook/bookDeep.dat">The 12-Ply database <em>without</em> winning distances</a></li>
+  <li><a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/openingBook/bookDeepDist.dat">The 12-Ply database <em>with</em> winning distances</a></li>
+</ol>
+
+<h2 id="appendix">Appendix</h2>
+
+<h3 id="java-classes-for-loading-the-databases">Java-Classes for Loading the Databases</h3>
+
+<div class="github-sample-reference">
+  <div class="author-info">
+    <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/openingBook/Book.java">This Github Sample</a> is by <a href="https://github.com/MarkusThill">MarkusThill</a>
+  </div>
+  <div class="meta-info">
+    CFour/src/openingBook/Book.java <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/openingBook/Book.java">view</a> <a href="https://raw.githubusercontent.com/MarkusThill/Connect-Four/master/CFour/src/openingBook/Book.java">raw</a>
+  </div>
+</div>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"> <span class="kn">package</span> <span class="n">openingBook</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.InputStream</span><span class="o">;</span>
+
+<span class="cm">/**
+ * There are 3 different opning-books available: &lt;br&gt;
+ *         1. Opening book with all positions with 8 pieces (win/draw/loss) &lt;br&gt;
+ *         2. Opening book with all positions with 12 pieces (win/draw/loss) &lt;br&gt;
+ *         3. Opening book with all positions with 12 pieces (win/draw/loss with
+ *         exact distance) &lt;br&gt;
+ * 
+ *         One of these books can be selected by setting the bookNr to 0,1 or 2.
+ *         
+ * @author Markus Thill 
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Book</span> <span class="o">{</span>
+
+	<span class="c1">// Constants
+</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">BOOKPATH</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"book.dat"</span><span class="o">,</span> <span class="s">"bookDeep.dat"</span><span class="o">,</span>
+			<span class="s">"bookDeepDist.dat"</span> <span class="o">};</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">BOOKSIZE</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">34286</span><span class="o">,</span> <span class="mi">1735945</span><span class="o">,</span> <span class="mi">4200899</span> <span class="o">};</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">STONENUM</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">12</span> <span class="o">};</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MASKPOSITION</span> <span class="o">=</span> <span class="mh">0xFFFFFFFC</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MASKVALUE</span> <span class="o">=</span> <span class="mh">0x3</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="no">MSBINT</span> <span class="o">=</span> <span class="mh">0x80000000</span><span class="no">L</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">NORMALBOOK</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">DEEPBOOK</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">DISTDEEPBOOK</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+
+	<span class="c1">// Selected book-Nr
+</span>
+	<span class="kd">private</span> <span class="kt">int</span> <span class="n">bookNr</span><span class="o">;</span>
+
+	<span class="c1">// Input-stream for reading the book
+</span>
+	<span class="kd">private</span> <span class="nc">InputStream</span> <span class="n">file</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+	<span class="c1">// All rows of the opening-book. Each row is coded in a special format
+</span>
+	<span class="c1">// (exact 24- or 32-Bit)
+</span>
+	<span class="kd">private</span> <span class="kt">int</span> <span class="n">book</span><span class="o">[];</span>
+
+	<span class="c1">// Only for Deep-book with Exact Distance
+</span>
+	<span class="kt">byte</span> <span class="n">vals</span><span class="o">[];</span>
+
+	<span class="cm">/**
+	 * @param bookNr
+	 *            Selected book
+	 */</span>
+	<span class="kd">public</span> <span class="nf">Book</span><span class="o">(</span><span class="kt">int</span> <span class="n">bookNr</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">bookNr</span> <span class="o">=</span> <span class="n">bookNr</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * Open the selected book from the selected path
+	 * 
+	 * @throws IOException
+	 */</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">openBook</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+		<span class="n">file</span> <span class="o">=</span> <span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="no">BOOKPATH</span><span class="o">[</span><span class="n">bookNr</span><span class="o">]);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">file</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+			<span class="k">throw</span> <span class="o">(</span><span class="k">new</span> <span class="nc">IOException</span><span class="o">(</span><span class="s">"Could not open File"</span><span class="o">));</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * Close the selected book
+	 * 
+	 * @throws IOException
+	 */</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">closeBook</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+		<span class="n">file</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * Read the book from the HDD and save in the RAM.
+	 * 
+	 * @throws IOException
+	 */</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">readBook</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+		<span class="n">book</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="no">BOOKSIZE</span><span class="o">[</span><span class="n">bookNr</span><span class="o">]];</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="n">bookNr</span> <span class="o">==</span> <span class="no">DISTDEEPBOOK</span><span class="o">)</span>
+			<span class="n">vals</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="no">BOOKSIZE</span><span class="o">[</span><span class="n">bookNr</span><span class="o">]];</span>
+
+		<span class="kt">int</span> <span class="n">shiftNum</span><span class="o">,</span> <span class="n">temp</span><span class="o">;</span>
+		<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">BOOKSIZE</span><span class="o">[</span><span class="n">bookNr</span><span class="o">];</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+			<span class="n">shiftNum</span> <span class="o">=</span> <span class="o">(</span><span class="n">bookNr</span> <span class="o">==</span> <span class="no">NORMALBOOK</span> <span class="o">?</span> <span class="mi">16</span> <span class="o">:</span> <span class="mi">24</span><span class="o">);</span>
+			<span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+			<span class="k">for</span> <span class="o">(;</span> <span class="n">shiftNum</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">shiftNum</span> <span class="o">-=</span> <span class="mi">8</span><span class="o">)</span> <span class="o">{</span>
+				<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="na">read</span><span class="o">();</span>
+				<span class="n">temp</span> <span class="o">|=</span> <span class="o">(</span><span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">shiftNum</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="n">book</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+
+			<span class="k">if</span> <span class="o">(</span><span class="n">bookNr</span> <span class="o">==</span> <span class="no">DISTDEEPBOOK</span><span class="o">)</span> <span class="o">{</span>
+				<span class="kt">byte</span> <span class="n">b</span> <span class="o">=</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span> <span class="n">file</span><span class="o">.</span><span class="na">read</span><span class="o">();</span>
+				<span class="n">vals</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * Search in the opening book for the coded board and return the value for
+	 * this board. A fast binary-search is used.
+	 * 
+	 * @param codedPos
+	 *            Position coded in an Integer (see class ConnectFour for
+	 *            details)
+	 * @param codedPosMirrored
+	 *            Mirrored Position coded in an Integer (see class ConnectFour
+	 *            for details)
+	 * @return Game-Theoretic Value for this board
+	 */</span>
+	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getValue</span><span class="o">(</span><span class="kt">int</span> <span class="n">codedPos</span><span class="o">,</span> <span class="kt">int</span> <span class="n">codedPosMirrored</span><span class="o">)</span> <span class="o">{</span>
+		<span class="kt">int</span> <span class="n">code</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">code2</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">pos</span><span class="o">,</span> <span class="n">pos2</span><span class="o">,</span> <span class="n">step</span><span class="o">;</span>
+		<span class="n">pos</span> <span class="o">=</span> <span class="n">pos2</span> <span class="o">=</span> <span class="n">step</span> <span class="o">=</span> <span class="no">BOOKSIZE</span><span class="o">[</span><span class="n">bookNr</span><span class="o">]</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+
+		<span class="c1">// Binary Search
+</span>
+		<span class="k">while</span> <span class="o">(</span><span class="n">step</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">step</span> <span class="o">=</span> <span class="o">(</span><span class="n">step</span> <span class="o">!=</span> <span class="mi">1</span> <span class="o">?</span> <span class="o">(</span><span class="n">step</span> <span class="o">+</span> <span class="o">(</span><span class="n">step</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">))</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="no">BOOKSIZE</span><span class="o">[</span><span class="n">bookNr</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">pos</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span>
+				<span class="n">code</span> <span class="o">=</span> <span class="n">book</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span> <span class="o">&amp;</span> <span class="no">MASKPOSITION</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">pos2</span> <span class="o">&lt;</span> <span class="no">BOOKSIZE</span><span class="o">[</span><span class="n">bookNr</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">pos2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span>
+				<span class="n">code2</span> <span class="o">=</span> <span class="n">book</span><span class="o">[</span><span class="n">pos2</span><span class="o">]</span> <span class="o">&amp;</span> <span class="no">MASKPOSITION</span><span class="o">;</span>
+
+			<span class="k">if</span> <span class="o">(</span><span class="n">codedPos</span> <span class="o">&lt;</span> <span class="n">code</span><span class="o">)</span>
+				<span class="n">pos</span> <span class="o">-=</span> <span class="n">step</span><span class="o">;</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">codedPos</span> <span class="o">&gt;</span> <span class="n">code</span><span class="o">)</span>
+				<span class="n">pos</span> <span class="o">+=</span> <span class="n">step</span><span class="o">;</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">codedPos</span> <span class="o">==</span> <span class="n">code</span><span class="o">)</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">bookNr</span> <span class="o">!=</span> <span class="no">DISTDEEPBOOK</span><span class="o">)</span>
+					<span class="k">return</span> <span class="o">(</span><span class="n">book</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span> <span class="o">&amp;</span> <span class="no">MASKVALUE</span><span class="o">);</span>
+				<span class="k">else</span>
+					<span class="k">return</span> <span class="n">vals</span><span class="o">[</span><span class="n">pos</span><span class="o">];</span>
+
+			<span class="k">if</span> <span class="o">(</span><span class="n">codedPosMirrored</span> <span class="o">&lt;</span> <span class="n">code2</span><span class="o">)</span>
+				<span class="n">pos2</span> <span class="o">-=</span> <span class="n">step</span><span class="o">;</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">codedPosMirrored</span> <span class="o">&gt;</span> <span class="n">code2</span><span class="o">)</span>
+				<span class="n">pos2</span> <span class="o">+=</span> <span class="n">step</span><span class="o">;</span>
+			<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">codedPosMirrored</span> <span class="o">==</span> <span class="n">code2</span><span class="o">)</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">bookNr</span> <span class="o">!=</span> <span class="no">DISTDEEPBOOK</span><span class="o">)</span>
+					<span class="k">return</span> <span class="o">(</span><span class="n">book</span><span class="o">[</span><span class="n">pos2</span><span class="o">]</span> <span class="o">&amp;</span> <span class="no">MASKVALUE</span><span class="o">);</span>
+				<span class="k">else</span>
+					<span class="k">return</span> <span class="n">vals</span><span class="o">[</span><span class="n">pos2</span><span class="o">];</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="mi">2</span><span class="o">;</span> <span class="c1">//Value was not found in database, must be a win for X
+</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * Get a Board and its value at an specified index of this opening-book
+	 * 
+	 * @param index
+	 *            Position in the opening-book
+	 * @param board
+	 *            Return-Value: Contains the board
+	 * @return Value for the board
+	 */</span>
+	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getBoard</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="kt">int</span> <span class="n">board</span><span class="o">[][])</span> <span class="o">{</span>
+		<span class="kt">int</span> <span class="n">hCode</span> <span class="o">=</span> <span class="n">book</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+		<span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+		<span class="kt">long</span> <span class="n">b1</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="n">board</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+			<span class="n">board</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">7</span><span class="o">][</span><span class="mi">6</span><span class="o">];</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">bookNr</span> <span class="o">==</span> <span class="no">NORMALBOOK</span><span class="o">)</span>
+			<span class="n">hCode</span> <span class="o">&lt;&lt;=</span> <span class="mi">8</span><span class="o">;</span> <span class="c1">// Move to Front of Integer
+</span>
+		<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">STONENUM</span><span class="o">[</span><span class="n">bookNr</span><span class="o">]</span> <span class="o">+</span> <span class="mi">6</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+			<span class="n">b1</span> <span class="o">=</span> <span class="n">hCode</span> <span class="o">&amp;</span> <span class="no">MSBINT</span><span class="o">;</span>
+			<span class="n">hCode</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span><span class="o">;</span>
+			<span class="c1">// Column is Full
+</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">b1</span> <span class="o">==</span> <span class="mi">0L</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">col</span><span class="o">++;</span>
+				<span class="n">row</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+				<span class="k">continue</span><span class="o">;</span>
+			<span class="o">}</span>
+
+			<span class="n">b2</span> <span class="o">=</span> <span class="n">hCode</span> <span class="o">&amp;</span> <span class="no">MSBINT</span><span class="o">;</span>
+			<span class="n">hCode</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">b2</span> <span class="o">!=</span> <span class="mi">0L</span><span class="o">)</span>
+				<span class="n">board</span><span class="o">[</span><span class="n">col</span><span class="o">][</span><span class="n">row</span><span class="o">++]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+			<span class="k">else</span>
+				<span class="n">board</span><span class="o">[</span><span class="n">col</span><span class="o">][</span><span class="n">row</span><span class="o">++]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">bookNr</span> <span class="o">!=</span> <span class="no">DISTDEEPBOOK</span><span class="o">)</span>
+			<span class="k">return</span> <span class="n">book</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">&amp;</span> <span class="no">MASKVALUE</span><span class="o">;</span>
+		<span class="k">return</span> <span class="n">vals</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * @return Size of the opening-book in bytes
+	 */</span>
+	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getBookSize</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="no">BOOKSIZE</span><span class="o">[</span><span class="n">bookNr</span><span class="o">];</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+ </code></pre></figure>
+
+<hr />
+
+<div class="github-sample-reference">
+  <div class="author-info">
+    <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/openingBook/BookSum.java">This Github Sample</a> is by <a href="https://github.com/MarkusThill">MarkusThill</a>
+  </div>
+  <div class="meta-info">
+    CFour/src/openingBook/BookSum.java <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/openingBook/BookSum.java">view</a> <a href="https://raw.githubusercontent.com/MarkusThill/Connect-Four/master/CFour/src/openingBook/BookSum.java">raw</a>
+  </div>
+</div>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"> <span class="kn">package</span> <span class="n">openingBook</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @author Markus Thill
+ * 
+ *         Load all opening Books in this class.
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookSum</span> <span class="o">{</span>
+
+	<span class="kd">private</span> <span class="nc">Book</span> <span class="n">openingBook</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="nc">Book</span> <span class="n">openingBookDeep</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="nc">Book</span> <span class="n">openingBookDeepDist</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="nf">BookSum</span><span class="o">()</span> <span class="o">{</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="nc">Book</span> <span class="nf">getOpeningBook</span><span class="o">()</span> <span class="o">{</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="n">openingBook</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">openingBook</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Book</span><span class="o">(</span><span class="nc">Book</span><span class="o">.</span><span class="na">NORMALBOOK</span><span class="o">);</span>
+			<span class="k">try</span> <span class="o">{</span>
+				<span class="n">openingBook</span><span class="o">.</span><span class="na">openBook</span><span class="o">();</span>
+				<span class="n">openingBook</span><span class="o">.</span><span class="na">readBook</span><span class="o">();</span>
+				<span class="n">openingBook</span><span class="o">.</span><span class="na">closeBook</span><span class="o">();</span>
+			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">openingBook</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="nc">Book</span> <span class="nf">getOpeningBookDeep</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">openingBookDeep</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">openingBookDeep</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Book</span><span class="o">(</span><span class="nc">Book</span><span class="o">.</span><span class="na">DEEPBOOK</span><span class="o">);</span>
+			<span class="k">try</span> <span class="o">{</span>
+				<span class="n">openingBookDeep</span><span class="o">.</span><span class="na">openBook</span><span class="o">();</span>
+				<span class="n">openingBookDeep</span><span class="o">.</span><span class="na">readBook</span><span class="o">();</span>
+				<span class="n">openingBookDeep</span><span class="o">.</span><span class="na">closeBook</span><span class="o">();</span>
+			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">openingBookDeep</span><span class="o">;</span>
+	<span class="o">}</span>
+
+	<span class="kd">public</span> <span class="nc">Book</span> <span class="nf">getOpeningBookDeepDist</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">openingBookDeepDist</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">openingBookDeepDist</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Book</span><span class="o">(</span><span class="nc">Book</span><span class="o">.</span><span class="na">DISTDEEPBOOK</span><span class="o">);</span>
+			<span class="k">try</span> <span class="o">{</span>
+
+				<span class="n">openingBookDeepDist</span><span class="o">.</span><span class="na">openBook</span><span class="o">();</span>
+				<span class="n">openingBookDeepDist</span><span class="o">.</span><span class="na">readBook</span><span class="o">();</span>
+				<span class="n">openingBookDeepDist</span><span class="o">.</span><span class="na">closeBook</span><span class="o">();</span>
+			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">openingBookDeepDist</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+ </code></pre></figure>
+
+<hr />
+
+<p><em>Note: Several paragraphs of this blog post are in parts taken from my <a href="http://www.gm.fh-koeln.de/~konen/research/PaperPDF/MT-Thill2015-final.pdf">Master’s thesis</a> or from a translation of my <a href="http://www.gm.fh-koeln.de/ciopwebpub/Theses.d/Thill12.d/BA-Thill-2012.pdf">Bachelor thesis</a> and <a href="http://www.gm.fh-koeln.de/ciopwebpub/Thil12a.d/Thill12a.pdf">some earlier project work</a>.</em></p>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="https://MarkusThill.github.io/tags#Connect-4" title="Pages tagged Connect-4" class="tag"><span class="term">Connect-4</span></a><a href="https://MarkusThill.github.io/tags#AI" title="Pages tagged AI" class="tag"><span class="term">AI</span></a><a href="https://MarkusThill.github.io/tags#tree-search" title="Pages tagged tree-search" class="tag"><span class="term">tree-search</span></a><a href="https://MarkusThill.github.io/tags#alpha-beta" title="Pages tagged alpha-beta" class="tag"><span class="term">alpha-beta</span></a><a href="https://MarkusThill.github.io/tags#minimax" title="Pages tagged minimax" class="tag"><span class="term">minimax</span></a><a href="https://MarkusThill.github.io/tags#transposition tables" title="Pages tagged transposition tables" class="tag"><span class="term">transposition tables</span></a><a href="https://MarkusThill.github.io/tags#opening databases" title="Pages tagged opening databases" class="tag"><span class="term">opening databases</span></a><a href="https://MarkusThill.github.io/tags#move ordering" title="Pages tagged move ordering" class="tag"><span class="term">move ordering</span></a><a href="https://MarkusThill.github.io/tags#bitboards" title="Pages tagged bitboards" class="tag"><span class="term">bitboards</span></a></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/programming/connect-4-opening-databases/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/programming/connect-4-opening-databases/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/programming/connect-4-opening-databases/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/programming/connect-4-transposition-tables/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

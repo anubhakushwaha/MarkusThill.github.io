@@ -1,0 +1,636 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Constructing Agents for Connect-4&#58; Transposition Tables &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="Connect-4, AI, tree-search, alpha-beta, minimax, transposition tables, opening databases, move ordering, bitboards">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Constructing Agents for Connect-4&#58; Transposition Tables">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/programming/connect-4-transposition-tables/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/programming/connect-4-transposition-tables/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Constructing Agents for Connect-4: Transposition Tables | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Constructing Agents for Connect-4: Transposition Tables" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This post is the 5th part of a series of 7 articles: Constructing Agents for Connect-4: Initial Notes Constructing Agents for Connect-4: Tree Search Algorithms Constructing Agents for Connect-4: Board Representations Constructing Agents for Connect-4: Move Ordering Constructing Agents for Connect-4: Transposition Tables Constructing Agents for Connect-4: Opening Databases Constructing Agents for Connect-4: Final Considerations Using transposition tables (hash tables) is another way to speed up the tree search. They are mainly used to avoid multiple analyses (analysis of whole subtrees) of individual positions during the search. In connection with iterative deepening, it is also possible to optimize move ordering using transposition tables. In this project, however, iterative deepening is not used for the alpha-beta search, as it could not achieve any runtime advantages. Regardless of the board game under consideration, the use of transposition tables in combination with tree-search results in an enormous saving of knots, so that a halving of the search time is quite realistic." />
+<meta property="og:description" content="This post is the 5th part of a series of 7 articles: Constructing Agents for Connect-4: Initial Notes Constructing Agents for Connect-4: Tree Search Algorithms Constructing Agents for Connect-4: Board Representations Constructing Agents for Connect-4: Move Ordering Constructing Agents for Connect-4: Transposition Tables Constructing Agents for Connect-4: Opening Databases Constructing Agents for Connect-4: Final Considerations Using transposition tables (hash tables) is another way to speed up the tree search. They are mainly used to avoid multiple analyses (analysis of whole subtrees) of individual positions during the search. In connection with iterative deepening, it is also possible to optimize move ordering using transposition tables. In this project, however, iterative deepening is not used for the alpha-beta search, as it could not achieve any runtime advantages. Regardless of the board game under consideration, the use of transposition tables in combination with tree-search results in an enormous saving of knots, so that a halving of the search time is quite realistic." />
+<link rel="canonical" href="https://markusthill.github.io/programming/connect-4-transposition-tables/" />
+<meta property="og:url" content="https://markusthill.github.io/programming/connect-4-transposition-tables/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-19T23:09:33+01:00" />
+<script type="application/ld+json">
+{"description":"This post is the 5th part of a series of 7 articles: Constructing Agents for Connect-4: Initial Notes Constructing Agents for Connect-4: Tree Search Algorithms Constructing Agents for Connect-4: Board Representations Constructing Agents for Connect-4: Move Ordering Constructing Agents for Connect-4: Transposition Tables Constructing Agents for Connect-4: Opening Databases Constructing Agents for Connect-4: Final Considerations Using transposition tables (hash tables) is another way to speed up the tree search. They are mainly used to avoid multiple analyses (analysis of whole subtrees) of individual positions during the search. In connection with iterative deepening, it is also possible to optimize move ordering using transposition tables. In this project, however, iterative deepening is not used for the alpha-beta search, as it could not achieve any runtime advantages. Regardless of the board game under consideration, the use of transposition tables in combination with tree-search results in an enormous saving of knots, so that a halving of the search time is quite realistic.","headline":"Constructing Agents for Connect-4: Transposition Tables","dateModified":"2018-02-19T23:09:33+01:00","datePublished":"2018-02-19T23:09:33+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/programming/connect-4-transposition-tables/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/programming/connect-4-transposition-tables/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Constructing Agents for Connect-4&#58; Transposition Tables</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2018-02-19T23:09:33+01:00">February 19, 2018</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~11 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+      <h1 class="post-title entry-title">Constructing Agents for Connect-4&#58; Transposition Tables</h1>
+      <p>This post is the 5th part of a series of 7 articles:</p>
+<ol>
+  <li><a href="/programming/connect-4-introduction-and-tree-search-algorithms/">Constructing Agents for Connect-4: Initial Notes</a></li>
+  <li><a href="/programming/connect-4-tree-search-algorithms/">Constructing Agents for Connect-4: Tree Search Algorithms</a></li>
+  <li><a href="/programming/connect-4-board-representations/">Constructing Agents for Connect-4: Board Representations</a></li>
+  <li><a href="/programming/connect-4-move-ordering/">Constructing Agents for Connect-4: Move Ordering</a></li>
+  <li><strong><a href="/programming/connect-4-transposition-tables/">Constructing Agents for Connect-4: Transposition Tables</a></strong></li>
+  <li><a href="/programming/connect-4-opening-databases/">Constructing Agents for Connect-4: Opening Databases</a></li>
+  <li><a href="/programming/connect-4-final-considerations/">Constructing Agents for Connect-4: Final Considerations</a>
+Using transposition tables (hash tables) is another way to speed up the tree search. They are mainly used to avoid multiple analyses (analysis of whole subtrees) of individual positions during the search. In connection with iterative deepening, it is also possible to optimize move ordering using transposition tables. In this project, however, iterative deepening is not used for the alpha-beta search, as it could not achieve any runtime advantages. Regardless of the board game under consideration, the use of transposition tables in combination with tree-search results in an enormous saving of knots, so that a halving of the search time is quite realistic.</li>
+</ol>
+
+<!--more-->
+
+<div class="alert">
+  <!--<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
+  <i class="fa fa-info-circle"></i><strong> &nbsp;&nbsp;Note:</strong> The related Java framework for <em>Connect-4</em> is available on GitHub and can be downloaded from: <a href="http://github.com/MarkusThill/Connect-Four">http://github.com/MarkusThill/Connect-Four</a>.
+</div>
+
+<h2 id="permutations-of-move-sequences">Permutations of Move Sequences</h2>
+
+<p>In many games, changes in the order of moves within a move sequence often lead to the same position. The different arrangements of a move sequence can also be referred to as permutations, whereby a permutation represents a bijective representation of a set of plys on itself. The individual permutations can be generated using a finite number of transpositions, where a transposition is defined as a permutation that exchanges exactly two elements (plys) with each other. However, the term transposition table comes from English. Chess moves are often referred to as transpositions.</p>
+
+<p>It should be noted that not all permutations of a move sequence necessarily lead to the same position in the game. Individual permutations may contain impossible moves or might result in other states. In a chess game, for example, it is not possible to draw a figure on a square that is already occupied by a piece of the same player; this could happen with certain changes in the move sequence.
+Furthermore, a single transposition, in which a ply of one player is swapped with a ply of the opponent, results in an illegal move sequence, since two plys of the same player would follow each other directly. Therefore, it is better to keep the plys of each player in separate move lists. But not all permutations of the separate move sequences necessarily always lead to identical states. In the gameConnect-4, this is prevented by the gravity rule of the game, in the case of chess or checkers, for example, by the hitting moves. Tic Tac Toe and Gomoku, on the other hand, are games for which all permutations of a move sequence (each treated separately for both players) lead to the same position in the game.</p>
+
+<h2 id="a-hash-method-according-to-albert-l-zobrist">A Hash Method according to Albert L. Zobrist</h2>
+
+<p>Since under certain circumstances several thousand or even millions of nodes of the search tree are examined per second, a particular efficiency of the hash method is required when using transposition tables. Therefore, a function is sought which maps a state of the game to a hash value (and index of the hash table) without any special effort. Albert L. Zobrist already introduced such a procedure in 1970. It is particularly suitable for board games and is now widely used in chess programming. This is described in more detail below.
+The central operation for zobrist-hashing is the bitwise exclusive OR (XOR), with which n-digit dual numbers are linked to obtain a unique position key. In general, a list of random numbers is created, each of which corresponds to a piece at a certain position. A set of random numbers must be generated for each player. In general, the number of required random numbers can be described as follows:</p>
+
+<p>N_Random = Number of players × (Number of figure types per player) × Number of fields</p>
+
+<p>where certain special moves may have to be coded separately.
+ Connect-4 would therefore require 2 x 42 random numbers. When you add a piece, you simply update the current key by XOR-ing it to the corresponding random number. It is also possible to remove or move pieces without any problems. This and other special features are quickly apparent when looking at some basic properties of the XOR link (notation: <script type="math/tex">x\nleftrightarrow y</script>):</p>
+
+<ol>
+  <li><script type="math/tex">(x\nleftrightarrow  y)\nleftrightarrow  z=x\nleftrightarrow  (y\nleftrightarrow  z)</script> (associativity) and <script type="math/tex">x\nleftrightarrow y=y\nleftrightarrow  x</script> (commutativity): The sequence of the individual moves is not relevant for the construction of the key. Permutations of a move sequence lead to the same key (if the positions are also identical).</li>
+  <li>x\nleftrightarrow x=0: This allows you to remove a piece from the Zobrist key. To move a piece, it is first removed from the key and then reinserted elsewhere. Two bitwise XOR operations are required for this.</li>
+  <li>The bit-by-bit XOR combination of any number of n-digit random dual numbers produces an n-digit random number as well. This is by no means the case with all operations (for example, for bitwise AND operation).</li>
+</ol>
+
+<p>In addition, Zobrist-Hashing allows incremental modification of the key. This is of particular advantage during the tree search, since only very few XOR operations are required in each node to update the key. The Connect-4 search even requires only one XOR operation per node.
+Using a simple hash function, e. g. a modulo function, the index within the transposition table is determined using the key. In some cases, the modulo function can also be converted to a bitwise AND operation. This is always the case when using transposition tables of size <script type="math/tex">2^k</script>.
+However, unambiguous keys cannot be generated with this method; the mapping of the game states to the set of keys is not injective. For example, in the game Conect-4 occasionally errors occurred when 32-bit keys were used. When using 64-bit keys, no more errors could be observed, but they cannot be excluded (this is due to the fact, that we store the 64-bit Zobrist key in the hash table instead of the position. To prevent any errors, one would have to store the bit-boards of both players in the hash table).</p>
+
+<h2 id="design-of-the-transposition-tables">Design of the Transposition Tables</h2>
+
+<p>As mentioned above, the Alpha-Beta Search for Connect-4 is divided into two stages for performance reasons. The use of a two-stage transposition table also brought significant runtime advantages. This is mainly due to the fact that entries for nodes at lower levels are not overwritten by the higher levels. Since hits in the transposition table of the first stage in particular lead to a considerable saving of nodes, the separation into two stages makes sense.
+For each node, the system first checks whether an entry exists in the corresponding transposition table. If this is the case, the search can in many cases be interrupted at this point and the corresponding value returned. Otherwise, the search continues as usual and the result for the node is inserted into the corresponding transposition table. Since the hash function is not injective, several keys may be assigned the same index in the transposition table. Such collisions cannot be avoided, but there are some strategies to deal with them. However, only linear probing was tested for this project. A reduction of the runtime was not possible, so that already existing entries in the current version of the program are simply overwritten in case of a collision.</p>
+
+<p>Each entry in a transposition table consists of three elements:</p>
+
+<ol>
+  <li>position key: Since collisions can occur during the reading process, it is necessary to save the corresponding position as well. In this case, you may want to use the Zobrist key to identify the position and store it for each entry in the transposition table. As mentioned above, however, it can happen that identical Zobrist keys are generated from two different positions. This is avoided by selecting a suitable key length. However, errors can only be completely excluded if the complete position, i. e. the bit boards of both players, are stored for the respective entries in the transposition table.</li>
+  <li>Value of the position.</li>
+  <li>Type of node: Since the value of a node is only exact if it lies between alpha and beta, the node type information must be included in each entry of the transposition table in addition to the value of the node. As already mentioned, the value can be an exact result, an upper or a lower limit.</li>
+</ol>
+
+<h2 id="enhanced-transposition-cutoffs">Enhanced Transposition Cutoffs</h2>
+
+<p>In general, before the actual alpha-beta search starts, the transposition table is first examined for a suitable entry in each node. In many cases there is no such entry, so a detailed analysis of the position is necessary. These are tried to be avoided with the Enhanced Transposition Cutoffs (ETC). The basic idea behind it is as follows: If the transposition table does not contain a suitable entry for the current position, it is still possible to find individual after-state positions in it. In the hope of achieving a cutoff, you create the keys of all subsequent statements and look them up in the table. Often such a cutoff can be achieved without having to expand the current node further. However, since hash accesses are usually very time-consuming, this procedure often only has a real advantage in nodes near the roots. In the Connect-4 program, ETCs are therefore only used in the first stage of the Alpha-Beta search. Their use accelerated the search by about 15%.</p>
+
+<h2 id="other-optimizations">Other Optimizations</h2>
+
+<p>As mentioned in an earlier blog post, the use of mirror or rotational symmetries can speed up the search considerably. This can also be used for accessing the transposition tables. If a query does not return a result, a repetition with mirrored or rotated positions is often successful. Generally speaking, the generation of symmetrical positions is comparatively complex, so that this can only be done up to a certain search depth. In the Connect-4 game, this measure made it possible to speed up the search for empty fields and positions with only a few pieces (without using the opening databases).
+With an increased degree of filling of the transposition tables, the number of collisions increases rapidly. To avoid this, you should try not to make unnecessary entries in the tables. As it turns out, it is not necessary to access the transposition tables in each node of the Connect-4 search tree. Thus, the filling level of the two transposition tables could be significantly reduced by using the tables only on every second level of the search tree. As a result, the number of entries during the search is almost halved and fewer collisions occur.</p>
+
+<h2 id="appendix">Appendix</h2>
+<h3 id="accessing-the-transposition-table-in-lower-levels">Accessing the Transposition Table in lower Levels</h3>
+<div class="github-sample-reference">
+  <div class="author-info">
+    <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/c4/AlphaBetaAgent.java">This Github Sample</a> is by <a href="https://github.com/MarkusThill">MarkusThill</a>
+  </div>
+  <div class="meta-info">
+    CFour/src/c4/AlphaBetaAgent.java <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/c4/AlphaBetaAgent.java">view</a> <a href="https://raw.githubusercontent.com/MarkusThill/Connect-Four/master/CFour/src/c4/AlphaBetaAgent.java">raw</a>
+  </div>
+</div>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// int transPosition = (unsigned long)zobr % lTransPosSize;
+</span>
+<span class="c1">// should be equal to above operation (time)
+</span>
+<span class="c1">// Check for Entry in Transposition-Table
+</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">lKey</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">==</span> <span class="n">zobr</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kt">short</span> <span class="n">v</span> <span class="o">=</span> <span class="n">lValue</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+	<span class="k">switch</span> <span class="o">(</span><span class="n">lFlag</span><span class="o">[</span><span class="n">index</span><span class="o">])</span> <span class="o">{</span>
+	<span class="k">case</span> <span class="nl">TRANSPOSEXACT:</span>
+		<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+	<span class="k">case</span> <span class="nl">TRANSPOSLOWER:</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&gt;=</span> <span class="n">beta</span><span class="o">)</span>
+			<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="o">)</span>
+			<span class="n">alpha</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">break</span><span class="o">;</span>
+	<span class="k">case</span> <span class="nl">TRANSPOSUPPER:</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&lt;=</span> <span class="n">alpha</span><span class="o">)</span>
+			<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">beta</span><span class="o">)</span>
+			<span class="n">beta</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">break</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+<span class="kt">boolean</span> <span class="n">isExactValue</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span></code></pre></figure>
+
+<p>Try mirrored positions as well:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">moves</span><span class="o">[];</span>
+<span class="c1">// Mirror Board
+</span>
+<span class="kt">long</span> <span class="n">f1</span> <span class="o">=</span> <span class="n">getMirroredField</span><span class="o">(</span><span class="no">PLAYER1</span><span class="o">);</span>
+<span class="kt">long</span> <span class="n">f2</span> <span class="o">=</span> <span class="n">getMirroredField</span><span class="o">(</span><span class="no">PLAYER2</span><span class="o">);</span>
+ <span class="k">if</span> <span class="o">(</span><span class="n">tds</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">countPieces</span><span class="o">()</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="o">)</span>
+	 <span class="n">moves</span> <span class="o">=</span> <span class="n">tds</span><span class="o">.</span><span class="na">getBestMoveList</span><span class="o">(</span><span class="n">fieldP1</span><span class="o">,</span> <span class="n">fieldP2</span><span class="o">);</span>
+ <span class="k">else</span>
+<span class="c1">// dynamic move-ordering
+</span>
+<span class="n">moves</span> <span class="o">=</span> <span class="n">generateMoves</span><span class="o">(</span><span class="no">PLAYER1</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+<span class="c1">// Check, if symmetry is still possible. If current board is symmetric,
+</span>
+<span class="c1">// only one half of the board must be evaluated
+</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">symPos</span><span class="o">)</span>
+	<span class="k">if</span> <span class="o">((</span><span class="n">symPos</span> <span class="o">=</span> <span class="o">((</span><span class="n">f1</span> <span class="o">&amp;</span> <span class="n">fieldP1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0L</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">f2</span> <span class="o">&amp;</span> <span class="n">fieldP2</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0L</span><span class="o">)))</span>
+		<span class="k">if</span> <span class="o">((</span><span class="n">f1</span> <span class="o">==</span> <span class="n">fieldP2</span> <span class="o">&amp;&amp;</span> <span class="n">f2</span> <span class="o">==</span> <span class="n">fieldP1</span><span class="o">))</span> <span class="o">{</span>
+			<span class="kt">int</span> <span class="n">tmp</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">8</span><span class="o">];</span>
+			<span class="k">for</span> <span class="o">(</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">moves</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="n">x</span><span class="o">++)</span> <span class="o">{</span>
+				<span class="k">if</span> <span class="o">(</span><span class="n">moves</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">)</span>
+					<span class="n">tmp</span><span class="o">[</span><span class="n">y</span><span class="o">++]</span> <span class="o">=</span> <span class="n">moves</span><span class="o">[</span><span class="n">x</span><span class="o">];</span>
+			<span class="o">}</span>
+			<span class="k">for</span> <span class="o">(</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="o">;</span> <span class="n">x</span><span class="o">++)</span>
+				<span class="n">moves</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">[</span><span class="n">x</span><span class="o">];</span>
+			<span class="n">moves</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+		<span class="o">}</span>
+<span class="c1">// Try to find mirrored board in Transposition-Table
+</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">depth</span> <span class="o">&lt;</span> <span class="mi">16</span> <span class="cm">/* &amp;&amp; symPos */</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// scheint ohne das
+</span>
+									<span class="c1">// Auskommentiere schneller zu sein
+</span>
+	<span class="kt">long</span> <span class="n">nZobr</span> <span class="o">=</span> <span class="n">toZobrist</span><span class="o">(</span><span class="n">f1</span><span class="o">,</span> <span class="n">f2</span><span class="o">);</span>
+	<span class="kt">int</span> <span class="n">transPositionN</span> <span class="o">=</span> <span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="n">nZobr</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">lTransPosSize</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+	<span class="k">if</span> <span class="o">(</span><span class="n">lKey</span><span class="o">[</span><span class="n">transPositionN</span><span class="o">]</span> <span class="o">==</span> <span class="n">nZobr</span><span class="o">)</span> <span class="o">{</span>
+		<span class="kt">short</span> <span class="n">v</span> <span class="o">=</span> <span class="n">lValue</span><span class="o">[</span><span class="n">transPositionN</span><span class="o">];</span>
+		<span class="k">switch</span> <span class="o">(</span><span class="n">lFlag</span><span class="o">[</span><span class="n">transPositionN</span><span class="o">])</span> <span class="o">{</span>
+		<span class="k">case</span> <span class="nl">TRANSPOSEXACT:</span>
+			<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">case</span> <span class="nl">TRANSPOSLOWER:</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&gt;=</span> <span class="n">beta</span><span class="o">)</span>
+				<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="o">)</span>
+				<span class="n">alpha</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+			<span class="k">break</span><span class="o">;</span>
+		<span class="k">case</span> <span class="nl">TRANSPOSUPPER:</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&lt;=</span> <span class="n">alpha</span><span class="o">)</span>
+				<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">beta</span><span class="o">)</span>
+				<span class="n">beta</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+			<span class="k">break</span><span class="o">;</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<hr />
+
+<h3 id="enhanced-transposition-cuttoffs-etcs">Enhanced Transposition Cuttoffs (ETCs)</h3>
+<div class="github-sample-reference">
+  <div class="author-info">
+    <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/c4/AlphaBetaAgent.java">This Github Sample</a> is by <a href="https://github.com/MarkusThill">MarkusThill</a>
+  </div>
+  <div class="meta-info">
+    CFour/src/c4/AlphaBetaAgent.java <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/c4/AlphaBetaAgent.java">view</a> <a href="https://raw.githubusercontent.com/MarkusThill/Connect-Four/master/CFour/src/c4/AlphaBetaAgent.java">raw</a>
+  </div>
+</div>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">for</span> <span class="o">(</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">moves</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">!=</span> <span class="o">(-</span><span class="mi">1</span><span class="o">);</span> <span class="n">x</span><span class="o">++)</span> <span class="o">{</span>
+	<span class="n">t</span> <span class="o">=</span> <span class="n">zobr</span> <span class="o">^</span> <span class="n">rnd</span><span class="o">[</span><span class="mi">1</span><span class="o">][</span><span class="n">moves</span><span class="o">[</span><span class="n">x</span><span class="o">]</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">+</span> <span class="n">colHeight</span><span class="o">[</span><span class="n">moves</span><span class="o">[</span><span class="n">x</span><span class="o">]]];</span>
+	<span class="kt">long</span> <span class="n">k</span><span class="o">;</span>
+	<span class="kt">short</span> <span class="n">v</span><span class="o">;</span>
+	<span class="kt">byte</span> <span class="n">f</span><span class="o">;</span>
+	<span class="c1">// Hash-Table ist in zwei Stufen unterteilt, daher die
+</span>
+	<span class="c1">// Unterscheidung
+</span>
+	<span class="k">if</span> <span class="o">(</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">13</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">transPosition</span> <span class="o">=</span> <span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="n">t</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">transPosSize</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+		<span class="n">k</span> <span class="o">=</span> <span class="n">key</span><span class="o">[</span><span class="n">transPosition</span><span class="o">];</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="n">value</span><span class="o">[</span><span class="n">transPosition</span><span class="o">];</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">flag</span><span class="o">[</span><span class="n">transPosition</span><span class="o">];</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+		<span class="n">transPosition</span> <span class="o">=</span> <span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="n">t</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">lTransPosSize</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+		<span class="n">k</span> <span class="o">=</span> <span class="n">lKey</span><span class="o">[</span><span class="n">transPosition</span><span class="o">];</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="n">lValue</span><span class="o">[</span><span class="n">transPosition</span><span class="o">];</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">lFlag</span><span class="o">[</span><span class="n">transPosition</span><span class="o">];</span>
+	<span class="o">}</span>
+	<span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="n">t</span> <span class="o">&amp;&amp;</span> <span class="n">f</span> <span class="o">!=</span> <span class="no">TRANSPOSLOWER</span> <span class="o">&amp;&amp;</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="n">alpha</span><span class="o">)</span>
+		<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+<span class="o">}</span></code></pre></figure>
+
+<hr />
+
+<h3 id="accessing-the-transposition-table-in-higher-levels">Accessing the Transposition Table in higher Levels</h3>
+<div class="github-sample-reference">
+  <div class="author-info">
+    <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/c4/AlphaBetaAgent.java">This Github Sample</a> is by <a href="https://github.com/MarkusThill">MarkusThill</a>
+  </div>
+  <div class="meta-info">
+    CFour/src/c4/AlphaBetaAgent.java <a href="https://github.com/MarkusThill/Connect-Four/blob/master/CFour/src/c4/AlphaBetaAgent.java">view</a> <a href="https://raw.githubusercontent.com/MarkusThill/Connect-Four/master/CFour/src/c4/AlphaBetaAgent.java">raw</a>
+  </div>
+</div>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="n">zobr</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">transPosSize</span> <span class="o">-</span> <span class="mi">1</span><span class="o">));</span>
+<span class="c1">// Check, if current board is in Transposition-Table
+</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">key</span><span class="o">[</span><span class="n">index</span><span class="o">]</span> <span class="o">==</span> <span class="n">zobr</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kt">short</span> <span class="n">v</span> <span class="o">=</span> <span class="n">value</span><span class="o">[</span><span class="n">index</span><span class="o">];</span>
+	<span class="k">switch</span> <span class="o">(</span><span class="n">flag</span><span class="o">[</span><span class="n">index</span><span class="o">])</span> <span class="o">{</span>
+	<span class="k">case</span> <span class="nl">TRANSPOSEXACT:</span>
+		<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+	<span class="k">case</span> <span class="nl">TRANSPOSLOWER:</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&gt;=</span> <span class="n">beta</span><span class="o">)</span>
+			<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">alpha</span><span class="o">)</span>
+			<span class="n">alpha</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">break</span><span class="o">;</span>
+	<span class="k">case</span> <span class="nl">TRANSPOSUPPER:</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&lt;=</span> <span class="n">alpha</span><span class="o">)</span>
+			<span class="k">return</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">beta</span><span class="o">)</span>
+			<span class="n">beta</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+		<span class="k">break</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<hr />
+
+<p><em>Note: Several paragraphs of this blog post are in parts taken from my <a href="http://www.gm.fh-koeln.de/~konen/research/PaperPDF/MT-Thill2015-final.pdf">Master’s thesis</a> or from a translation of my <a href="http://www.gm.fh-koeln.de/ciopwebpub/Theses.d/Thill12.d/BA-Thill-2012.pdf">Bachelor thesis</a> and <a href="http://www.gm.fh-koeln.de/ciopwebpub/Thil12a.d/Thill12a.pdf">some earlier project work</a>.</em></p>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="https://MarkusThill.github.io/tags#Connect-4" title="Pages tagged Connect-4" class="tag"><span class="term">Connect-4</span></a><a href="https://MarkusThill.github.io/tags#AI" title="Pages tagged AI" class="tag"><span class="term">AI</span></a><a href="https://MarkusThill.github.io/tags#tree-search" title="Pages tagged tree-search" class="tag"><span class="term">tree-search</span></a><a href="https://MarkusThill.github.io/tags#alpha-beta" title="Pages tagged alpha-beta" class="tag"><span class="term">alpha-beta</span></a><a href="https://MarkusThill.github.io/tags#minimax" title="Pages tagged minimax" class="tag"><span class="term">minimax</span></a><a href="https://MarkusThill.github.io/tags#transposition tables" title="Pages tagged transposition tables" class="tag"><span class="term">transposition tables</span></a><a href="https://MarkusThill.github.io/tags#opening databases" title="Pages tagged opening databases" class="tag"><span class="term">opening databases</span></a><a href="https://MarkusThill.github.io/tags#move ordering" title="Pages tagged move ordering" class="tag"><span class="term">move ordering</span></a><a href="https://MarkusThill.github.io/tags#bitboards" title="Pages tagged bitboards" class="tag"><span class="term">bitboards</span></a></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/programming/connect-4-transposition-tables/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/programming/connect-4-transposition-tables/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/programming/connect-4-transposition-tables/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/programming/connect-4-move-ordering/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

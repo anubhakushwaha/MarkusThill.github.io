@@ -1,0 +1,602 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Notes on Machine Learning, Statistics & Programming &#8211; ML & Stats</title>
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta name="keywords" content="Machine Learning Statistics Programming Electronics Internet of Things Smart Home">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes on Machine Learning, Statistics & Programming">
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more.">
+<meta property="og:url" content="https://MarkusThill.github.io/page4/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/images/logo.png">
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/page4/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Page 4 of 10 for Notes on Machine Learning, Statistics &amp; Programming | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Notes on Machine Learning, Statistics &amp; Programming" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<meta property="og:description" content="My private blog on Machine Learning, Statistics, Programming and more." />
+<link rel="canonical" href="https://markusthill.github.io/page4/" />
+<meta property="og:url" content="https://markusthill.github.io/page4/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<link rel="prev" href="https://markusthill.github.io/page3" />
+<link rel="next" href="https://markusthill.github.io/page5" />
+<script type="application/ld+json">
+{"description":"My private blog on Machine Learning, Statistics, Programming and more.","headline":"Notes on Machine Learning, Statistics &amp; Programming","@type":"WebPage","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/page4/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post-index">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Notes on Machine Learning, Statistics & Programming</h1>
+      
+        <h2><span class="entry-date"><time>&nbsp;</time></span></h2>
+      
+
+      
+          <p class="entry-reading-time">
+            &nbsp;
+          </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-02-19T23:09:33+01:00"><a href="https://MarkusThill.github.io/programming/connect-4-transposition-tables/">February 19, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~11 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-transposition-tables/" rel="bookmark" title="Constructing Agents for Connect-4&#58; Transposition Tables" itemprop="url">Constructing Agents for Connect-4&#58; Transposition Tables</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>This post is the 5th part of a series of 7 articles:</p>
+<ol>
+  <li><a href="/programming/connect-4-introduction-and-tree-search-algorithms/">Constructing Agents for Connect-4: Initial Notes</a></li>
+  <li><a href="/programming/connect-4-tree-search-algorithms/">Constructing Agents for Connect-4: Tree Search Algorithms</a></li>
+  <li><a href="/programming/connect-4-board-representations/">Constructing Agents for Connect-4: Board Representations</a></li>
+  <li><a href="/programming/connect-4-move-ordering/">Constructing Agents for Connect-4: Move Ordering</a></li>
+  <li><strong><a href="/programming/connect-4-transposition-tables/">Constructing Agents for Connect-4: Transposition Tables</a></strong></li>
+  <li><a href="/programming/connect-4-opening-databases/">Constructing Agents for Connect-4: Opening Databases</a></li>
+  <li><a href="/programming/connect-4-final-considerations/">Constructing Agents for Connect-4: Final Considerations</a>
+Using transposition tables (hash tables) is another way to speed up the tree search. They are mainly used to avoid multiple analyses (analysis of whole subtrees) of individual positions during the search. In connection with iterative deepening, it is also possible to optimize move ordering using transposition tables. In this project, however, iterative deepening is not used for the alpha-beta search, as it could not achieve any runtime advantages. Regardless of the board game under consideration, the use of transposition tables in combination with tree-search results in an enormous saving of knots, so that a halving of the search time is quite realistic.</li>
+</ol>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/programming/connect-4-transposition-tables//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-02-17T17:21:56+01:00"><a href="https://MarkusThill.github.io/programming/connect-4-move-ordering/">February 17, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~60 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-move-ordering/" rel="bookmark" title="Constructing Agents for Connect-4&#58; Move Ordering" itemprop="url">Constructing Agents for Connect-4&#58; Move Ordering</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>This post is the 4th part of a series of 7 articles:</p>
+<ol>
+  <li><a href="/programming/connect-4-introduction-and-tree-search-algorithms/">Constructing Agents for Connect-4: Initial Notes</a></li>
+  <li><a href="/programming/connect-4-tree-search-algorithms/">Constructing Agents for Connect-4: Tree Search Algorithms</a></li>
+  <li><a href="/programming/connect-4-board-representations/">Constructing Agents for Connect-4: Board Representations</a></li>
+  <li><strong><a href="/programming/connect-4-move-ordering/">Constructing Agents for Connect-4: Move Ordering</a></strong></li>
+  <li><a href="/programming/connect-4-transposition-tables/">Constructing Agents for Connect-4: Transposition Tables</a></li>
+  <li><a href="/programming/connect-4-opening-databases/">Constructing Agents for Connect-4: Opening Databases</a></li>
+  <li><a href="/programming/connect-4-final-considerations/">Constructing Agents for Connect-4: Final Considerations</a></li>
+</ol>
+
+<p>In order to achieve the highest possible efficiency of the alpha-beta algorithm, good move ordering is necessary. In contrast to the Minimax algorithm, which has to examine all nodes of the search tree, the Alpha-Beta algorithm can prune large parts of the tree if the best moves are tried out early on. The reason for this is that the opponents always try to maximize their own results and minimize the opponent’s results. The more the current results come closer to the game theoretical values, the more subtrees can be cut off, as they no longer contribute to the determination of the exact values.
+Cutoffs in lower levels of the search tree cut off larger subtrees. Since the computing effort is limited due to the smaller number of nodes in these levels, sophisticated algorithms for move ordering are conceivable there, which increase the computing time per node, but in return achieve higher cutoff rates. If this is implemented in a reasonable way, significant runtime improvements are possible. Therefore, you should first try to further improve move ordering before making technical optimizations and other changes to the program. This offers much more potential.
+Our agent’s alpha-beta search is divided into two stages. In the first step, it is possible to implement runtime-intensive procedures, since the number of searched nodes is comparatively small.  The second stage, on the other hand, is very static to minimize the computing time per node. In the following, the techniques for move ordering are discussed in more detail for both stages.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/programming/connect-4-move-ordering//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-02-14T11:10:18+01:00"><a href="https://MarkusThill.github.io/programming/connect-4-board-representations/">February 14, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~49 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-board-representations/" rel="bookmark" title="Constructing Agents for Connect-4&#58; Board Representations" itemprop="url">Constructing Agents for Connect-4&#58; Board Representations</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>This post is the 3rd part of a series of 7 articles:</p>
+<ol>
+  <li><a href="/programming/connect-4-introduction-and-tree-search-algorithms/">Constructing Agents for Connect-4: Initial Notes</a></li>
+  <li><a href="/programming/connect-4-tree-search-algorithms/">Constructing Agents for Connect-4: Tree Search Algorithms</a></li>
+  <li><strong><a href="/programming/connect-4-board-representations/">Constructing Agents for Connect-4: Board Representations</a></strong></li>
+  <li><a href="/programming/connect-4-move-ordering/">Constructing Agents for Connect-4: Move Ordering</a></li>
+  <li><a href="/programming/connect-4-transposition-tables/">Constructing Agents for Connect-4: Transposition Tables</a></li>
+  <li><a href="/programming/connect-4-opening-databases/">Constructing Agents for Connect-4: Opening Databases</a></li>
+  <li><a href="/programming/connect-4-final-considerations/">Constructing Agents for Connect-4: Final Considerations</a></li>
+</ol>
+
+<p>The representation of the board is an elementary component of the agent. Since very large parts of the program require this data structure as a basis, special care must be taken in the specification of this data structure. This applies in particular to tree-search procedures such as the alpha-beta search, in which a large number of operations are performed on this data structure.
+Probably the simplest representation of the board is achieved in most games by using a one- or two-dimensional array. For Connect-4, for example, a 7x6 integer matrix could be used. This approach is also recommended for less complex games such as Tic Tac Toe, since efficiency is not particularly important and the representation of the board simplifies programming in many parts.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/programming/connect-4-board-representations//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-02-12T15:31:46+01:00"><a href="https://MarkusThill.github.io/programming/connect-4-tree-search-algorithms/">February 12, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~90 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-tree-search-algorithms/" rel="bookmark" title="Constructing Agents for Connect-4&#58; Tree Search Algorithms" itemprop="url">Constructing Agents for Connect-4&#58; Tree Search Algorithms</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>This post is the 2nd part of a series of 7 articles:</p>
+<ol>
+  <li><a href="/programming/connect-4-introduction-and-tree-search-algorithms/">Constructing Agents for Connect-4: Initial Notes</a></li>
+  <li><strong><a href="/programming/connect-4-tree-search-algorithms/">Constructing Agents for Connect-4: Tree Search Algorithms</a></strong></li>
+  <li><a href="/programming/connect-4-board-representations/">Constructing Agents for Connect-4: Board Representations</a></li>
+  <li><a href="/programming/connect-4-move-ordering/">Constructing Agents for Connect-4: Move Ordering</a></li>
+  <li><a href="/programming/connect-4-transposition-tables/">Constructing Agents for Connect-4: Transposition Tables</a></li>
+  <li><a href="/programming/connect-4-opening-databases/">Constructing Agents for Connect-4: Opening Databases</a></li>
+  <li><a href="/programming/connect-4-final-considerations/">Constructing Agents for Connect-4: Final Considerations</a></li>
+</ol>
+
+<p>For Connect-4, a perfectly playing agent must be able to fully examine the game tree (in extreme cases 42 moves), but the search effort increases exponentially with the search depth, so that in many respects a high development effort is necessary to achieve this goal.
+This post and the following are intended to explain some of the procedures and techniques used to enable such an agent. In this blog post, we will particularly look at a basic tree search algorithm: the alpha-beta search.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/programming/connect-4-tree-search-algorithms//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+      <div class="entry-image-index">
+        <a href="https://MarkusThill.github.io/programming/connect-4-introduction-and-tree-search-algorithms/" title="Constructing Agents for Connect-4&#58; Initial Notes"><img src="https://MarkusThill.github.io/images/connect-4-2.jpg" alt="Constructing Agents for Connect-4&#58; Initial Notes"></a>
+        
+
+      </div><!-- /.entry-image -->
+    
+    <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2018-02-09T16:00:51+01:00"><a href="https://MarkusThill.github.io/programming/connect-4-introduction-and-tree-search-algorithms/">February 09, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://MarkusThill.github.io/about/" title="About Markus Thill">Markus Thill</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+        Reading time ~13 minutes
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://MarkusThill.github.io/programming/connect-4-introduction-and-tree-search-algorithms/" rel="bookmark" title="Constructing Agents for Connect-4&#58; Initial Notes" itemprop="url">Constructing Agents for Connect-4&#58; Initial Notes</a></h1>
+    
+  </header>
+  <div class="entry-content">
+      <p>This post is the 1st part of a series of 7 articles:</p>
+<ol>
+  <li><strong><a href="/programming/connect-4-introduction-and-tree-search-algorithms/">Constructing Agents for Connect-4: Initial Notes</a></strong></li>
+  <li><a href="/programming/connect-4-tree-search-algorithms/">Constructing Agents for Connect-4: Tree Search Algorithms</a></li>
+  <li><a href="/programming/connect-4-board-representations/">Constructing Agents for Connect-4: Board Representations</a></li>
+  <li><a href="/programming/connect-4-move-ordering/">Constructing Agents for Connect-4: Move Ordering</a></li>
+  <li><a href="/programming/connect-4-transposition-tables/">Constructing Agents for Connect-4: Transposition Tables</a></li>
+  <li><a href="/programming/connect-4-opening-databases/">Constructing Agents for Connect-4: Opening Databases</a></li>
+  <li><a href="/programming/connect-4-final-considerations/">Constructing Agents for Connect-4: Final Considerations</a></li>
+</ol>
+
+<p>The study of strategic board games is one of the classical research areas in the field of artificial intelligence (AI). In countless works, the most diverse approaches have been and are being investigated, which are often very different in their objectives. Especially complex games such as chess, Go or checkers seem to be of particular interest from the perspective of research. In this blog post and in the following posts, we will take a look at the game <em>Connect-4</em> and explore different ways for the construction of a strong player using AI methods.</p>
+
+
+      
+   
+   
+   
+   <p><a class="btn btn-sm btn-primary" href="/programming/connect-4-introduction-and-tree-search-algorithms//#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+   </p>
+   
+
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+
+
+<div class="pagination">
+  <ul class="inline-list">
+    
+    
+      
+        <li><a href="https://MarkusThill.github.io/page3/" class="btn">Previous</a></li>
+      
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/">1</a></li>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page2/">2</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page3/">3</a></li>
+      
+    
+      
+        <li><strong class="current-page">4</strong></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page5/">5</a></li>
+      
+    
+      
+        
+        
+        
+        <li><a href="https://MarkusThill.github.io/page6/">6</a></li>
+      
+    
+
+    
+    
+      <li>…</li>
+    
+
+    
+      <li><a href="https://MarkusThill.github.io/page10/">10</a></li>
+    
+
+    
+    
+      <li><a href="https://MarkusThill.github.io/page5/" class="btn">Next</a></li>
+    
+  </ul>
+</div>
+
+
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="Online, Gaussians, Covariances, Maximum Likelihood Estimation">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-gaussians/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/stats.jpg">
+
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/math/stats/ml/online-estimation-of-gaussians/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This post is the first part of a series of five articles: Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions Online Estimation of Weighted Sample Mean and Coviarance Matrix The Covariance of weighted Means Memory of the exponentially decaying Estimator for Mean and Covariance Matrix Online Estimation of the Inverse Covariance Matrix \( \def\myX{\mathbf{x}} \def\myY{\mathbf{y}} \def\mySigma{\mathbf{\Sigma}} \def\myM{\mathbf{M}} \def\myT{\mathsf{T}} \) When one has to estimate the parameters (mean vector and covariance matrix ) of a multivariate Gaussian distribution, the following well known relations – which represent the the maximum likelihood estimates – are commonly used: where is the i-th example vector of a sample of size . The above two equations can be easily implemented for the offline case with already existing data. However, in practice, one often has to deal with data streams, where one example has to be processed at a time. This is where things get more difficult." />
+<meta property="og:description" content="This post is the first part of a series of five articles: Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions Online Estimation of Weighted Sample Mean and Coviarance Matrix The Covariance of weighted Means Memory of the exponentially decaying Estimator for Mean and Covariance Matrix Online Estimation of the Inverse Covariance Matrix \( \def\myX{\mathbf{x}} \def\myY{\mathbf{y}} \def\mySigma{\mathbf{\Sigma}} \def\myM{\mathbf{M}} \def\myT{\mathsf{T}} \) When one has to estimate the parameters (mean vector and covariance matrix ) of a multivariate Gaussian distribution, the following well known relations – which represent the the maximum likelihood estimates – are commonly used: where is the i-th example vector of a sample of size . The above two equations can be easily implemented for the offline case with already existing data. However, in practice, one often has to deal with data streams, where one example has to be processed at a time. This is where things get more difficult." />
+<link rel="canonical" href="https://markusthill.github.io/math/stats/ml/online-estimation-of-gaussians/" />
+<meta property="og:url" content="https://markusthill.github.io/math/stats/ml/online-estimation-of-gaussians/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-11-20T22:03:56+01:00" />
+<script type="application/ld+json">
+{"description":"This post is the first part of a series of five articles: Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions Online Estimation of Weighted Sample Mean and Coviarance Matrix The Covariance of weighted Means Memory of the exponentially decaying Estimator for Mean and Covariance Matrix Online Estimation of the Inverse Covariance Matrix \\( \\def\\myX{\\mathbf{x}} \\def\\myY{\\mathbf{y}} \\def\\mySigma{\\mathbf{\\Sigma}} \\def\\myM{\\mathbf{M}} \\def\\myT{\\mathsf{T}} \\) When one has to estimate the parameters (mean vector and covariance matrix ) of a multivariate Gaussian distribution, the following well known relations – which represent the the maximum likelihood estimates – are commonly used: where is the i-th example vector of a sample of size . The above two equations can be easily implemented for the offline case with already existing data. However, in practice, one often has to deal with data streams, where one example has to be processed at a time. This is where things get more difficult.","headline":"Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions","dateModified":"2017-11-20T22:03:56+01:00","datePublished":"2017-11-20T22:03:56+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/math/stats/ml/online-estimation-of-gaussians/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/math/stats/ml/online-estimation-of-gaussians/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" class="feature">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2017-11-20T22:03:56+01:00">November 20, 2017</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~5 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+            <div class="entry-image-index">
+              <img src="https://MarkusThill.github.io/images/stats.jpg" alt="Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions">
+              
+            </div>
+        
+      <h1 class="post-title entry-title">Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</h1>
+      <p>This post is the first part of a series of five articles:</p>
+<ol>
+  <li><strong><a href="/math/stats/ml/online-estimation-of-gaussians/">Online Maximum Likelihood Estimation of (multivariate) Gaussian Distributions</a></strong></li>
+  <li><a href="/math/stats/ml/online-estimation-of-weighted-sample-mean-and-coviarance-matrix/">Online Estimation of Weighted Sample Mean and Coviarance Matrix</a></li>
+  <li><a href="/math/stats/ml/onthe-covariance-of-the-weighted-mean/">The Covariance of weighted Means</a></li>
+  <li><a href="/math/stats/ml/memory-of-an-exponentially-weighted-estimator-of-the-arithmetic-mean-and-covariance-matrix/">Memory of the exponentially decaying Estimator for Mean and Covariance Matrix</a></li>
+  <li><a href="/math/stats/ml/online-estimation-of-the-inverse-covariance-matrix/">Online Estimation of the Inverse Covariance Matrix</a></li>
+</ol>
+
+<p>\( <br />
+  \def\myX{\mathbf{x}}
+  \def\myY{\mathbf{y}}
+  \def\mySigma{\mathbf{\Sigma}}
+  \def\myM{\mathbf{M}}
+  \def\myT{\mathsf{T}}
+\)</p>
+
+<p>When one has to estimate the parameters (mean vector <script type="math/tex">\bar\myX</script> and covariance matrix <script type="math/tex">\mathbf\Sigma</script>) of a multivariate Gaussian distribution, the following well known relations – which represent the the maximum likelihood estimates – are commonly used:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+	\bar\myX &= \frac{1}{n}\sum_{i=1}^n \myX_i \label{eq:meanDef} \\
+	\mySigma &= \frac{1}{n-1}\sum_{i=1}^n {(\myX_i - \bar\myX)(\myX_i - \bar\myX)^\myT} \label{eq:SigmaDef}
+\end{align} %]]></script>
+
+<p>where <script type="math/tex">\myX_i</script> is the i-th example vector of a sample of size <script type="math/tex">n</script>.</p>
+
+<p>The above two equations can be easily implemented for the offline case with already existing data. However, in practice, one often has to deal with data streams, where one example <script type="math/tex">\myX_i</script> has to be processed at a time. This is where things get more difficult.</p>
+
+<!--more-->
+
+<p>In such situations it is  usually not feasible to repeatedly compute Eq. \eqref{eq:meanDef} and Eq. \eqref{eq:SigmaDef} for the each newly collected data instance again. It would make more sense to slightly adapt the previous estimates <script type="math/tex">\bar\myX_{n-1}</script> and <script type="math/tex">\mathbf\Sigma_{n-1}</script> to fit the new point <script type="math/tex">\myX_n</script> as well, in order to get <script type="math/tex">\bar\myX_{n}</script> and <script type="math/tex">\mathbf\Sigma_{n}</script>.</p>
+
+<h2 id="online-estimation-of-the-mean">Online Estimation of the Mean</h2>
+
+<p>For the mean vector, we can actually find such a solution easily:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+	\bar\myX_{n} &= \frac{(n-1)\bar\myX_{n-1} + \myX_{n}}{n}\\
+	&= \bar\myX_{n-1}  + \frac{1}{n} (-\bar\myX_{n-1} + \myX_{n}) \\
+	&= \bar\myX_{n-1}  + \frac{1}{n} (\myX_{n} - \bar\myX_{n-1}) \\
+	&= \bar\myX_{n-1}  + \frac{1}{n} \mathbf\Delta_n, \label{eq:onlineMean}
+\end{align} %]]></script>
+
+<p>where:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+ \mathbf\Delta_n = \myX_{n} - \bar\myX_{n-1}. \label{eq:DeltaN}
+\end{align}</script>
+
+<p>The update-rule in Eq. \eqref{eq:onlineMean} in combination with Eq. \eqref{eq:DeltaN} should be sufficiently robust for most practical applications.</p>
+
+<h2 id="online-estimation-of-the-covariance-matrix">Online Estimation of the Covariance Matrix</h2>
+<p>Finding update rules for the online adaptation of the covariance matrix <script type="math/tex">\mySigma</script> is slightly more difficult. However, once the math is done, the resulting equations are also rather simple.</p>
+
+<p>One can start with the unnormalized sum of example covariances (the so called scatter matrix) for a sample size of <script type="math/tex">n</script> (we initially do not consider the normalization by <script type="math/tex">\frac{1}{n-1}</script>):</p>
+
+<script type="math/tex; mode=display">\begin{align}
+\myM_{jk}^{(n)} = \sum_{i=1}^{n}(\myX_{ij}-\bar{\myX}_{nj})(\myX_{ik}-\bar{\myX}_{nk}),
+\end{align}</script>
+
+<p>where <script type="math/tex">\myX_{ij}</script> is the j-th element of the vector <script type="math/tex">\myX_{i}</script> at time step <script type="math/tex">i</script>.</p>
+
+<p>For the covariance between two features j and k, in order to update <script type="math/tex">\myM^{(n-1)}_{jk}</script> to <script type="math/tex">\myM^{(n)}_{jk}</script>, one can compute the increment <script type="math/tex">\Delta \myM_{jk} = \myM^{(n)}_{jk} - \myM^{(n-1)}_{jk}</script>:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\Delta \myM_{jk} &= \myM^{(n)}_{jk} - \myM^{(n-1)}_{jk} && \\
+&= \sum_{i=1}^{n}(\myX_{ij}-\bar{\myX}_{nj})(\myX_{ik}-\bar{\myX}_{nk}) &-& \sum_{i=1}^{n-1}(\myX_{ij}-\bar{\myX}_{(n-1)j})(\myX_{ik}-\bar{\myX}_{(n-1)k}) \\
+&= (\myX_{nj}-\bar{\myX}_{nj})(\myX_{nk}-\bar{\myX}_{nk}) &+& \sum_{i=1}^{n-1}  \Big[ (\myX_{ij}-\bar{\myX}_{nj})(\myX_{ik}-\bar{\myX}_{nk}) \\
+&&&-(\myX_{ij}-\bar{\myX}_{(n-1)j})(\myX_{ik}-\bar{\myX}_{(n-1)k}) \Big] \\
+&= (\myX_{nj}-\bar{\myX}_{nj})(\myX_{nk}-\bar{\myX}_{nk}) &+&\sum_{i=1}^{n-1} \Big[{\myX_{ij}\myX_{ik}}-\myX_{ij}\bar{\myX}_{nk}-\myX_{ik}\bar{\myX}_{nj}+\bar{\myX}_{nj}\bar{\myX}_{nk}\\
+	&&&-\myX_{ij}\myX_{ik}+\myX_{ij}\bar{\myX}_{(n-1)k}+\myX_{ik}\bar{\myX}_{(n-1)j}-\bar{\myX}_{(n-1)k}\bar{\myX}_{(n-1)j}\Big] \\
+&= (\myX_{nj}-\bar{\myX}_{nj})(\myX_{nk}-\bar{\myX}_{nk}) &+& \sum_{i=1}^{n-1} \Big[-\bar{\myX}_{nk}(\myX_{ij}-\bar{\myX}_{nj})-\bar{\myX}_{nj}(\myX_{ik}-\bar{\myX}_{nk})-\bar{\myX}_{nj}\bar{\myX}_{nk} \\
+&&&+\bar{\myX}_{(n-1)k}(\myX_{ij}-\bar{\myX}_{(n-1)j})+\bar{\myX}_{(n-1)j}(\myX_{ik}-\bar{\myX}_{(n-1)k})\\
+	&&&+\bar{\myX}_{(n-1)j}\bar{\myX}_{(n-1)k}\Big], \\
+\end{align} %]]></script>
+
+<p>Using the relations</p>
+
+<script type="math/tex; mode=display">\begin{align}
+	\sum_{i=1}^{n}( \myX_i - \bar{\myX}) = \sum_{i=1}^{n}\myX_i - n\bar{\myX}=n\bar{\myX}- n\bar{\myX}=0
+\end{align}</script>
+
+<p>and</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+	\sum_{i=1}^{n-1} (\myX_i-\bar{\myX}_n)&=\underbrace{\sum_{i=1}^{n} (\myX_i-\bar{\myX}_n)}_{=0}-(\myX_n-\bar{\myX}_n)\\
+&=\bar{\myX}_n-\myX_n
+\end{align} %]]></script>
+
+<p>we can further simplify:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\mathbf\Delta \myM_{jk} &= \myM^{(n)}_{jk} - \myM^{(n-1)}_{jk} && \\
+&= (\myX_{nj}-\bar{\myX}_{nj})(\myX_{nk}-\bar{\myX}_{nk}) &+& \sum_{i=1}^{n-1} \Big[-\bar{\myX}_{nk}(\myX_{ij}-\bar{\myX}_{nj})-\bar{\myX}_{nj}(\myX_{ik}-\bar{\myX}_{nk})-\bar{\myX}_{nj}\bar{\myX}_{nk} \\
+&&&+\underbrace{\bar{\myX}_{(n-1)k}(\myX_{ij}-\bar{\myX}_{(n-1)j})}_{=0}+\underbrace{\bar{\myX}_{(n-1)j}(\myX_{ik}-\bar{\myX}_{(n-1)k})}_{=0}\\
+	&&&+\bar{\myX}_{(n-1)j}\bar{\myX}_{(n-1)k}\Big]
+\end{align} %]]></script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+=& \ (\myX_{nj}-\bar{\myX}_{nj})(\myX_{nk}-\bar{\myX}_{nk}) - \bar{\myX}_{nk} (\bar{\myX}_{nj}-\myX_{nj}) -\bar{\myX}_{nj} (\bar{\myX}_{nk}-\myX_{nk})\\
+& \ -(n-1)\bar{\myX}_{nj}\bar{\myX}_{nk}+(n-1)\bar{\myX}_{(n-1)j}\bar{\myX}_{(n-1)k}\\
+=& \ (\myX_{nj}-\bar{\myX}_{nj}+\bar{\myX}_{nj})(\myX_{nk}-\bar{\myX}_{nk}+\bar{\myX}_{nk})-\bar{\myX}_{nj}\bar{\myX}_{nk}\\
+& \ -(n-1)\bar{\myX}_{nj}\bar{\myX}_{nk}+(n-1)\bar{\myX}_{(n-1)j}\bar{\myX}_{(n-1)k}\\
+=& \ (\myX_{nj}-\bar{\myX}_{nj}+\bar{\myX}_{nj})(\myX_{nk}-\bar{\myX}_{nk}+\bar{\myX}_{nk})-n\bar{\myX}_{nj}\bar{\myX}_{nk}+(n-1)\bar{\myX}_{(n-1)j}\bar{\myX}_{(n-1)k}\\
+=& \ \myX_{nj}\myX_{nk}-n\bar{\myX}_{nj}\bar{\myX}_{nk}+(n-1)\bar{\myX}_{(n-1)j}\bar{\myX}_{(n-1)k}\\
+=& \ \myX_{nj}\myX_{nk}+n(\bar{\myX}_{(n-1)j}\bar{\myX}_{(n-1)k} - \bar{\myX}_{nj}\bar{\myX}_{nk})-\bar{\myX}_{(n-1)j}\bar{\myX}_{(n-1)k}\\
+\end{align} %]]></script>
+
+<p>In vectorized form we finally get the following recursive relation (where <script type="math/tex">\myX</script> and <script type="math/tex">\bar{\myX}</script> are both column vectors):</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\mathbf \Delta \myM&=\myX_n \myX_{n}^\myT + n(\bar{\myX}_{n-1}\bar{\myX}_{n-1}^\myT-\bar{\myX}_{n}\bar{\myX}_{n}^\myT)-\bar{\myX}_{n-1}\bar{\myX}_{n-1}^\myT\\
+&= \myX_n \myX_{n}^\myT - n\bar{\myX}_{n}\bar{\myX}_{n}^\myT + (n-1)(\bar{\myX}_{n-1}\bar{\myX}_{n-1}^\myT) \label{eq:DeltaMResult} \\
+\myM^{(n)} &= \myM^{(n-1)} + \mathbf \Delta \myM\\
+&= \myM^{(n-1)} + \myX_n \myX_{n}^\myT + n(\bar{\myX}_{n-1}\bar{\myX}_{n-1}^\myT-\bar{\myX}_{n}\bar{\myX}_{n}^\myT)-\bar{\myX}_{n-1}\bar{\myX}_{n-1}^\myT\\
+&= \myM^{(n-1)} + \myX_n \myX_{n}^\myT - n\bar{\myX}_{n}\bar{\myX}_{n}^\myT + (n-1)(\bar{\myX}_{n-1}\bar{\myX}_{n-1}^\myT) \\
+\end{align} %]]></script>
+
+<p>In case one prefers to update the Covariance Matrix with “mini-batches” instead of single examples, this can be realized with the following equation:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\myM^{(n)} &= \myM^{(n-\mu)} + \Delta \myM\\
+&= \myM^{(n-\mu)} + \mathbf X_n^\myT \mathbf X_{n} + (n+\mu-1)(\bar{\myX}_{n-\mu}\bar{\myX}_{n-\mu}^\myT-\bar{\myX}_{n}\bar{\myX}_{n}^\myT)-\mu\bar{\myX}_{n-\mu}\bar{\myX}_{n-\mu}^\myT
+\end{align} %]]></script>
+
+<p>where <script type="math/tex">\mu</script>  is the size of a mini-batch and <script type="math/tex">\mathbf X</script> is the mini-batch with <script type="math/tex">\mu</script> rows. Typically, the computation time can be reduced slightly when mini-batches are utilized.
+The unbiased covariance matrix can then be computed in every time step with:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+\mySigma_n=\frac{\myM^{(n)}}{n-1}
+\end{align}</script>
+
+<h2 id="finding-a-simpler-formulation-for-the-covariance-matrix">Finding a simpler Formulation for the Covariance Matrix</h2>
+<p>However, the above formulation still appears to be slightly too complex. So we try again to find a nicer online update rule for the covariance matrix, by starting again from the original representation:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\myM^{(n)} &= \sum_{i=1}^{n} (\myX_i-\bar{\myX}_n)(\myX_i-\bar{\myX}_n)^\myT \\
+&= \sum_{i=1}^{n}  \big[ \myX_i \myX_i^\myT - \myX_i \bar{\myX}_n^\myT -  \bar{\myX}_n\myX_i^\myT+\bar{\myX}_n\bar{\myX}_n^\myT \big]\\
+&= \sum_{i=1}^{n}  \big[ \myX_i \myX_i^\myT - 2\myX_i \bar{\myX}_n^\myT + \bar{\myX}_n\bar{\myX}_n^\myT \big]\\
+&= \sum_{i=1}^{n}  \myX_i \myX_i^\myT - 2 \Bigg( \sum_{i=1}^{n} \myX_i \Bigg) \bar{\myX}_n^\myT + \sum_{i=1}^{n} \bar{\myX}_n\bar{\myX}_n^\myT \\
+&= \sum_{i=1}^{n}  \myX_i \myX_i^\myT - 2 n  \bar{\myX}_n \bar{\myX}_n^\myT + n \bar{\myX}_n\bar{\myX}_n^\myT \\
+&= \sum_{i=1}^{n}  \myX_i \myX_i^\myT - n \bar{\myX}_n\bar{\myX}_n^\myT \\
+\end{align} %]]></script>
+
+<p>This leads to the following covariance matrix</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\mySigma_n &= \myM^{(n)} / (n-1) \\
+&= \frac{1}{n-1}\sum_{i=1}^{n}  \myX_i \myX_i^\myT - \frac{n}{n-1} \bar{\myX}_n\bar{\myX}_n^\myT \\
+\end{align} %]]></script>
+
+<p>which can also be computed in vectorized form (replacing Bessel’s correction term <script type="math/tex">n-1</script> simply by <script type="math/tex">n</script>) if all example vectors <script type="math/tex">\myX_i</script> are organized as rows in a matrix <script type="math/tex">\mathbf X_n</script> with <script type="math/tex">n</script> rows (just as a side note):</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\mySigma_n &= \frac{1}{n} \mathbf X_n^\myT \mathbf X_n - \bar{\myX_n}\bar{\myX_n}^\myT \\
+\end{align}. %]]></script>
+
+<h2 id="further-simplifications">Further Simplifications</h2>
+<p>With equation <script type="math/tex">\myM^{(n)} = \sum_{i=1}^{n}  \myX_i \myX_i^T - n \bar{\myX}_n\bar{\myX}_n^T</script>, we can actually find a even simpler online rule for updating the covariance matrix. Let us start again with <script type="math/tex">\mathbf\Delta \myM = \myM^{(n)} - \myM^{(n-1)}</script>:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+\mathbf\Delta \myM &= \myM^{(n)} - \myM^{(n-1)} \\
+&= \sum_{i=1}^{n} \myX_i \myX_i^T - n \bar{\myX}_n\bar{\myX}_n^T - \sum_{i=1}^{n-1}  \myX_i \myX_i^T + (n-1) \bar{\myX}_{n-1}\bar{\myX}_{n-1}^T\\
+&= \myX_n \myX_n^T - n \bar{\myX}_n\bar{\myX}_n^T + (n-1) \bar{\myX}_{n-1}\bar{\myX}_{n-1}^T \label{eqref:DeltaM2}
+\end{align} %]]></script>
+
+<p>If we look at the above equation we can see that it is actually identical to Eq. \eqref{eq:DeltaMResult}. So basically, we just found an easier way to derive Eq. \eqref{eq:DeltaMResult}. Nevertheless, after experimenting a little with different approaches, we can manage to simplify \eqref{eqref:DeltaM2} slightly. The main idea is, to get rid of the terms <script type="math/tex">n</script> and <script type="math/tex">(n-1)</script>, since they are not that appealing for our on-line formulation. With the already known expression</p>
+
+<script type="math/tex; mode=display">\begin{align}
+	\bar{\myX}_n = \frac{\myX_n+(n-1)\bar{\myX}_{n-1}}{n}
+	\label{eq:xmeanNew}
+\end{align}</script>
+
+<p>and with a rearranged formulation of above equation</p>
+
+<script type="math/tex; mode=display">\begin{align}
+	\bar{\myX}_{n-1} = \frac{n\bar{\myX}_{n}-\myX_n}{n-1}
+	\label{eq:xmeanOld}
+\end{align}</script>
+
+<p>we can start simplifying Eq. \eqref{eqref:DeltaM2}. We insert Eq. \eqref{eq:xmeanNew} and Eq. \eqref{eq:xmeanOld} into \eqref{eqref:DeltaM2} and see where it leads us:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+	\mathbf\Delta \myM &= \myM^{(n)} - \myM^{(n-1)} \\
+&= \sum_{i=1}^{n}  \mathbf x_i \mathbf x_i^T - n \bar{\mathbf x}_n\bar{\mathbf x}_n^T - \sum_{i=1}^{n-1} \mathbf x_i \mathbf x_i^\mathsf{T} + (n-1) \bar{\mathbf x}_{n-1}\bar{\mathbf x}_{n-1}^\mathsf{T}\\
+&= \mathbf x_n \mathbf x_n^\mathsf{T} - n \bar{\mathbf x}_n\bar{\mathbf x}_n^T + (n-1) \bar{\mathbf x}_{n-1}\bar{\mathbf x}_{n-1}^\mathsf{T} \\
+&= \mathbf x_n \mathbf x_n^\mathsf{T} - n \frac{\mathbf x_n+(n-1)\bar{\mathbf x}_{n-1}}{n} \bar{\mathbf x}_n^T + (n-1) \bar{\mathbf x}_{n-1} \Big( \frac{n\bar{\mathbf x}_{n}- \mathbf x_n}{n-1} \Big)^\mathsf{T} \\
+&= \mathbf x_n \mathbf x_n^\mathsf{T} - \big[\mathbf x_n+(n-1)\bar{\myX}_{n-1}\big] \bar{\myX}_n^\mathsf{T} + \bar{\myX}_{n-1} \big( n\bar{\myX}_{n}-\myX_n \big)^\mathsf{T} \\
+&= \myX_n \myX_n^\mathsf{T} - \myX_n \bar{\myX}_n^\mathsf{T} - (n-1)\bar{\myX}_{n-1} \bar{\myX}_n^\mathsf{T} + n \bar{\myX}_{n-1} \bar{\myX}_{n}^\mathsf{T} - \bar{\myX}_{n-1} x_n^\mathsf{T} \\
+&= \myX_n x_n^\mathsf{T} - \myX_n \bar{\myX}_n^\mathsf{T} + \bar{\myX}_{n-1} \bar{\myX}_n^\mathsf{T} - \bar{\myX}_{n-1} \myX_n^\mathsf{T} \\
+&= \myX_n \big(\myX_n^\mathsf{T} - \bar{\myX}_n^\mathsf{T} \big) + \bar{\myX}_{n-1} \big( \bar{\myX}_n^\mathsf{T} - \myX_n^\mathsf{T} \big) \\
+&= \myX_n \big(\myX_n^\mathsf{T} - \bar{\myX}_n^\mathsf{T} \big) - \bar{\myX}_{n-1} \big( \myX_n^\mathsf{T} - \bar{\myX}_n^\mathsf{T} \big) \\
+&= \big(\myX_n - \bar{\myX}_{n-1} \big)  \big(\myX_n^\mathsf{T} - \bar{\myX}_n^\mathsf{T} \big)  \\
+&= \big(\myX_n - \bar{\myX}_{n-1} \big)  \big(\myX_n - \bar{\myX}_n \big)^\mathsf{T}  \\
+&= \mathbf\Delta_n  \big(\myX_n - \bar{\myX}_n \big)^\mathsf{T},
+\end{align} %]]></script>
+
+<p>where <script type="math/tex">\mathbf\Delta_n</script> is already defined in Eq. \eqref{eq:DeltaN}.</p>
+
+<h2 id="unified-algorithmic-description">Unified Algorithmic Description</h2>
+<p>Overall, this results in only a few very simple update rules, which can be executed in the following order:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+	\mathbf\Delta_n = \myX_{n} - \bar\myX_{n-1} \\
+	\bar\myX_{n} = \bar\myX_{n-1}  + \frac{1}{n} \mathbf\Delta_n \\
+	\myM^{(n)} = \myM^{(n-1)} + \mathbf\Delta_n  \big(\myX_n - \bar{\myX}_n \big)^\mathsf{T}\\
+	\mySigma_n = \frac{\myM^{(n)}}{n-1}
+\end{align}</script>
+
+<p>In case of a univariate Gaussian distribution, the above instructions reduce to:</p>
+
+<script type="math/tex; mode=display">\begin{align}
+	\Delta_n = x_{n} - \bar x_{n-1} \\
+	\bar x_{n} = \bar x_{n-1}  + \frac{1}{n} \Delta_n \\
+	m^{(n)} = m^{(n-1)} + \Delta_n  \big(x_n - \bar{x}_n \big)\\
+	s^2_n = \frac{m^{(n)}}{n-1},
+\end{align}</script>
+
+<p>where <script type="math/tex">s_n^2</script> is now the sample variance and <script type="math/tex">x_n</script> the sample mean at time step <script type="math/tex">n</script>.</p>
+
+<h2 id="example">Example</h2>
+
+<p>An implementation of the above update rules in <em>R</em> could look as follows:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">require</span><span class="p">(</span><span class="n">mvtnorm</span><span class="p">)</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">reshape2</span><span class="p">)</span><span class="w">
+
+</span><span class="n">onlineEstimator</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ncol</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w">
+    </span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">n</span><span class="o">^</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="w">
+    </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">n</span><span class="p">))</span><span class="w">
+    </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nrow</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,])</span><span class="w">
+      </span><span class="n">delta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mean</span><span class="w">
+      </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">delta</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">i</span><span class="w">
+      </span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">delta</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mean</span><span class="p">)</span><span class="w">
+      </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">&gt;</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="n">cov</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="m">-1</span><span class="p">)</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="n">return</span><span class="w"> </span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">meanEst</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">covEst</span><span class="o">=</span><span class="n">cov</span><span class="p">))</span><span class="w">
+  </span><span class="p">}</span></code></pre></figure>
+<p><!---_* ---></p>
+
+<p>Now let us specify a multivariate Gaussian with the parameters</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+  \mu_x &= \begin{pmatrix} 1 \\ 10 \\ 20 \end{pmatrix} \\
+  \Sigma &= \begin{pmatrix} 1 & -1 & 0.5 \\ -1 & 3 & -1 \\ 0.5 & -1 & 3 \end{pmatrix}
+\end{align} %]]></script>
+
+<p>and draw a sample of size <script type="math/tex">N</script> from this distribution. Then we run over the drawn examples in an online manner and attempt to estimate the mean and covariance matrix again:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="c1"># Example: Sample from a pre-specified distribution and then try to estimate</span><span class="w">
+</span><span class="c1"># the distribution's parameters</span><span class="w">
+</span><span class="n">covMat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">.5</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">.5</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="m">3</span><span class="p">)</span><span class="w">
+</span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000</span><span class="w">
+</span><span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">N</span><span class="p">,</span><span class="n">Sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">covMat</span><span class="p">,</span><span class="w">  </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">20</span><span class="p">),</span><span class="w"> </span><span class="n">tol</span><span class="o">=</span><span class="w"> </span><span class="m">1e-13</span><span class="p">)</span><span class="w">
+</span><span class="n">onlineEstimator</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></code></pre></figure>
+<p><!---_* ---></p>
+
+<p>After running through the sample of size <script type="math/tex">N=1000</script> we could get the following output:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="o">&gt;</span><span class="w"> </span><span class="n">onlineEstimator</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w">
+</span><span class="o">$</span><span class="n">meanEst</span><span class="w">
+           </span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">,]</span><span class="w">  </span><span class="m">0.9908257</span><span class="w">
+</span><span class="p">[</span><span class="m">2</span><span class="p">,]</span><span class="w"> </span><span class="m">10.0214919</span><span class="w">
+</span><span class="p">[</span><span class="m">3</span><span class="p">,]</span><span class="w"> </span><span class="m">20.0737200</span><span class="w">
+
+</span><span class="o">$</span><span class="n">covEst</span><span class="w">
+           </span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">      </span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w">       </span><span class="p">[,</span><span class="m">3</span><span class="p">]</span><span class="w">
+</span><span class="p">[</span><span class="m">1</span><span class="p">,]</span><span class="w">  </span><span class="m">1.0374998</span><span class="w"> </span><span class="m">-1.017537</span><span class="w">  </span><span class="m">0.5327917</span><span class="w">
+</span><span class="p">[</span><span class="m">2</span><span class="p">,]</span><span class="w"> </span><span class="m">-1.0175368</span><span class="w">  </span><span class="m">3.038815</span><span class="w"> </span><span class="m">-1.0029339</span><span class="w">
+</span><span class="p">[</span><span class="m">3</span><span class="p">,]</span><span class="w">  </span><span class="m">0.5327917</span><span class="w"> </span><span class="m">-1.002934</span><span class="w">  </span><span class="m">3.0590012</span></code></pre></figure>
+
+<p>We can also plot how the estimations change over time. The result could something like this (note: only a few estimated components are shown):</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-20-online-estimation-of-gaussians/estimator.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 1:</b>  Online estimation of the parameters of a Gaussian distribution. Shown are a few components of the mean vector and covariance matrix. After processing a sufficient number of examples the estimations converge towards the true values. </p>
+      </figcaption>
+    
+</figure>
+
+<p>The above graph was generated with the following <em>R</em> code:</p>
+
+<figure class="highlight"><pre><code class="language-r" data-lang="r"><span class="n">onlineEstimator</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ncol</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w">
+    </span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">n</span><span class="o">^</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="o">=</span><span class="n">n</span><span class="p">)</span><span class="w">
+    </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">n</span><span class="p">))</span><span class="w">
+    </span><span class="n">myMeans</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">()</span><span class="w">
+    </span><span class="n">myCovs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">()</span><span class="w">
+    </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nrow</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,])</span><span class="w">
+      </span><span class="n">delta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mean</span><span class="w">
+      </span><span class="n">mean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">delta</span><span class="o">/</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w">
+      </span><span class="n">M</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">delta</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">t</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mean</span><span class="p">)</span><span class="w">
+      </span><span class="n">mycov</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">&gt;</span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="m">-1</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">M</span><span class="w">
+      </span><span class="n">myMeans</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">myMeans</span><span class="p">,</span><span class="w"> </span><span class="n">as.vector</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span><span class="w">
+      </span><span class="n">myCovs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">myCovs</span><span class="p">,</span><span class="w"> </span><span class="n">as.vector</span><span class="p">(</span><span class="n">mycov</span><span class="p">))</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="n">return</span><span class="w"> </span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="n">meanEst</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">covEst</span><span class="o">=</span><span class="n">mycov</span><span class="p">,</span><span class="w"> </span><span class="n">allMeans</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myMeans</span><span class="p">,</span><span class="w"> </span><span class="n">allCovs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myCovs</span><span class="p">))</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+
+  </span><span class="n">covMat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">.5</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">.5</span><span class="p">,</span><span class="m">-1</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w">
+  </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000</span><span class="w">
+  </span><span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mvrnorm</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">N</span><span class="p">,</span><span class="n">Sigma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">covMat</span><span class="p">,</span><span class="w">  </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">20</span><span class="p">),</span><span class="w"> </span><span class="n">tol</span><span class="o">=</span><span class="w"> </span><span class="m">1e-13</span><span class="p">)</span><span class="w">
+  </span><span class="n">res</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">onlineEstimator</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="w">
+
+  </span><span class="n">ts.plot</span><span class="p">(</span><span class="n">res</span><span class="o">$</span><span class="n">allMeans</span><span class="p">[,</span><span class="m">1</span><span class="p">])</span><span class="w">
+
+  </span><span class="n">allEsts</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">cbind</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="n">N</span><span class="p">,</span><span class="n">res</span><span class="o">$</span><span class="n">allMeans</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="o">$</span><span class="n">allCovs</span><span class="p">)</span><span class="w">
+  </span><span class="n">colnames</span><span class="p">(</span><span class="n">allEsts</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="s2">"mean_"</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">""</span><span class="p">),</span><span class="w"> </span><span class="n">paste</span><span class="p">(</span><span class="s2">"cov_"</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">9</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">""</span><span class="p">))</span><span class="w">
+  </span><span class="n">plotCols</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">9</span><span class="p">)</span><span class="w">
+  </span><span class="n">plotdf</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">melt</span><span class="p">(</span><span class="n">allEsts</span><span class="p">[,</span><span class="n">plotCols</span><span class="p">],</span><span class="w"> </span><span class="n">id.vars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"n"</span><span class="p">)</span><span class="w">
+  </span><span class="n">colnames</span><span class="p">(</span><span class="n">allEsts</span><span class="p">)[</span><span class="n">plotCols</span><span class="p">]</span><span class="w"> </span><span class="c1"># show the names for us</span><span class="w">
+  </span><span class="n">legendLabels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">expression</span><span class="p">(</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="m">1</span><span class="p">]),</span><span class="w"> </span><span class="nf">expression</span><span class="p">(</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="m">2</span><span class="p">]),</span><span class="w"> </span><span class="nf">expression</span><span class="p">(</span><span class="n">Sigma</span><span class="p">[</span><span class="m">11</span><span class="p">]),</span><span class="w"> </span><span class="nf">expression</span><span class="p">(</span><span class="n">Sigma</span><span class="p">[</span><span class="m">12</span><span class="p">]),</span><span class="w"> </span><span class="nf">expression</span><span class="p">(</span><span class="n">Sigma</span><span class="p">[</span><span class="m">13</span><span class="p">]),</span><span class="w"> </span><span class="nf">expression</span><span class="p">(</span><span class="n">Sigma</span><span class="p">[</span><span class="m">22</span><span class="p">])</span><span class="w"> </span><span class="p">)</span><span class="w">
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plotdf</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">variable</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">geom_line</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">scale_color_discrete</span><span class="p">(</span><span class="n">labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">legendLabels</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">theme_bw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+    </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">13</span><span class="p">),</span><span class="w">
+          </span><span class="n">axis.title</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">15</span><span class="p">),</span><span class="w">
+          </span><span class="n">legend.text</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">13</span><span class="p">),</span><span class="w">
+          </span><span class="n">legend.title</span><span class="o">=</span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">15</span><span class="p">))</span></code></pre></figure>
+<p><!---_* ---></p>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="https://MarkusThill.github.io/tags#Online" title="Pages tagged Online" class="tag"><span class="term">Online</span></a><a href="https://MarkusThill.github.io/tags#Gaussians" title="Pages tagged Gaussians" class="tag"><span class="term">Gaussians</span></a><a href="https://MarkusThill.github.io/tags#Covariances" title="Pages tagged Covariances" class="tag"><span class="term">Covariances</span></a><a href="https://MarkusThill.github.io/tags#Maximum Likelihood Estimation" title="Pages tagged Maximum Likelihood Estimation" class="tag"><span class="term">Maximum Likelihood Estimation</span></a></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/math/stats/ml/online-estimation-of-gaussians/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/math/stats/ml/online-estimation-of-gaussians/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/math/stats/ml/online-estimation-of-gaussians/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/electronics/choosing-a-voltage-divider-resistor-for-a-ldr/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>

@@ -1,0 +1,917 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<!--<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>-->
+<!--<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>-->
+<head>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+<meta charset="utf-8">
+<title>Visualizing High-Dimensional Data With Parallel Coordinates &#8211; ML & Stats</title>
+<meta name="description" content="Describe your website here.">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Visualizing High-Dimensional Data With Parallel Coordinates">
+<meta property="og:description" content="Describe your website here.">
+<meta property="og:url" content="https://MarkusThill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/">
+<meta property="og:site_name" content="ML & Stats">
+<meta property="og:image" content="https://MarkusThill.github.io/images/parallelcoor.jpg">
+
+
+
+
+
+
+<link rel="canonical" href="https://MarkusThill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/">
+<link href="https://MarkusThill.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ML & Stats Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/main.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.mmenu.all.css">
+<link rel="stylesheet" href="https://MarkusThill.github.io/assets/css/jquery.floating-social-share.min.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://MarkusThill.github.io/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://MarkusThill.github.io/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://MarkusThill.github.io/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://MarkusThill.github.io/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://MarkusThill.github.io/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css">-->
+<link rel="stylesheet" href="/fonts/cmun-serif.css"></link>
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Visualizing High-Dimensional Data With Parallel Coordinates | ML &amp; Stats</title>
+<meta name="generator" content="Jekyll v3.8.6" />
+<meta property="og:title" content="Visualizing High-Dimensional Data With Parallel Coordinates" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The remarkable ability of the human brain to recognize patterns in graphical representations of data is the main reason that visual methods still play a crucial role in data-mining tasks. Humans are capable of detecting relevant as well as irrelevant structures in data and drawing the correct conclusions from them, if the data is visualized in a suitable way. However, developing appropriate tools for visualization purposes is a very challenging task, especially for high-dimensional data, which always – due to the limited human spatial perception of max. three dimensions – implies a mapping to lower dimensions. Parallel Coordinates (commonly ||-Coordinates), invented by Alfred Inselberg [1] follow such an approach by mapping high dimensional data to 2D using a comprehensible methodology. In this blog post we will briefly introduce ||-Coordinates, in order to investigate their properties. Furthermore, we will apply ||-Coordinates to various datasets and compare the results to several other visualization techniques." />
+<meta property="og:description" content="The remarkable ability of the human brain to recognize patterns in graphical representations of data is the main reason that visual methods still play a crucial role in data-mining tasks. Humans are capable of detecting relevant as well as irrelevant structures in data and drawing the correct conclusions from them, if the data is visualized in a suitable way. However, developing appropriate tools for visualization purposes is a very challenging task, especially for high-dimensional data, which always – due to the limited human spatial perception of max. three dimensions – implies a mapping to lower dimensions. Parallel Coordinates (commonly ||-Coordinates), invented by Alfred Inselberg [1] follow such an approach by mapping high dimensional data to 2D using a comprehensible methodology. In this blog post we will briefly introduce ||-Coordinates, in order to investigate their properties. Furthermore, we will apply ||-Coordinates to various datasets and compare the results to several other visualization techniques." />
+<link rel="canonical" href="https://markusthill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/" />
+<meta property="og:url" content="https://markusthill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/" />
+<meta property="og:site_name" content="ML &amp; Stats" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-11-07T16:16:41+01:00" />
+<script type="application/ld+json">
+{"description":"The remarkable ability of the human brain to recognize patterns in graphical representations of data is the main reason that visual methods still play a crucial role in data-mining tasks. Humans are capable of detecting relevant as well as irrelevant structures in data and drawing the correct conclusions from them, if the data is visualized in a suitable way. However, developing appropriate tools for visualization purposes is a very challenging task, especially for high-dimensional data, which always – due to the limited human spatial perception of max. three dimensions – implies a mapping to lower dimensions. Parallel Coordinates (commonly ||-Coordinates), invented by Alfred Inselberg [1] follow such an approach by mapping high dimensional data to 2D using a comprehensible methodology. In this blog post we will briefly introduce ||-Coordinates, in order to investigate their properties. Furthermore, we will apply ||-Coordinates to various datasets and compare the results to several other visualization techniques.","headline":"Visualizing High-Dimensional Data With Parallel Coordinates","dateModified":"2017-11-07T16:16:41+01:00","datePublished":"2017-11-07T16:16:41+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://markusthill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://markusthill.github.io/images/logo.png"}},"url":"https://markusthill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body id="post" class="feature">
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="https://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+
+
+<div class="header-menu header-menu-top">
+    <ul class="header-item-container">
+      <li class="header-item-title header-toggle "><a href="#menu"><h2><i class="fa fa-bars"></i></h2></a></li>
+      <li class="header-item-title">
+        <a href="https://MarkusThill.github.io/">
+          
+            <img class="logo" src="https://MarkusThill.github.io/images/logo.png" alt="ML & Stats">
+          
+          <a href="https://MarkusThill.github.io/" class="title"> ML & Stats</a>
+        </a>
+      </li>
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+          <li class="header-item "><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+            <ul class="header-submenu">
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+              
+                
+                  <li class="sub-item"><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+              
+            </ul>
+          </li>
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+            
+        
+      
+        
+        
+
+        
+            
+                <li class="header-item "><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+            
+        
+      
+      <li class="header-item"><a href="https://MarkusThill.github.io/search"><h3><i class="fa fa-search"></i></h3></a></li>
+    </ul>
+  </div>
+<div class="entry-header">
+  <div class="header-title">
+    <div class="header-title-wrap">
+      <h1>Visualizing High-Dimensional Data With Parallel Coordinates</h1>
+      
+        <h2><span class="entry-date date published updated"><time datetime="2017-11-07T16:16:41+01:00">November 07, 2017</time></span></h2>
+      
+
+      
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+          Reading time ~49 minutes
+        </p><!-- /.entry-reading-time -->
+      
+    </div><!-- /.header-title-wrap -->
+  </div><!-- /.header-title -->
+</div><!-- /.entry-header -->
+
+
+<nav id="menu" style="display: none">
+  <ul>
+    
+      
+        <li><a href="https://MarkusThill.github.io/"><h3>Home</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/markus"><h3>About</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/tags"><h3>Tags</h3></a></li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/categories"><h3>Categories</h3></a>
+          <ul>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Electronics">Electronics</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#ML">ML</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Math">Math</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Programming">Programming</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Stats">Stats</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Template">Template</a></li>
+            
+              
+                <li><a href="https://MarkusThill.github.io/categories/#Vector Algebra">Vector Algebra</a></li>
+            
+          </ul>
+        </li>
+      
+    
+      
+        <li><a href="https://MarkusThill.github.io/posts"><h3>Posts</h3></a></li>
+      
+    
+  </ul>
+</nav>
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <div class="entry-content">
+        
+            <div class="entry-image-index">
+              <img src="https://MarkusThill.github.io/images/parallelcoor.jpg" alt="Visualizing High-Dimensional Data With Parallel Coordinates">
+              
+            </div>
+        
+      <h1 class="post-title entry-title">Visualizing High-Dimensional Data With Parallel Coordinates</h1>
+      <p>The remarkable ability of the human brain to recognize patterns in graphical representations of data is the main reason that visual methods still play a crucial role in data-mining tasks. Humans are capable of detecting relevant as well as irrelevant structures in data and drawing the correct conclusions from them, if the data is visualized in a suitable way. However, developing appropriate tools for visualization purposes is a very challenging task, especially for high-dimensional data, which always – due to the limited human spatial perception of max. three dimensions – implies a mapping to lower dimensions. Parallel Coordinates (commonly ||-Coordinates), invented by <em>Alfred Inselberg</em> <a class="citation" href="#Inselberg85">[1]</a> follow such an approach by mapping high dimensional data to 2D using a comprehensible methodology. In this blog post we will briefly introduce ||-Coordinates, in order to investigate their properties. Furthermore, we will apply ||-Coordinates to various datasets and compare the results to several other visualization techniques.</p>
+
+<!--more-->
+<div class="alert">
+  <!--<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>-->
+  <i class="fa fa-info-circle"></i><strong> &nbsp;&nbsp;Note:</strong> All <em>R</em>-scripts and other resources used for this blog post can be found on <a href="https://github.com/MarkusThill/MultiDiminsionalViz">GitHub</a> at <a href="https://github.com/MarkusThill/MultiDiminsionalViz">https://github.com/MarkusThill/MultiDiminsionalViz</a>
+</div>
+
+<h2 id="introduction">Introduction</h2>
+<p>In many application areas nowadays frequently large, high-dimensional datasets with unknown content are generated. In order to gain insights and find the essential information hidden in the data, these datasets have to be explored systematically and carefully. Very often, it is not clear in the beginning, how and with which tools to approach unknown, complex data. Typically, the raw data is presented in textual or tabular form, which is usually hard to analyze for most people and makes it impossible to reveal the concealed structures.
+To get a first understanding of the existing data, visual representations can support the user analyzing and finding meaningful patterns. However, the human perception is limited to a maximum of three dimensions which makes it necessary to map data with more than three dimensions to lower dimensional space (commonly two dimensions) in order to present it in a graphical form. The challenge of this mapping is to preserve as much – for the user important – structure in the data as possible, by approaching the data with an appropriate visualization technique. Selecting a suitable tool for visualization is not always trivial. Often the user can choose from a large group of possible candidates, which all give a different view on the provided data and which all have their individual advantages and disadvantages. Visualization techniques range from geometric methods such as the well-known <em>scatter plots</em> over pixel-oriented techniques (e.g., <em>dimensional stacking</em> <a class="citation" href="#LeBlancWW90">[2]</a>) to icon-based methods (<em>Chernoff-faces</em> <a class="citation" href="#CHERNOFF">[3]</a>).</p>
+
+<p>In this blog post we present a geometric-based visualization technique called Parallel Coordinates (in the following ||-Coordinates), which was especially designed to visualize multidimensional and multivariate data <a class="citation" href="#Inselberg85">[1]</a>. ||-Coordinates for two dimensions were already described in the year 1885 by <em>Maurice d’Ocagne</em> and independently discovered again in 1959 by <em>Alfred Inselberg</em>, who was not aware of d’Ocagnes previous work (<a class="citation" href="#Inselberg12">[4]</a>, p. 16).
+The main idea of ||-Coordinates is to transform high-dimensional datasets to two dimensions <script type="math/tex">(\mathbb{R}^N \rightarrow \mathbb{R}^2)</script> by arranging the set of axes (one axis per dimension) in parallel to each other and  representing samples by polygonal lines. This 2-dimensional representation is well suited for visual exploration and pattern-recognition and simplifies the search for relations in the data <a class="citation" href="#Inselberg97">[5]</a>.
+In practice, ||-Coordinates have been successfully applied in various fields, e.g. for automatic collision detection and avoidance algorithms in air traffic control (with three patents in the <em>USA</em>) or for data-mining and optimization tasks <a class="citation" href="#Plemenos2009">[6]</a>.
+we will use ||-Coordinates intensively throughout this blog post by applying this technique to diverse datasets and exploring its specific characteristics.</p>
+
+<h2 id="fundamentals-of-parallel-coordinates">Fundamentals of Parallel Coordinates</h2>
+
+<h3 id="construction-and-properties">Construction and Properties</h3>
+<p>Consider a <script type="math/tex">N</script>-dimensional dataset containing a number of <script type="math/tex">k</script> observations. The construction of a ||-Coordinates-graph visualizing this data can be described as follows:</p>
+
+<p>Analogous to the <em>Cartesian coordinate system</em>, for every dimension one individual axis is required, therefore, in total, a set of <script type="math/tex">N</script> axes is created. All axes are then placed in parallel to each other in the plane, usually equidistant and vertically arranged.
+In detail, a ||-Coordinates-graph can be viewed as a set of parallel <script type="math/tex">Y</script>-axes embedded in a <script type="math/tex">XY</script>-Cartesian coordinate system. For the <script type="math/tex">i</script>-th dimension, (of in total <script type="math/tex">N</script>), the Y-axis is copied and placed at the position <script type="math/tex">d_i</script> – which describes the distance of the <script type="math/tex">i</script>-th axis to the origin – on the <script type="math/tex">X</script>-axis. Usually, the distance between all axes is chosen to be equal (<script type="math/tex">d_1 = d_2 = \ldots = d</script>). Formally, every axis in ||-Coordinates is labeled <script type="math/tex">\overline{X}_i</script>. In total there are  <script type="math/tex">N-1</script> <em>segments</em> (the regions between two adjacent axes). Assuming <script type="math/tex">N</script> axes, there are <script type="math/tex">\frac{N(N-1)}{2}</script> possible pairs of axes and <script type="math/tex">N!</script> possible permutations for the arrangement of all <script type="math/tex">N</script> axes.
+A point <script type="math/tex">P = (x_1, x_2, \cdots, x_N)</script> in the <script type="math/tex">n</script>-dimensional Cartesian coordinate system can be mapped to a polygonal line in ||-Coordinates by simply connecting the <script type="math/tex">x_i</script>-values of the point <script type="math/tex">P</script> on all corresponding axes <script type="math/tex">\overline{X}_i</script> with straight lines. A set of <script type="math/tex">k</script> points therefore leads to <script type="math/tex">k</script> polygonal lines in ||-Coordinates <a class="citation" href="#Inselberg85">[1]</a> <a class="citation" href="#Heinrich2013">[7]</a> <a class="citation" href="#Inselberg1990">[8]</a>.
+Inselberg states that the representational complexity of ||-Coordinates is <script type="math/tex">O(N)</script>, since every additional dimension simply results in an extra axis <a class="citation" href="#Inselberg97">[5]</a>. In general, this statement is true, however, as we will mention later, the axis-ordering in a ||-Coordinates-graph plays an important role. So, in many cases several ||-Coordinates plots – with various axis-orderings – have to be created and compared, which may indirectly increase the complexity.
+There are no restrictions regarding the dimensionality of the data for <em>Parallel Coordinates</em>. Theoretically, ||-Coordinates is able to handle an infinite number of dimensions, for practical purposes we did not find information on a reasonable maximum of dimensions; this usually depends on many factors such as size of the dataset, screen-resolution and more.</p>
+
+<h3 id="examples">Examples</h3>
+<p>The following examples illustrate many properties of ||-Coordinates in a nice way. For example, negatively correlated variables (in the example: a straight line with negative slope) are translated to lines in the ||-Coordinates-graph, which have intersections.</p>
+
+<figure class="half">
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/lineMxb_xy.png" alt="" />
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/lineMxb_pc.png" alt="" />
+  <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/lineNegMxb_xy.png" alt="" />
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/lineNegMxb_pc.png" alt="" />
+  
+<figure class="centre-element ">
+    <img src="" alt="" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 1:</b>  A few examples illustrating the relations between the <em>Cartesian coordinate system</em> and ||-Coordinates realized with an <em>R</em>-script (Part 1). <br /> <b>Top:</b> A sampled line (a set of points) with a <em>positive</em> slope in the <em>Cartesian coordinate system</em> results in a set of lines in the ||-Coordinates-graph which do not intersect in the segment between both axes. <br /> <b>Bottom:</b> A sampled line (a set of points) with a <em>negative</em> slope in the <em>Cartesian coordinate system</em> results in a set of lines in the ||-Coordinates-graph that intersect in the segment between both axes. Finding a pattern similar to this in a ||-Coordinates-plot is always an indication for a negative correlation. </p>
+      </figcaption>
+    
+</figure>
+
+</figure>
+
+<figure class="half">
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/cluster_xy.png" alt="" />
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/cluster_pc.png" alt="" />
+  <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/rnorm_xy.png" alt="" />
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/rnorm_pc.png" alt="" />
+  <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/circle_xy.png" alt="" />
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/structures/circle_pc.png" alt="" />
+  
+<figure class="centre-element ">
+    <img src="" alt="" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 2:</b>  A few examples illustrating the relations between the <em>Cartesian coordinate system</em> and ||-Coordinates realized with an <em>R</em>-script (Part 2). <br /> <b>Top:</b> Clusters in a <em>Cartesian coordinate system</em> can often also be identified in a ||-Coordinates-graph. <br /> <b>Middle:</b> Normally distributed data results in this typical structure in the ||-Coordinates-plot with hyperbolic envelopes. <br /> <b>Bottom:</b> Mapping of a circle in the <script type="math/tex">XY</script>-plane to a ||-Coordinates-graph. Here the hyperbolic envelopes in the ||-Coordinates-plot are even clearer than in the figure above. </p>
+      </figcaption>
+    
+</figure>
+
+</figure>
+
+<h3 id="point-line-duality">Point-Line Duality</h3>
+<p>Much theoretical work for ||-Coordinates has been done by Inselberg (missing reference)  <a class="citation" href="#Inselberg1990">[8]</a>, including the <em>point-line duality</em> for ||-Coordinates. At this point we want to give a brief idea: The point-line duality describes the dual relation between points and lines, hence, that points deﬁned in the Cartesian coordinate system can be mapped to lines in the parallel-coordinates domain and vice versa.
+As mentioned before a set of points in a Cartesian Coordinate system is mapped to a set of polygonal lines in ||-Coordinates. For instance a point <script type="math/tex">P = (p_1, p_2)</script> in a 2-dimensional Cartesian coordinate system is mapped to a line that connects the points <script type="math/tex">y=p_1</script> on the <script type="math/tex">\overline{X}_1</script>-axis and <script type="math/tex">y=p_2</script> on the <script type="math/tex">\overline{X}_2</script>-axis. Assuming that <script type="math/tex">d_2=(0,d)</script>, this leads to a line which can be described with</p>
+
+<script type="math/tex; mode=display">\begin{equation}
+	y=\frac{p_2-p_1}{d} x + p_1 , \ \ d>0.
+	\label{ch3:eq:pointToLine}
+\end{equation}</script>
+
+<p>It can easily be shown that a set of points sampled on a linear curve (<script type="math/tex">P_we = (p_1, m \cdot p_1 + b)</script>) in Cartesian Coordinate system result in a set of lines in ||-Coordinates, that all intersect in the point <script type="math/tex">\overline{P_{s}}</script>.</p>
+
+<script type="math/tex; mode=display">\begin{equation}
+	\overline{P_{s}} = (\frac{d}{1-m} , \frac{b}{1-m}) , \ \ m \neq 1.
+	\label{ch3:eq:pointToLineIntersec}
+\end{equation}</script>
+
+<p>This intersection-point corresponds to exactly one line in the <script type="math/tex">XY</script>-domain, which then completes the point-line duality theorem. As seen from equation \eqref{ch3:eq:pointToLineIntersec}, if the slope of the sampled linear curve <script type="math/tex">\ell</script> is <script type="math/tex">% <![CDATA[
+m<0 %]]></script> then the lines <script type="math/tex">\overline{\ell_i}</script> in the ||-Coordinates-system will intersect between the axes <script type="math/tex">\overline{X}_1</script> and <script type="math/tex">\overline{X}_2</script>, for <script type="math/tex">m>1</script> the virtual extension of all <script type="math/tex">\overline{\ell_i}</script> will intersect on the right-hand side <script type="math/tex">\overline{X}_2</script> and analogous for <script type="math/tex">% <![CDATA[
+0<m<1 %]]></script> on the left-hand side of <script type="math/tex">\overline{X}_1</script>. The special case <script type="math/tex">m=1</script> will result in a set of lines <script type="math/tex">\overline{\ell_i}</script> that do not intersect in the ||-Coordinates.
+Inselberg describes the underlying theory in <a class="citation" href="#Inselberg12">[4]</a> (chapter 3) in much more detail.</p>
+
+<h3 id="tasks">Tasks</h3>
+<p>In general, ||-Coordinates can be applied to a wide range of high- dimensional visualization-problems, in very different application-areas. Maybe the most important purpose of ||-Coordinates is, simply giving a general overview of the visualized data. ||-Coordinates can provide a lot of information on the first glance: Outliers can be easily identified, as well as other anomalies or patterns. This first summary that ||-Coordinates provide, can help the user proceed in his data-mining tasks and give a direction for further work on the data.
+<em>Cluster-analysis</em> – the task of finding sets of samples with a similar structure – can as well be done with the help of ||-Coordinates. Trivial clusters can already be found by simply looking at the individual axis, clusters in higher dimensions can be identified based on characteristics such as density, proximity and slopes of the polygonal lines, intersection of lines with the axes, and more.
+Often, visual clustering in ||-Coordinates is combined with the search for <em>correlations</em> in the data. ||-Coordinates are able to reveal many different types of correlation, e.g., a strong negative linear correlation results in a set of lines that intersect in one point between the two corresponding axes.
+Furthermore, ||-Coordinates can be used to support the user in <em>classification</em> or to some extent also in <em>regression</em>-tasks <a class="citation" href="#Heinrich2013">[7]</a>. For instance, it is possible to color samples of different classes in order to compare the characteristics between the classes and find the attributes with the best class-separating features for further processing (finding a subset of attributes that describe the data best is not necessarily limited to classification tasks, but could be a general task as well).  ||-Coordinates could also support the evaluation or the development of classifiers, for example, interactively in combination with algorithmic classifiers, as proposed in <a class="citation" href="#Yonghong2007">[9]</a> <a class="citation" href="#Steed2012">[10]</a>.
+In some cases, the user may use ||-Coordinates simply for <em>verification</em>-purposes (perhaps in combination with one or more of the previous tasks) or as a report tool without the intention of <em>knowledge-discovery</em>.</p>
+
+<h3 id="common-issues">Common Issues</h3>
+
+<p>Although ||-Coordinates are very often a good tool for visualization of high-dimensional data, there are some common issues that one should be aware of. <em>Overplotting</em> (often denoted as <em>visual clutter</em>) is one main problems that users may face. Due to the large number of records in a dataset, the vast number of lines overlay and can cover important patterns in the plot <a class="citation" href="#Heinrich2013">[7]</a>. There are different approaches to handle visual clutter in ||-Coordinates. A possible solution could be (randomly) sampling the data to a certain degree, which often preserves the main patterns in the plot and makes them visible. However, this approach is associated with a loss of information and can lead to a misinterpretation of the data. Different sampling-techniques are described in <a class="citation" href="#EllisD06">[11]</a>. Further clutter-reduction techniques are: Brushing, density-based methods, aggregation and, axis-reconfiguration.
+Brushing-techniques allow the user to (interactively) highlight selected observations and to blind out others. Density-based methods, such as alpha blending (which uses opacity to make dense regions appear more intense), are commonly applied to ||-Coordinates.
+Aggregating samples in ||-Coordinates, e.g., by clustering, can reduce the amount of visual clutter, as well as axis-reordering and axis-inversion. A summary of further clutter-reduction techniques can be found in <a class="citation" href="#Heinrich2013">[7]</a>.
+The <em>axis-ordering</em> of ||-Coordinates is an important issue for revealing patterns in the data. Inexperienced users often only find structures between adjacent axes and also more experienced users normally need to evaluate different axis-constellations, in order to find structures; usually, the ordering of the axes has a large effect on the appearance of ||-Coordinates. However, selecting a suitable axis-ordering is not trivial. Analyzing all possible permutations of the axes may be possible for low dimensions, but with <script type="math/tex">N!</script> permutations (for <script type="math/tex">N</script> variables), this task gets more and more difficult with increasing dimensionality. Considering the fact that only all pairwise relations have to be analyzed, reduces the number of necessary permutations tremendously.
+The ||-Coordinates Matrix (PCM) <a class="citation" href="#Heinrich2012">[12]</a> is one approach addressing this problem by showing all pairwise relations with only comparably few ||-Coordinates plots, as discussed in the following section. Another solution for the <em>axis-ordering</em> problem could involve automated analysis methods, which rank a set of ||-Coordinates candidates according to certain measures and only offer a small selection of these to the user, as proposed in <a class="citation" href="#TatuAESTMK09">[13]</a>.
+A further problem that frequently occurs in ||-Coordinates (especially with discrete axes), is the intersection of two or more lines at exactly the same position on an axis. This makes it impossible to follow the affected polygonal lines (there is more than one possibility, how the line could continue) and therefore to distinguish the involved samples. A simple solution for this problem could be the usage of different colors, which may work for small datasets, but gets unpractical for more complex data. Other approaches use curves instead of lines or the interactively highlight certain samples <a class="citation" href="#Heinrich2013">[7]</a>.</p>
+
+<h3 id="related-work-variations-and-extensions-of-parallel-coordinates">Related Work, Variations and Extensions of Parallel Coordinates</h3>
+<p>Since ||-Coordinates were introduced by Inselberg, a lot of further work has been done extending ||-Coordinates, targeting certain problems (e.g., overplotting), combining ||-Coordinates with other visualization-techniques, specializing the technique for certain tasks, such as clustering, and more.
+Hybrid visualization techniques, which combine two or more methods, are often designed with the goal to utilize the advantages of the integrated methods, in order to compensate their disadvantages.
+Many examples for such hybrid techniques using ||-Coordinates can be found. In <a class="citation" href="#Yuan2009">[14]</a> <em>scatter plots</em> and <em>multidimensional scaling</em> are integrated into ||-Coordinates. Fanea et al. combine <em>star glyphs</em> with ||-Coordinates, addressing the clutter-problem in ||-Coordinates. In <a class="citation" href="#Bertini2005">[15]</a>, ||-Coordinates is coupled with <em>RadViz</em> (a radial visualization technique), using RadViz for brushing, clustering, and coloring of the observations and ||-Coordinates for visualizing the quantitative information of the data.
+A couple of publications extend the idea of ||-Coordinates to a visualization technique of three dimensions instead of two, for example: R"ubel et al. <a class="citation" href="#Rübel2006">[16]</a> use planes (basically representing scatter plots) instead of axis and connect the corresponding points on all planes with polygonal lines. In <a class="citation" href="#streit2006">[17]</a>, isosurfaces based on the densities in the ||-Coordinates plot are generated, which give the user a better feeling of the regions in the plot with higher concentrations of samples. Dang et al. <a class="citation" href="#Nhon2010">[18]</a> follow a similar idea in order to overcome the overplotting-problem by stacking overlapping elements.
+Typically, ||-Coordinates are defined for a set of samples or in other words discrete data-points. In <a class="citation" href="#Heinrich2009">[19]</a>, ||-Coordinates were extended for data in the continuous domain by using a density model.
+As mentioned before, the ||-Coordinates-Matrix (<em>PCM</em>) <a class="citation" href="#Heinrich2012">[12]</a> was introduced with the aim to find appropriate axis-orderings with a preferably small number of ||-Coordinates plots. The method is based on graph-theoretical considerations: Every axis represents a vertex in a graph. The graph is considered to be complete (describing all possible pairwise relations between the individual axes). By applying the <em>Hamiltonian decomposition</em> to the graph, a set of all possible <em>Hamiltonian paths</em> (for even <script type="math/tex">N</script>) or <em>Hamiltonian cycles</em> (for odd <script type="math/tex">N</script>) is created. A Hamiltonian path visits every vertex exactly one. Hamiltonian cycles are Hamiltonian paths that form a cycle; in the <em>axis-ordering</em>-problem they can be retrieved  by calculating the Hamiltonian paths for <script type="math/tex">N-1</script> and adding the remaining dimension to the beginning and end of every path. This approach, using the <em>PCM</em>, reduces the number of ||-Coordinates plots needed to visualize all axis-combinations to <script type="math/tex">\lfloor \frac{N}{2} \rfloor</script>. We developed an implementation of <em>PCM</em> in <em>R</em> <a class="citation" href="#RPackage">[20]</a>, that determines Hamiltonian paths and -cycles and displays the corresponding ||-Coordinates graphs in one plot. The ||-Coordinates Matrix method will be used intensively for our analysis in later sections.</p>
+
+<h2 id="applications-and-experimental-setup">Applications and Experimental Setup</h2>
+<p>In this section we introduce a few datasets that will be used to explore the features and limits of ||-Coordinates. The datasets vary in the number of dimensions, observations, and furthermore in the data types of the attributes. The <em>Out5d</em>  and the <em>Pollen</em>  dataset have the smallest number of dimensions (both five), the <em>MiniBooNe</em>  dataset has the highest dimensionality (51 attributes). Some datasets will be used for classification purposes, others for clustering, or simply for finding patterns, correlations, and outliers.
+In the following, we will apply ||-Coordinates  to the individual datasets and analyze the results. For this purpose, we developed scripts realizing ||-Coordinates  plots and ||-Coordinates-Matrix-plots (based on the <em>Hamiltonian decomposition</em> described in <a class="citation" href="#Heinrich2012">[12]</a>) using <em>R</em> <a class="citation" href="#RPackage">[20]</a> and the <em>R</em>-package <em>ggplot2</em>. <em>R</em> already provides inbuilt ||-Coordinates  methods, such as <em>ggpcp</em>, however, the range of functionality was not sufficient for our purposes). In our ||-Coordinates, we will use brushing (e.g., for highlighting clusters), coloring of samples (based on their class or other features), axis-inversion (which helps to reduce clutter, especially for negative correlated segments), data-scaling functionalities and, very intensively, the ||-Coordinates-Matrix.</p>
+
+<h3 id="the-pollen-dataset">The Pollen dataset</h3>
+<p>The pollen dataset describes geometric features of pollen grains <a class="citation" href="#pollenData">[21]</a>. The dataset was assembled by David Coleman of RCA Labs in Princeton, USA in 1986 and was used as the <em>American Statistical Association (ASA)</em> Exposition dataset for a competition. In total the dataset contains 3848 observations on 5 variables (<em>ridge, nub, crack, weight, density</em>).  The first three variables represent the lengths of geometric features observed from sampled pollen grain: a “ridge” for the <script type="math/tex">x</script>-dimension, a “nub” along the <script type="math/tex">y</script>-axis and a “crack” in the <script type="math/tex">z</script>-direction. The fourth variable describes the pollen grain weight and the last dimension represents the density.</p>
+
+<p>Since the number of dimensions is rather small and the dataset contains some interesting patterns, we will use this dataset to briefly describe certain features of ||-Coordinates.</p>
+
+<h3 id="the-out5d-dataset">The Out5D Dataset</h3>
+
+<p>The 5-dimensional <em>Out5d</em>  dataset contains 16384 observations of remotely sensed data, collected from a western region of Australia, for the Worcester Polytechnic Institute in 2005 by Peter Ketelaar <a class="citation" href="#out5d_2005">[22]</a>. Unfortunately, the author of this dataset does not provide much general information on the dataset, we could only find the following remarks: The measurements for the records were performed on a <script type="math/tex">128 \times 128</script> grid, which leads in total to 16384 records with radiometric information on each grid-cell. The five dimensions are <em>spot</em>, <em>magnetics</em> and three bands of radiometrics: <em>potassium</em>, <em>thorium</em> and <em>uranium</em>.</p>
+
+<p>The <em>Out5d</em>-dataset was used in several publications, which apply different methods to the data in order to reveal patterns. Among others we found <a class="citation" href="#Malik2011">[23]</a>, <a class="citation" href="#Bertini2005">[15]</a>, <a class="citation" href="#Makwana2012">[24]</a>, <a class="citation" href="#Zhou2009">[25]</a>, <a class="citation" href="#Yu2012">[26]</a>, <a class="citation" href="#palmas14a">[27]</a>, <a class="citation" href="#JohanssonC08">[28]</a>, <a class="citation" href="#ArteroOL04">[29]</a>, <a class="citation" href="#Bertini2006">[30]</a>, which all explore the <em>Out5d</em>-data. We will compare our results with a few of the here mentioned papers.</p>
+
+<h3 id="the-wine-quality-dataset">The Wine Quality Dataset</h3>
+
+<p>The wine quality dataset contains in total <script type="math/tex">6497</script> samples with <script type="math/tex">12</script> attributes of red (1599 samples) and white (4898 samples) <em>Vinho Verde</em> wines from the north-western region <em>Minho</em> of <em>Portugal</em>, collected from May/2004 to February/2007 (the dataset was retrieved from <a class="citation" href="#BacheLichman2013">[31]</a>).
+Eleven of the twelve attributes were determined by objective Physicochemical laboratory tests: <em>fixed acidity, volatile acidity, citric acidity, residual sugar, chlorides, free sulfur dioxide, total sulfur dioxide, density, pH, sulphates and alcohol</em>. The last attribute, <em>quality</em> is a subjective measure in the range of 0 (very bad) to 10 (excellent) which represents the preferences of three certified wine tasters who graded the wines. Details can be found in <a class="citation" href="#Cortez2009">[32]</a>.
+Similar to <a class="citation" href="#Cortez2009">[32]</a>, we will try to use this dataset to find some general potential relationships between objective Physicochemical measures and the wine-taste preferences and additionally, explore the main differences of the red and white wines from the <em>Vinho Verde</em> region. Finding such relations in the data could make it possible to control some of the objective variables in a purposeful way to increase the quality of the corresponding wine.
+While Cortez et al. <a class="citation" href="#Cortez2009">[32]</a> are mainly applying <em>Support Vector Machines</em>, multiple regression and neural network methods to the dataset, we will simply use ||-Coordinates  as the main technique, in order to find some trivial patterns in the data. Beside <a class="citation" href="#Cortez2009">[32]</a>, we found additional publications (missing reference), <a class="citation" href="#Nachev2012">[33]</a>, <a class="citation" href="#Lambrou2012">[34]</a>, <a class="citation" href="#DasguptaK10">[35]</a>, that use the wine quality dataset, mainly for regression or classification purposes.</p>
+
+<h3 id="miniboone--particle-identification-dataset">MiniBooNe  Particle Identification Dataset</h3>
+<p>The MiniBooNe dataset (retrieved from <a class="citation" href="#BacheLichman2013">[31]</a>) was generated for the <em>MiniBooNe</em>  experiment performed at Fermilab in Batavia, Illinois, with the goal of finding neutrino oscillations <a class="citation" href="#Roe2005">[36]</a>. The dataset contains 130065 samples that either describe – with in total 50 attributes – electron neutrinos or moun neutrinos. In the following we will refer to electron neutrinos as <em>signal events</em> and moun neutrinos as <em>background events</em>.
+The MiniBooNe dataset is the largest dataset – in both, number of observations and number of dimensions – we will use for this blog post. In one of the following sections, we will apply ||-Coordinates  to the dataset and try to perform some simple visual classifications on the data, attempting to distinguish observations between <em>signal events</em> and <em>background events</em>.
+we could not find  publications visualizing this dataset and not much information on the attributes of the dataset and therefore simply label them from <em>V1</em> to <em>V51</em>, whereby <em>V51</em> describes the class of the observation.</p>
+
+<h2 id="analysis">Analysis</h2>
+<h3 id="introductory-example-the-pollen-dataset">Introductory Example: The Pollen Dataset</h3>
+
+<p>In this section, we will explore the <em>pollen</em> dataset, mainly using ||-Coordinates.</p>
+
+<p>To get a first impression of the dataset we simply create a ||-Coordinates  plot of all observations without any special adjustments or parameter-settings as seen in Fig. 3. Because of the high  number of observations the plot has a high degree of overplotting. Nevertheless it is possible to already get a few insights into the data.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/pollen/pollen1.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 3:</b>  ||-Coordinates  plot of all observations of the <em>pollen data</em> without any special adjustments or parameter-settings. We can observe a high degree of overplotting. </p>
+      </figcaption>
+    
+</figure>
+
+<p>Due to the high degree of overplotting which results in a classical ||-Coordinates  plot we apply alpha blending – a density-based approach, which uses opacity to highlight regions with higher density – to ||-Coordinates , with <script type="math/tex">\alpha = 0.05</script>. The corresponding plot is displayed in Fig. 4.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/pollen/pollen2.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 4:</b>  ||-Coordinates plot of the <em>pollen</em>  dataset. In order to avoid over-plotting <em>alpha blending</em> is applied with <script type="math/tex">\alpha = 0.05</script>. The hyperbolic envelopes in the plot are an indication for normally distributed data. However, the region in the center contains a cluster that is unusual in this form for normally distributed data. </p>
+      </figcaption>
+    
+</figure>
+
+<p>The data does not seem to contain significant outliers. All observations appear to be centered around zero for the 5 given attributes. The hyperbolic envelopes in the plot seem to be a strong indication for normally distributed data and indeed, a density plot strengthens this hypothesis. All attributes are roughly normally distributed, with differing standard deviations. However, the density plot apparently contains an anomaly around the mean value of every attribute.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/pollen/density.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 5:</b>  Density-plot of the <em>pollen</em> dataset. All dimensions appear to be normally distributed. However, there seems to be an anomaly around the mean-value. </p>
+      </figcaption>
+    
+</figure>
+
+<p>Also, the ||-Coordinates  plot shows a small region with higher density around the value zero that is unusual for normally distributed data and could explain the anomaly in the density plot. A cluster with this appearance in normally distributed data is not very likely, we therefore take a closer look and zoom into the plot and try to extract this cluster.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/pollen/pollenZoom1.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 6:</b>  Zoom into the center of the <em>pollen</em>  dataset. The cluster we identified before seems to contain certain structures, such as linear correlations. For example, the attributes <em>ridge</em> and <em>nub</em> appear to be positively correlated, while <em>weight</em> and <em>density</em> seem to be negatively correlated. <em>Right:</em> Further analysis of the extracted cluster finally reveals the secret of the <em>pollen</em>  dataset as seen here. </p>
+      </figcaption>
+    
+</figure>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/pollen/pollenZoom2.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 7:</b>  A further zoom into the center of the ||-Coordinates plot of the <em>pollen</em> dataset showing the observations of the previously identified cluster. </p>
+      </figcaption>
+    
+</figure>
+
+<p>In figures 6 and 7, we can clearly identify a certain structure in the cluster found before. This structure does not appear to be random and should be examined in more detail. From the ||-Coordinates  it can already be seen that a few trivial patterns – such as linear correlations – are included in this structure. For example, the attributes <em>ridge</em> and <em>nub</em> appear to be positively correlated, while <em>nub and crack</em>, <em>crack and weight</em>, and <em>weight and density</em> are negatively correlated on the other hand. Permuting the axis-ordering using the ||-Coordinates-Matrix shows that all attributes are linearly correlated.</p>
+
+<p>By creating a scatter plot matrix of the extracted cluster, we can finally reveal the hidden information in the dataset. The points in many of the subplots form the word <em>“EUREKA”</em>. As example the scatter plot for the attribute <em>weight</em> against <em>density</em> is displayed in Figure 8.</p>
+
+<figure id="alt-and-id" class="centre-element max-400px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/pollen/pollenSactter.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 8:</b>  Further analysis of the extracted cluster finally reveals the secret of the <em>pollen</em>  dataset as seen here. </p>
+      </figcaption>
+    
+</figure>
+
+<p>The complete data was totally artificially generated and the attribute names as well as the dataset name itself were just chosen in order to mislead the participants of the competition into thinking the data was related to biology.</p>
+
+<h3 id="the-out5d-dataset-1">The OUT5D Dataset</h3>
+
+<p>In this section, we will apply ||-Coordinates to the <em>Out5d</em> dataset, mainly to find patterns and correlations in the data.
+we first simply generate a ||-Coordinates  plot without any further adjustments or parameters.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/out5d/out5d_1.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 9:</b>  A classical ||-Coordinates plot of the <em>Out5d</em> data without any further adjustments or parameter-settings leads to a high degree of over-plotting. </p>
+      </figcaption>
+    
+</figure>
+
+<p>Due to the rather high number of observations (in total 16384), it is hardly possible to find any information in the plot, only very basic characteristics can be seen: The dataset does not contain negative values. The maximum values for the first three axis (<em>spot</em>, <em>magnetics</em> and <em>potassium</em>) are around 250, in fact: the summary-command in <em>R</em> shows that the max. value is 255, which indicates that byte-variables were used to represent the dimensions. Furthermore, no significant outliers can be seen in this plot. The higher-valued regions on the <em>magnetics</em>- and <em>potassium</em>-axis could suggest that a negative correlation is present for the corresponding observations, however, a general statement is not possible at this stage due to the overplotting in the ||-Coordinates plot.</p>
+
+<p>We try to reduce the clutter by applying alpha-blending to the plot.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/out5d/out5d_alpha0_01.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 10:</b>  Applying <em>alpha blending</em> to the plot with <script type="math/tex">\alpha=0.01</script> reduces the visual clutter and first patterns in the data are visible. </p>
+      </figcaption>
+    
+</figure>
+
+<p>A value of <script type="math/tex">\alpha=0.01</script> is chosen, which allows us to see patterns in the dataset for the first time. However, still a certain degree of clutter remains. One method to reduce visible clutter in ||-Coordinates  plots can be the inversion of individual axis, in order to decrease the number of crossing lines – especially when negative correlations are present. We inverse the <em>magnetics</em>-axis, in expectation of reducing the clutter slightly more and getting a different view on the <em>Out5d</em>-data. Fig. 11 shows the result of the inversion.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/out5d/out5d_invMag.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 11:</b>  ||-Coordinates  plot of the <em>Out5d</em> dataset with inverted <em>magnetics</em> axis. The plot already reveals some patterns in the data. On the <em>magnetics</em>-axis we can see many observations with a value higher than 250 and lower than 100. Also for <em>potassium</em> a large number of records reach the maximum value of 255. Furthermore, a negative correlation between <em>magnetics</em> and <em>potassium</em> is apparent. Other correlations can be spotted easily as well. </p>
+      </figcaption>
+    
+</figure>
+
+<p>On the <em>magnetics</em>-axis we can see many observations with a value higher than 250 and lower than 100. Also for <em>potassium</em>, a large number of records reach the max. value of 255. As already assumed before, we can see a somewhat negative correlation between <em>magnetics</em> and <em>potassium</em>. High <em>magnetics</em>-values seem to correspond to low <em>spot</em>-values, on the other hand low values on the <em>magnetics</em>-axis spread evenly over the whole <em>spot</em>-axis.
+Altogether, it seems that it is possible to separate records with very high and low <em>magnetics</em> as well in the other dimensions <em>potassium</em>, <em>thorium</em> and <em>uranium</em>.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/out5d/out5d_Cluster1.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 12:</b>  Brushing three sets of samples in the ||-Coordinates  plot for the <em>Out5d</em> dataset with inverted <em>magnetics</em>-axis. In the area around 100 (real value: 155) on the <em>magnetics</em>-axis, a higher concentration of observations was found and brushed with black. Another cluster is found when brushing high values of <em>potassium</em> (blue). High <em>magnetics</em>-values (red brushed samples) generally lead to fairly low values on the <em>potassium</em>-axis, however, the relation is not as clear as for the blue samples. </p>
+      </figcaption>
+    
+</figure>
+
+<p>To be more precise (according to figure above): A negative correlation between <em>magnetics</em> and <em>potassium</em> is visible, but with some slight differences; high <em>potassium</em>-values lead to small <em>magnetics</em> and vice versa. On the other hand, large <em>magnetics</em>-values correspond to a comparably low value of <em>potassium</em>, but spread in a wider range. Furthermore, a low amount of <em>potassium</em> does not necessary implicate high <em>magnetics</em>.
+In the area around 100 (real value: 155) on the <em>magnetics</em>-axis we recognize another higher concentration of observations. We count around 1300 records for <em>magnetics</em> in the range <script type="math/tex">[155, 170]</script> (in comparison: The range <script type="math/tex">[135, 150]</script> only contains approx. 340 records). In Fig. 12 these observations – and two other sets of observations – are highlighted by brushing. With exception of the attribute <em>spot</em>, most of the highlighted black-colored observations can also be clustered in the other 4 remaining dimensions. Also, the samples in blue form a fairly dense cluster in the plot.</p>
+
+<p>Another approach to get further insights into the data could be the usage of the so called ||-Coordinates-Matrix  (<em>PCM</em>). The ||-Coordinates-Matrix  displays all pairwise relations between the attributes and can be easily created for datasets with only few dimensions; for the <em>Out5d</em> dataset only two ||-Coordinates  plots are needed. Because of the odd number of attributes, we construct the <em>Hamiltonian cycles</em> by first calculating all possible <em>Hamiltonian paths</em> for complete graph with <script type="math/tex">N=4</script> vertexes and then adding the 5-th remaining attribute to the beginning and end of every row in the <em>Hamiltonian matrix</em>. In total, two such <em>Hamiltonian cycles</em> are possible:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{equation}
+	H =
+	\begin{pmatrix}
+	d_5 & d_1 & d_2 & d_4 & d_3 & d_5 \\
+	d_5 & d_2 & d_3 & d_1 & d_4 & d_5
+	\end{pmatrix}
+	\label{ch5:eq:hamiltonianOUTfD}
+\end{equation} %]]></script>
+
+<p>Using this matrix it is possible to show all pairwise relations in just two ||-Coordinates  plots.</p>
+
+<figure>
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/out5d/out5d_PCM1.png" alt="" />
+	<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/out5d/out5d_PCM2.png" alt="" />
+  
+<figure class="centre-element ">
+    <img src="" alt="" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 13:</b>  ||-Coordinates-Matrix of the <em>Out5d</em> dataset. In total two ||-Coordinates-plots are necessary in order to show all pairwise relations between the five individual axes. The attribute <em>uranium</em> appears twice in every plot. Note that the <em>magnetics</em>-axis was inverted. </p>
+      </figcaption>
+    
+</figure>
+
+</figure>
+
+<p>The ||-Coordinates-Matrix  reveals a few more interesting patterns in the <em>Out5d</em> dataset: In the pairwise relation between <em>uranium</em> and <em>magnetics</em>, we can observe a couple of features which could not be seen that clear before. Another relation that was not seen before, is between <em>potassium</em> and <em>uranium</em>.</p>
+
+<p>Most of the clusters found for the <em>Out5d</em> dataset in <a class="citation" href="#palmas14a">[27]</a> – which, however does not cover all possible combinations of attributes – could also easily be seen in our ||-Coordinates-Matrix. In <a class="citation" href="#Malik2011">[23]</a>, the authors Malik and Ünlü, using Parallel Coordinates, describe a strong negative correlation between <em>magnetics</em> and <em>potassium</em>, which was also found in this blog post. In <a class="citation" href="#Bertini2005">[15]</a>, ||-Coordinates  are combined with <em>Radviz</em> (Radial Visualization) in order to simplify the clustering-process. The authors find having low values of <em>thorium</em>, <em>potassium</em> and <em>uranium</em> correspond to high <em>magnetic</em> values. In addition, a cluster with high <em>uranium</em>- and <em>potassium</em>-values and low <em>magnetic</em> values was observed. A closer look on our ||-Coordinates  also leads to this conclusion.</p>
+
+<p>Although the <em>Out5d</em> dataset was used to simply illustrate certain features of the ||-Coordinates  in this example, the structure of the data indicates “potentially anomalous data”, as also stated in <a class="citation" href="#Malik2011">[23]</a>: Both attributes, magnetics and potassium, have around 20% of all observations located at the max. value of 255. This is not necessarily problematic, but due to the fact that only few information on the data is available, these records should be treated carefully.</p>
+
+<p>In every row of the ||-Coordinates-Matrix the attribute uranium is used twice – in the beginning and in the end of the line.</p>
+
+<p>The <em>Out5d</em>-dataset was used in other publications. We will briefly compare the results of a few of them with the results made in this blog post. For more results refer to the perviously mentioned citations.
+Most of the clusters found for the <em>Out5d</em>-dataset in <a class="citation" href="#palmas14a">[27]</a> –which, however does not cover all possible combinations of attributes – can also easily be seen in this ||-Coordinates-Matrix.<br />
+In <a class="citation" href="#Malik2011">[23]</a> the authors Malik and Ünlü describe the strong negative correlation between magnetics and Potassium, which was also found in this blog post. Furthermore they find single outliers (in more than one dimension).<br />
+In <a class="citation" href="#Bertini2005">[15]</a> ||-Coordinates  are combined with <em>Radviz</em> in order to simplify the clustering-process. The authors find having low values of thorium, potassium and uranium correspond to high magnetic values. In addition a cluster with high uranium- and potassium-values and low magnetic values was observed. A closer look to the ||-Coordinates-Matrix in Fig. 13 also leads to this conclusion.</p>
+
+<h3 id="the-wine-quality-dataset-1">The Wine Quality Dataset</h3>
+<p>Analogous to the sections before, we will at this point explore the wine quality dataset with the help ||-Coordinates  plots. The major goal will be finding certain patterns in the data considering the quality of both, red and white wines by visualizing the data in an appropriate way. Furthermore we want to discover the main differences between red and white wines.
+In respect to the large number of samples, plotting the whole dataset (even separately for white and red-wines) using a general ||-Coordinates  plot is not recommendable, the degree overplotting is simply too large. Alpha-blending is again our first step in order to get a first convenient plot. Nevertheless, the ordering of the columns is not optimal, so the amount of clutter in the plot is still rather large. By finding suitable orderings using the ||-Coordinates-Matrix  and inverting a few axes, it is possible to reduce the clutter a little more. In total, six ||-Coordinates  plots are necessary for the <em>PCM</em>. Among all six candidates, we try to find the constellations that reduce clutter the most and make clusters visible.</p>
+
+<p>Additionally, extreme outliers are removed from the data set to achieve a better overall distribution of all the lines in the plot. In total, 31 samples are removed from the white wine dataset and 17 from the red wine dataset; however, only outliers that are not part of the highest and lowest wine-quality groups are removed. The result for the white-wine dataset can be seen in figure 14: It gives us a first overview of the data with its value-ranges, clusters and other patterns. The red wine dataset can be handled in a similar manner. However, it is still not possible to make many statements regarding the quality of the data. Only very few white wines were graded with the quality of 9 and none for the red wines. The number of bad wines is fairly small as well, the worst red- and white wines get a rating of 3.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/wine/whiteOrderedInv.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 14:</b>  ||-Coordinates  plot of the white wine dataset with 4866 samples. In total 31 outliers were removed from this dataset. With the help of the ||-Coordinates-Matrix  and axis-inversion, it was tried to reduce the visual clutter in the plot as far as possible manually. Note, that a few axis were inverted, the max. value for these axis is now found in the bottom of the plot. General statements regarding the <em>quality</em> of the wines are difficult to make at this stage. </p>
+      </figcaption>
+    
+</figure>
+
+<p>In order to to get a better understanding of the influence of the objective attributes on the wine <em>quality</em>, we decide to implement a coloring-scheme for our <em>R</em>-implementation of the ||-Coordinates  plot. The colors for each sample are chosen according to the assigned <em>quality</em> using a heat-based coloring model; records with a bad <em>quality</em> will be colored yellow, whereas high-quality wines will be colored red. This approach should make it possible to visualize general <em>quality</em>-related patterns.<br />
+Again, we select an appropriate axis-setting using the ||-Coordinates-Matrix  and axis-inversion. Simply comparing the best and worst wines – by brushing the corresponding subsets – in a ||-Coordinates  plot could help as well, finding general correlations.</p>
+
+<figure>
+<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/wine/whiteBestWorst.png" alt="" />
+<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/wine/redBestWorst.png" alt="" />
+
+<figure class="centre-element ">
+    <img src="" alt="" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 15:</b>  <b>Top:</b> ||-Coordinates-plot of the best and worst <em>white wines</em>. Only <em>white wines</em> with a quality of <script type="math/tex">3,4,8</script> and <script type="math/tex">9</script> are shown. <br /><b>Bottom:</b> Analogous to above figure: ||-Coordinates-plot of the best and worst <em>red wines</em>. Only <em>red wines</em> with a quality of <script type="math/tex">3,4,7</script> and <script type="math/tex">8</script> are shown. </p>
+      </figcaption>
+    
+</figure>
+
+</figure>
+
+<p>The attributes that appear more important regarding their effect on the wine-<em>quality</em>, are chosen to be closer to the quality-axis. The corresponding ||-Coordinates  plot for the white wines is shown in the figure below.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/wine/plot2_4.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 16:</b>  Coloring the samples of the white wine dataset according to their <em>quality</em>. Attributes, that appear to have a higher importance regarding their influence on the <em>quality</em> of the white wines are chosen to be closer to the quality-axis (e.g., <em>alcohol</em>, <em>density</em> and <em>volatile acidity</em>). Note, that a few axis were inverted in order to reduce visual clutter and to get a slightly better view on the data. </p>
+      </figcaption>
+    
+</figure>
+
+<p>we found the attributes <em>alcohol</em>, <em>density</em> and <em>volatile acidity</em> (in descending order) to have the highest importance for the white wine dataset. In general white wines with a higher alcohol content seem to have a higher <em>quality</em>. In fact, the average alcohol concentration for wines with a quality larger or equal to 7 is around <script type="math/tex">11.5\%</script>; for <em>qualities</em> lower or equal to 5 the concentration is just around <script type="math/tex">9.8\%</script>, which is quite significant when considering the total range of alcohol (<script type="math/tex">[8\%, 14.2\%</script>]).
+A second important variable is the <em>density</em> of the white wines. Low densities (note that the <em>density</em>-axis is inverted in figure 16) indicate higher <em>qualities</em> (as well as higher alcoholic concentrations) and vice versa. Furthermore, also low values of the attribute <em>volatile acidity</em> correlate with higher <em>qualities</em>, even though the correlation is not as clear as for <em>alcohol</em> and <em>density</em>.</p>
+
+<p>The ||-Coordinates  plot also shows some other interesting information, e.g.: Although <em>sulphates</em> does not appear to be generally useful for our purposes, in the higher-value regions (<script type="math/tex">>0.75 g/dm^3</script>) we can mostly find samples with higher qualities. Furthermore, a closer look between <em>pH</em> and <em>fixed acidity</em> reveals the negative correlation between both attributes; a higher <em>fixed acidity</em> leads to a lower <em>pH</em>-value, which seems to be reasonable (note again that the axis for <em>fixed acidity</em> was inverted). The same effect – even though not that clear – can be observed for <em>citric acidity</em>.
+In contrast to our results, Cortez et al. <a class="citation" href="#Cortez2009">[32]</a> find the attribute <em>sulphates</em> to be the most important one, followed by <em>alcohol</em>, <em>residual sugar</em> and <em>citric acid</em>. The most likely reason for this could be, that in their work <em>Support Vector Machines</em> were used for regression, which certainly have different importance-measures than visual approaches. In Nachevs and Stoyanovs work <a class="citation" href="#Nachev2012">[33]</a> the three most important variables (determined by the symmetrical uncertainty importance ranking) are <em>alcohol</em>, <em>density</em> and <em>chlorides</em>. A <em>Random Forest</em> built by us suggests <em>alcohol</em>, <em>density</em> and <em>volatile acidity</em> as most important variables.</p>
+
+<p>For the red wine data (figure 17), <em>alcohol</em> again appears to have the highest impact on the wine <em>quality</em>: The wine tasters gave better grades to wines with higher <em>alcoholic</em> concentration. But in contrast to the white wines,  <em>density</em> is not as useful to draw conclusions regarding the red wine <em>quality</em>, on the other hand <em>sulphates</em> seems more convenient. Another observation we can make is, that especially very bad graded red wines have a low <em>citric acidity</em> and high <em>volatile acidity</em> and vice versa.
+Also, for the red wine dataset we find the negative correlation between <em>pH</em> and <em>fixed acidity</em> or alternatively <em>citric acidity</em>.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/wine/redColored1.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 17:</b>  Coloring the samples of the red wine dataset according to their <em>quality</em>. Again, we can observe that a high concentration of <em>alcohol</em> appears to have the largest impact on the wine <em>quality</em>. <em>Density</em> is not as useful (as for white wines) to draw conclusions regarding the red wine <em>quality</em>, on the other hand <em>sulphates</em> seems more convenient. </p>
+      </figcaption>
+    
+</figure>
+
+<p>Finally – as last step in this section – we want to investigate the main differences between the red and white wines. The ||-Coordinates  plot comparing both types of wines can be found in figure 18. The differences between red and white-wines are easily recognizable, e.g.: The amount of <em>total sulfur dioxide</em> is rather low for red wines in comparison to white wines. Besides this, the values for <em>sugar</em> and <em>free sulfur dioxide</em> are much lower for red wines as well and also in most other parts of the plot the differences are observable. Based on our visual impression, the attributes <em>total sulfur dioxide</em>, <em>sugar</em> and <em>free sulfur dioxide</em> are the most suitable (important) for classification of both wine types.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/wine/compareBoth.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 18:</b>  Comparison of red and white wines with the blue curves representing the samples of the white wines dataset. Some main differences between both types of wine can be found. For example, the value for <em>total sulfur dioxide</em> is far lower for red wines than white wines. Furthermore, most white wines have a higher concentration of <em>sugar</em> and <em>free sulfur dioxide</em>. Also other differences can easily be spotted.Note, that a few axis were inverted in order to reduce visual clutter and to allow a better view on the data. </p>
+      </figcaption>
+    
+</figure>
+
+<h3 id="the-miniboone-particle-identification-dataset">The MiniBooNe Particle Identification Dataset</h3>
+
+<p>The <em>MiniBooNe</em> dataset is the last dataset we want to analyze with <em>Parallel Coordinates</em>. It has the largest number of observations (130065) and dimensions (50, excluding the class information), which makes the handling of this data rather challenging; for the applied techniques and the computer-hardware. Our <em>R</em>-implementation of ||-Coordinates  has difficulties handling this large number of records, the creation of one plot takes too much time. Therefore, we decided to sample the dataset randomly in order to reduce the number of observations. Unless otherwise stated, a sampling-size of 20,000 observations is chosen.
+The <em>MiniBooNe</em> dataset contains 36,499 <em>signal events</em> and 93,565 <em>background events</em>, which makes it unbalanced. Sampling the data would again lead to an unbalanced subset of the data; it has to be decided from case to case, if this is desired. We want to weight both classes equally, thus we randomly pick 10,000 instances from each class.</p>
+
+<figure>
+<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/MiniBooNe/plot1_1.png" alt="" />
+<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/MiniBooNe/plot1_2.png" alt="" />
+
+<figure class="centre-element ">
+    <img src="" alt="" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 19:</b>  Initial ||-Coordinates plot of the <em>MiniBooNe Particle Identification</em> dataset. Due to the high number of dimensions the plot was split into two rows. The class-information is not shown in this figure. Nevertheless, we can get a first impression of the data. </p>
+      </figcaption>
+    
+</figure>
+
+</figure>
+
+<p>A first ||-Coordinates  plot of the selected 20,000 observations shows that many attributes have a minimum value of <script type="math/tex">-999</script>. In total there are 468 such records, which we remove from the dataset. Additionally, we automatically remove outliers that prevent a good view on the ||-Coordinates  plot, in total not more than 1\% of the selected 20,000 observations. Another plot of the dataset, containing all 50 attributes, can be seen in figure 20. Although the ||-Coordinates  plot contains many observations in a large dimension-space, it is already possible to find many patterns in the dataset. We get a first overview of the value-ranges of all attributes,  many appear to be normally distributed. If we take a closer look at the segments between <em>V38</em> and <em>V39</em>, we can identify the typical hyperbolic structure that is formed by two normally distributed variables. But also other patterns can be found: For example, many attributes such as <em>V1</em> and <em>V17</em> seem to separate both classes quite clearly, while <em>V34</em>, <em>V41</em> and, <em>V50</em> do not appear to have suitable class-separating properties. Also, regions in the plot can be found, where the data is widely spread and, other regions that contain clusters. <em>Signal events</em> are widely spread between <em>V15</em> and <em>V17</em>, whereas <em>background events</em> are rather dense. In this region, many correlations between individual (neighbored) variables can be found: <em>V16</em> and <em>V17</em> seem to be positively correlated, on the other hand <em>V31</em> and <em>V32</em> are negatively correlated.</p>
+
+<figure>
+<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/MiniBooNe/plot0_1.png" alt="" />
+<img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/MiniBooNe/plot0_2.png" alt="" />
+
+<figure class="centre-element ">
+    <img src="" alt="" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 20:</b>  Initial ||-Coordinates  plot of the <em>MiniBooNe</em> dataset showing all dimensions with in total 20,000 samples (10,000 <em>signal events</em> (red) and another 10,000 <em>background events</em> (blue)). The plot already reveals a few patterns in the dataset e.g., a few attributes separate both classes quite well, such as <em>V1</em> or <em>V17</em>. Many clusters can be found as well as regions with large spread of the data (for instance <em>signal events</em> are spread widely and <em>background events</em> are clustered between <em>V15</em> and <em>V17</em>). </p>
+      </figcaption>
+    
+</figure>
+
+</figure>
+
+<p>As mentioned before, not all 50 attributes appear to be suitable for (visual) classification purposes. In the following, we try to find the most significant variables and focus on them. Figure 21 shows a ||-Coordinates  plot containing only those attributes which we, after intensive analysis and tests (axis-reordering, axis-inversion), consider as convenient for classifying <em>signal events</em> and <em>background events</em>. In total, 13 attributes are selected and the most suitable ||-Coordinates  plot by using the ||-Coordinates-Matrix  is determined. The first subjective view of the plot suggests that variable <em>V1</em> has the best class-separating property, followed by <em>V17</em> and <em>V16</em> which, in fact, are ranked very high in a <em>Random Forest</em> as well (all three belong to the 5 most important variables). Also, <em>V3</em> seems to be a suitable attribute for class-separation, even though most samples are concentrated in low value regions on the axis.</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/MiniBooNe/plot3.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 21:</b>  ||-Coordinates  plot for a selection of attributes of the <em>MiniBooNe</em> dataset. Again, <script type="math/tex">20,000</script> samples are plotted – <em>signal events</em> in red and <em>background events</em> in blue. The attributes were selected based on their class-separating characteristics and ordering of the chosen variables was done with the help of the ||-Coordinates-Matrix; additionally a few axes were inverted. </p>
+      </figcaption>
+    
+</figure>
+
+<p>Although ||-Coordinates  is mainly a visualization technique and not really suitable for real classification purposes, humans capability of finding relations and other patterns in visualized data can make ||-Coordinates  an important tool to evaluate, adjust and verify algorithmic classification approaches. It may even be thinkable, to use the geometric features – such as slope of the polygonal lines or their proximity – of ||-Coordinates  for design and support of  classification-algorithms.  Adding geometric features – by introducing further decision variables – of ||-Coordinates  to the classification-process, for example in decision trees, could help improving classification-algorithms (e.g., the slope of a polygonal line in one or more segments could be more suitable as a class-separating factor than the actual values on the axes).</p>
+
+<p>Based on our visual impressions so far, we can develop a trivial classifier. The resulting classifier is described in the images below:</p>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/MiniBooNe/classify2.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 22:</b>  Illustration of a simple visual classifier for the <em>MiniBooNe</em> dataset visualized with ||-Coordinates using in total 8 of the 50 attributes. One observation of the class <em>background events</em> (blue) and one of the class <em>signal event</em> (red) is shown in this figure. The classification-process can be described as following: Highlight – e.g., with a color that represents one class – certain ranges on the individual axes that appear to include a majority of samples of one class. A single observation is then classified by counting the highlighted ranges – separately for every class – it crosses; the class with the most counts is assigned to the observation. For instance, the blue colored observation crosses one red-highlighted range on the <em>V2</em>-axis and six blue-highlighted ranges, therefore, this observation is very likely part of the class <em>background events</em>. </p>
+      </figcaption>
+    
+</figure>
+
+<figure id="alt-and-id" class="centre-element max-500px-wide">
+    <img src="/images/2017-11-07-visualizing-high-dimensional-data-with-parallel-coordinates/MiniBooNe/classify1.png" alt="alt and id" width="" />
+    
+      <figcaption><p style="font-family:'Luta';font-size:3;line-height:110%;"> <b>Figure 23:</b>  A trivial classifier for the <em>MiniBooNe</em> dataset visualized with ||-Coordinates using in total 8 of the 50 attributes. This figure shows a sample of 1000 observations that were correctly classified using this simple method. <em>Signal events</em> are colored red, <em>background events</em> blue. Around 70\% of the 130064 samples could be correctly classified.  However, around 8\% of all predictions would be wrong and 22\% of the data could not be classified at all. </p>
+      </figcaption>
+    
+</figure>
+
+<h2 id="discussion-and-conclusion">Discussion and Conclusion</h2>
+<p>In this blog post, we presented ||-Coordinates, a visualization technique invented by Alfred Inselberg for multidimensional and multivariate data. We mentioned the fundamental properties of ||-Coordinates  and applied it to various datasets, differing in the dimensionality, number of attributes and attribute characteristics, in order to examine its features and potential issues.</p>
+
+<p>Even though a (visual) classifier based on parallel coordinates does not seem to be a simple task, future work could investigate in how far it is possible to use the geometric features of ||-Coordinates  (such as slopes and proximities) to design or support classification algorithms.  contained observations of around 6500 Portuguese red- and white-wines. In total 11 objective attributes such as alcohol, pH and density describe the individual wines, a 12th attribute – the wine quality – was assessed by wine-tasters.
+%and also find other relations between the attributes – e.g., a higher concentration of <em>alcohol</em> was more likely to result in a good wine</p>
+
+<p>As an introductory example we applied ||-Coordinates  to the <em>Pollen</em> dataset, in order to find the hidden information in it. With ordinary ||-Coordinates, it was not possible to gain many insights into the data, due to the high number of observations that caused overplotting. Only when alpha blending is added to the plot, it is possible to identify the cluster. Visualizing this cluster in a scatter plot finally unveils the hidden secret.</p>
+
+<p>The second dataset we analyzed was the <em>Out5d</em>-dataset. The number of dimensions of this dataset is rather small and can be easily handled by ||-Coordinates; but not so the number of observations (in total 16384). Again, with the help of alpha blending we can again encounter overplotting problem and reduce the clutter. As seen in this example, the  ||-Coordinates-Matrix  is a suitable method when searching for patterns or clusters in the data and can provide more interesting and useful views.</p>
+
+<p>The main task for the <em>wine-quality</em> dataset, which we used as third example, was to find the relation between the 11 objective attributes and the wine quality.
+we found, that – next to alpha blending and axis re-ordering – axis inversion can be helpful in many cases in order to reduce clutter, especially when negative correlations are present. Using a heat color-scheme based on the wine quality, made it  possible to examine the influence of certain attributes on the quality of the wine.</p>
+
+<p>The last dataset we explored – with the highest number of observations (more than 130,000) and dimensions (in total 51) among all other datasets – was the <em>MiniBooNe</em> particle identification dataset, which is mainly used for classification-purposes. It was not possible to display the whole dataset with ||-Coordinates, we had to limit ourselves to 20,000 samples. Also, finding relations and patterns among all attributes was rather difficult, hence, we reduced the number of attributes by selecting those 13 which appeared to have the best (visual) class-separating properties. After a couple of axis re-configurations, we found a display that could clearly separate the two classes of the dataset.</p>
+
+<p>Overall, we found ||-Coordinates  to be a suitable and helpful tool in our data-mining tasks, if used in an appropriate way and adapted to the specific dataset. One main advantage we see, is the comprehensibility: Even though ||-Coordinates  have a complex underlying theory, they can be easily applied and read, even by inexperienced users.
+Especially overplotting was one issue we faced when applying ||-Coordinates  to our fairly large datasets. Overplotting causes polygonal lines to cover important patterns. We addressed this problem, by using a density-based technique –  the so called alpha blending– that introduces a certain degree of transparency, which can then make clusters and other patterns visible.
+Our impression was, that ||-Coordinates  show relations (e.g., linear correlations or normally distributed attributes, indicated by hyperbolic envelopes) in the data clearer than heatmaps and dimensional stacking. ||-Coordinates  were able to reveal ordered structures in data, e.g., in the pollen dataset that contained mostly random noise. However, in a few cases we wrongly assumed negative correlations, where actually no specific correlation was present. We    could often disprove the wrong assumption by inverting the concerned axis. Inverting (flipping) individual axis, results in negated slopes of the lines in the corresponding segment. This can also help reducing clutter and give a better view on the data.
+However, similar to dimensional stacking, the axis-configuration is an important factor for revealing structures (in dimensional stacking the axis-ordering affects the appearance of the plot even more). As one approach, to address this problem, we introduced the  ||-Coordinates-Matrix, which allows to analyze all pairwise relations between the attributes with a fairly small number of ||-Coordinates-plots.<br />
+After a suitable axis-configuration was found, ||-Coordinates  was a strong tool for revealing clusters in more than one dimension, by using the features proximity, slope and density of the polygonal lines. Heatmaps and dimensional stacking did not appear to be as suitable for clustering purposes.
+In contrast to heatmaps, where the color is already a main part of the value representation, we can use colors in ||-Coordinates  to give additional information to the plot (e.g. the class-information).
+Displaying large datasets with our ||-Coordinates-implementation was only possible to a certain degree. We had to sample the <em>MiniBooNe</em> dataset, whereas for example dimensional stacking could use all observations (but is restricted to only 10 dimensions on the other hand). Nevertheless, by evaluating diagrams for different sample-sizes, we could show that the main structure in ||-Coordinates  was preserved, in this respect, ||-Coordinates  seems to be a rather robust technique.
+The handling of outliers was one additional issue we found considering Parallel-Coordinates (for heatmaps and dimensional stacking as well): On the one hand outliers can be easily spotted with ||-Coordinates, but on the other hand, they  destroy the whole view of the plot, because the majority of the observations is located in a small region.</p>
+
+<p>Even though we encountered a few problems in the beginning – for example, overplotting as one main problem – we could obtain many interesting results from the analyzed datasets using ||-Coordinates, which we unfortunately could not all place in this blog post. Nevertheless, it was astonishing to see how a comparatively simple technique such as ||-Coordinates  – without any noteworthy extensions or enhancements – is able to reveal the patterns, relations and other information hidden in raw data.</p>
+
+<h2 id="references">References</h2>
+
+<ol class="bibliography"><li><span id="Inselberg85">A. Inselberg, “The plane with parallel coordinates.,” <i>The Visual Computer</i>, vol. 1, no. 2, pp. pp. 69–91, 1985.</span></li>
+<li><span id="LeBlancWW90">J. LeBlanc, M. O. Ward, and N. Wittels, “Exploring N-Dimensional Databases.,” in <i>Visualization, 1990</i>, Los Alamitos, CA, 1990, pp. 230–237.</span></li>
+<li><span id="CHERNOFF">H. Chernoff, “The Use of Faces to Represent Points in K-Dimensional Space Graphically,” <i>Journal of the American Statistical Association</i>, vol. 68, no. 342, pp. pp. 361–368, 1973.</span></li>
+<li><span id="Inselberg12">A. Inselberg, “Parallel Coordinates: Visual Multidimensional Geometry and Its Applications.,” in <i>Knowledge Discovery and Information Retrieval</i>, Barcelona, 2012.</span></li>
+<li><span id="Inselberg97">A. Inselberg, “Multidimensional detective,” in <i>IEEE Visualization 1997</i>, Los Alamitos, CA, 1997, pp. 100–107.</span></li>
+<li><span id="Plemenos2009">D. Plemenos and G. Miaoulis, <i>Visual Complexity and Intelligent Computer Graphics Techniques
+               Enhancements</i>, vol. 200. Berlin, Heidelberg: Springer, 2009, pp. pp. 123–141.</span></li>
+<li><span id="Heinrich2013">J. Heinrich and D. Weiskopf, “State of the Art of Parallel Coordinates,” in <i>STAR Proceedings of Eurographics 2013</i>, 2013, pp. 95–116.</span></li>
+<li><span id="Inselberg1990">A. Inselberg and B. Dimsdale, “Parallel Coordinates: A Tool for Visualizing Multi-dimensional Geometry,” in <i>IEEE Visualization 1990</i>, Los Alamitos, CA, 1990, pp. 361–378.</span></li>
+<li><span id="Yonghong2007">Y. Xu, W. Hong, N. Chen, X. Li, W. Liu, and T. Zhang, “Parallel Filter: A Visual Classifier Based on Parallel Coordinates and Multivariate Data Analysis,” <i>Advanced Intelligent Computing Theories and Applications. With Aspects of Artificial Intelligence</i>, pp. pp. 1172–1183, 2007.</span></li>
+<li><span id="Steed2012">C. A. Steed, J. E. Swan II, P. J. Fitzpatrick, and T. J. Jankun-Kelly, “A Visual Analytics Approach for Correlation, Classification, and
+		 Regression Analysis,” Oak Ridge National Laboratory, Oak Ridge, TN, Technical Report ORNL/TM-2012/68, 2012.</span></li>
+<li><span id="EllisD06">G. Ellis and A. J. Dix, “Enabling Automatic Clutter Reduction in Parallel Coordinate Plots.,” <i>IEEE Transactions on Visualization and Computer Graphics</i>, vol. 12, no. 5, pp. pp. 717–724, Jan. 2007.</span></li>
+<li><span id="Heinrich2012">J. Heinrich, J. Stasko, and D. Weiskopf, “The Parallel Coordinates Matrix,” in <i>EuroVis</i>, Vienna, 2012, pp. 37–41.</span></li>
+<li><span id="TatuAESTMK09">A. Tatu <i>et al.</i>, “Combining automated analysis and visualization techniques for effective exploration of high-dimensional data.,” in <i>IEEE Visual Analytics Science and Technology</i>, Piscataway, NJ, 2009, pp. 59–66.</span></li>
+<li><span id="Yuan2009">X. Yuan, P. Guo, H. Xiao, H. Zhou, and H. Qu, “Scattering Points in Parallel Coordinates.,” <i>IEEE Transactions on Visualization and Computer Graphics</i>, vol. 15, no. 6, pp. pp. 1001–1008, 2009.</span></li>
+<li><span id="Bertini2005">E. Bertini, L. Dell’Aquila, and G. Santucci, “SpringView: cooperation of radviz and parallel coordinates for view optimization and clutter reduction,” in <i>Coordinated and Multiple Views in Exploratory Visualization, 2005.</i>, Los Alamitos, CA, 2005, pp. 22–29.</span></li>
+<li><span id="Rübel2006">O. Rübel <i>et al.</i>, “PointCloudXplore: Visual Analysis of 3D Gene Expression Data Using Physical Views and Parallel Coordinates.,” in <i>EuroVis</i>, Vienna, 2009, pp. 203–210.</span></li>
+<li><span id="streit2006">M. Streit <i>et al.</i>, “3D parallel coordinate systems - A new data visualization method in the context of microscopy-based multicolor tissue cytometry,” <i>Cytometry Part A</i>, vol. 69A, no. 7, pp. pp. 601–611, 2006.</span></li>
+<li><span id="Nhon2010">D. T. Nhon, L. Wilkinson, and A. Anand, “Stacking Graphic Elements to Avoid Over-Plotting.,” <i>IEEE Transactions on Visualization and Computer Graphics</i>, vol. 16, no. 6, pp. pp. 1044–1052, 2010.</span></li>
+<li><span id="Heinrich2009">J. Heinrich and D. Weiskopf, “Continuous Parallel Coordinates,” <i>IEEE Transactions on Visualization and Computer Graphics</i>, vol. 15, no. 6, pp. pp. 1531–1538, 2009.</span></li>
+<li><span id="RPackage">R Core Team, “R: A Language and Environment for Statistical Computing.” R Foundation for Statistical Computing, Vienna, Austria, 2016.</span></li>
+<li><span id="pollenData">D. Coleman, “Pollen Data-Set.” RCA Labs, Princeton, USA, 1986.</span></li>
+<li><span id="out5d_2005">P. Ketelaar, “The OUT5D dataset\\.” Curtin University of Technology, Perth, Australia, 2005.</span></li>
+<li><span id="Malik2011">W. A. Malik and A. Ünlü, “Interactive Graphics: Exemplified with Real Data Applications,” <i>Frontiers in Psychology</i>, vol. 2, no. 11, 2011.</span></li>
+<li><span id="Makwana2012">H. Makwana, S. Tanwani, and S. Jain, “Article: Axes Re-Ordering in Parallel Coordinate for Pattern Optimization,” <i>International Journal of Computer Applications</i>, vol. 40, no. 13, pp. pp. 43–48, 2012.</span></li>
+<li><span id="Zhou2009">H. Zhou, W. Cui, H. Qu, Y. Wu, X. Yuan, and W. Zhuo, “Splatting the Lines in Parallel Coordinates.,” <i>Computer Graphics Forum</i>, vol. 28, no. 3, pp. pp. 759–766, Sep. 2009.</span></li>
+<li><span id="Yu2012">C. Yu, D. Yurovsky, and T. L. Xu, “Visual Data Mining: An Exploratory Approach to Analyzing Temporal Patterns of Eye Movements,” <i>Infancy</i>, vol. 17, no. 1, pp. pp. 33–60, 2012.</span></li>
+<li><span id="palmas14a">G. Palmas, M. Bachynskyi, A. Oulasvirta, H.-P. Seidel, and T. Weinkauf, “An Edge-Bundling Layout for Interactive Parallel Coordinates,” in <i>IEEE PacificVis</i>, Los Alamitos, CA, 2014, pp. 44–54.</span></li>
+<li><span id="JohanssonC08">J. Johansson and M. D. Cooper, “A Screen Space Quality Method for Data Abstraction.,” <i>Comput. Graph. Forum</i>, vol. 27, no. 3, pp. pp. 1039–1046, 2008.</span></li>
+<li><span id="ArteroOL04">A. O. Artero, M. C. F. de Oliveira, and H. Levkowitz, “Uncovering Clusters in Crowded Parallel Coordinates Visualizations.,” in <i>IEEE Visualization 2004</i>, Los Alamitos, CA, 2004, pp. 81–88.</span></li>
+<li><span id="Bertini2006">E. Bertini, L. Dell’Aquila, and G. Santucci, “Reducing cluttering through non uniform sampling, displacement, and user perception,” in <i>Visualization and Data Analysis 2006</i>, San Jose, CA, 2006, vol. 6060, pp. 60600L–60600L-12.</span></li>
+<li><span id="BacheLichman2013">K. Bache and M. Lichman, “UCI Machine Learning Repository,” 2013.</span></li>
+<li><span id="Cortez2009">P. Cortez, A. Cerdeira, F. Almeida, T. Matos, and J. Reis, “Modeling wine preferences by data mining from physicochemical properties ,” <i>Decision Support Systems </i>, vol. 47, no. 4, pp. pp. 547–553, 2009.</span></li>
+<li><span id="Nachev2012">A. Nachev and B. Stoyanov, “Product Quality Analysis using Support Vector Machnines,” <i>Information Models and Analyses</i>, vol. 1, no. 2, pp. pp. 170–193, 2012.</span></li>
+<li><span id="Lambrou2012">A. Lambrou, H. Papadopoulos, I. Nouretdinov, and A. Gammerman, “Reliable Probability Estimates Based on Support Vector Machines for Large Multiclass Datasets,” in <i>Artificial Intelligence Applications and Innovations</i>, vol. 382, L. Iliadis and others, Eds. Springer, Berlin, Heidelberg, 2012, pp. pp. 182–191.</span></li>
+<li><span id="DasguptaK10">A. Dasgupta and R. Kosara, “Pargnostics: Screen-Space Metrics for Parallel Coordinates,” <i>IEEE Transactions on Visualization and Computer Graphics</i>, vol. 16, no. 6, pp. pp. 1017–1026, 2010.</span></li>
+<li><span id="Roe2005">B. P. Roe, H.-J. Yang, J. Zhu, Y. Liu, I. Stancu, and G. McGregor, “Boosted decision trees as an alternative to artificial neural networks for particle identification,” <i>Nuclear Instruments and Methods in Physics Research</i>, vol. A543, pp. pp. 577–584, 2005.</span></li></ol>
+
+<h2 id="appendix">Appendix</h2>
+
+<h3 id="the-wine-quality-dataset-2">The Wine-Quality dataset</h3>
+<p>The attributes are summarized in the following table:</p>
+
+<table id="TBL-4" class="tabular" cellspacing="0" cellpadding="0"><colgroup id="TBL-4-1g"><col id="TBL-4-1" /><col id="TBL-4-2" /><col id="TBL-4-3" /><col id="TBL-4-4" /></colgroup><tr class="hline"><td><hr /></td><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr style="vertical-align:baseline;" id="TBL-4-1-"><td style="white-space:nowrap; text-align:left;" id="TBL-4-1-1" class="td10"><div class="multicolumn" style="white-space:nowrap; text-align:left;"> Attribute</div>         </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-1-2" class="td01">                    Unit</td><td style="white-space:nowrap; text-align:right;" id="TBL-4-1-3" class="td11"> Shortcut</td>
+</tr><tr class="hline"><td><hr /></td><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr class="vspace" style="font-size:2.0pt"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr style="vertical-align:baseline;" id="TBL-4-2-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-2-1" class="td10">      Fixed acidity   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-2-2" class="td01">      <span class="cmmi-10">g</span>(<span class="cmmi-10">tartaric</span><span class="cmmi-10">&#x00A0;acid</span>)<span class="cmmi-10">&#x2215;dm</span><sup><span class="cmr-7">3</span></sup> </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-2-3" class="td11">   <span class="cmti-10">f</span><span class="cmti-10">_acid </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-2-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-3-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-3-1" class="td10">    Volatile acidity   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-3-2" class="td01">        <span class="cmmi-10">g</span>(<span class="cmmi-10">acetic</span><span class="cmmi-10">&#x00A0;acid</span>)<span class="cmmi-10">&#x2215;dm</span><sup><span class="cmr-7">3</span></sup> </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-3-3" class="td11">   <span class="cmti-10">v</span><span class="cmti-10">_acid </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-3-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-4-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-4-1" class="td10">        Citric acid   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-4-2" class="td01">                  <span class="cmmi-10">g&#x2215;dm</span>3</td><td style="white-space:nowrap; text-align:right;" id="TBL-4-4-3" class="td11">   <span class="cmti-10">c</span><span class="cmti-10">_acid </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-4-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-5-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-5-1" class="td10">    Residual sugar   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-5-2" class="td01">                  <span class="cmmi-10">g&#x2215;dm</span>3</td><td style="white-space:nowrap; text-align:right;" id="TBL-4-5-3" class="td11">   <span class="cmti-10">sugar </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-5-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-6-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-6-1" class="td10">         Chlorides   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-6-2" class="td01">   <span class="cmmi-10">g</span>(<span class="cmmi-10">sodium</span><span class="cmmi-10">&#x00A0;chloride</span>)<span class="cmmi-10">&#x2215;dm</span><sup><span class="cmr-7">3</span></sup> </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-6-3" class="td11"> <span class="cmti-10">chlorides </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-6-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-7-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-7-1" class="td10"> Free sulfur dioxide   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-7-2" class="td01">                 <span class="cmmi-10">mg&#x2215;dm</span><sup><span class="cmr-7">3</span></sup> </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-7-3" class="td11">  <span class="cmti-10">f</span><span class="cmti-10">_sulfur </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-7-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-8-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-8-1" class="td10">Total sulfur dioxide   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-8-2" class="td01">                 <span class="cmmi-10">mg&#x2215;dm</span><sup><span class="cmr-7">3</span></sup> </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-8-3" class="td11">  <span class="cmti-10">t</span><span class="cmti-10">_sulfur </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-8-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-9-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-9-1" class="td10">          Density   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-9-2" class="td01">                   <span class="cmmi-10">g&#x2215;cm</span><sup><span class="cmr-7">3</span></sup> </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-9-3" class="td11">  <span class="cmti-10">density </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-9-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-10-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-10-1" class="td10">              pH   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-10-2" class="td01">                     <span class="cmsy-10">--</span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-10-3" class="td11">     <span class="cmti-10">pH </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-10-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-11-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-11-1" class="td10">         Sulphates   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-11-2" class="td01"><span class="cmmi-10">g</span>(<span class="cmmi-10">potassium</span><span class="cmmi-10">&#x00A0;sulphate</span>)<span class="cmmi-10">&#x2215;dm</span><sup><span class="cmr-7">3</span></sup> </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-11-3" class="td11"> sulphates</td><td style="white-space:nowrap; text-align:right;" id="TBL-4-11-4" class="td11"> </td>
+</tr><tr style="vertical-align:baseline;" id="TBL-4-12-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-12-1" class="td10">          Alcohol   </td><td style="white-space:nowrap; text-align:right;" id="TBL-4-12-2" class="td01">                  <span class="cmmi-10">vol.</span><span class="cmmi-10">&#x00A0;</span>%</td><td style="white-space:nowrap; text-align:right;" id="TBL-4-12-3" class="td11">  <span class="cmti-10">alcohol </span></td><td style="white-space:nowrap; text-align:right;" id="TBL-4-12-4" class="td11"> </td>
+</tr><tr class="hline"><td><hr /></td><td><hr /></td><td><hr /></td><td><hr /></td></tr><tr style="vertical-align:baseline;" id="TBL-4-13-"><td style="white-space:nowrap; text-align:right;" id="TBL-4-13-1" class="td10">                  </td></tr></table>
+<!-- __**** -->
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <span class="author vcard"><span class="fn">Markus Thill</span></span>
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://MarkusThill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://MarkusThill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://MarkusThill.github.io/visualizing-high-dimensional-data-with-parallel-coordinates/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+
+      </footer>
+    </div><!-- /.entry-content -->
+    <div class="read-more">
+  <div class="read-more-header">
+    <a href="https://MarkusThill.github.io/markus" class="read-more-btn">About the Author</a>
+  </div><!-- /.read-more-header -->
+  <div class="read-more-content author-info">
+    <h3>Markus Thill</h3>
+    <div class="author-container">
+      <img class="author-img" src="https://MarkusThill.github.io/images/avatar.jpg" alt="Markus Thill" />
+      <div class="author-bio">I studied computer engineering (B.Sc.) and Automation & IT (M.Eng.). Generally, I am interested in machine learning (ML) approaches (in the broadest sense), but particularly in the fields of time series analysis, anomaly detection, Reinforcement Learning (e.g. for board games), Deep Learning (DL) and incremental (on-line) learning procedures. </div>
+    </div>
+    <div class="author-share">
+      <ul class="list-inline social-buttons">
+        
+          <li><a href="https://github.com/markusthill" target="_blank"><i class="fa fa-github fa-fw"></i></a></li>
+        
+          <li><a href="https://www.linkedin.com/in/markus-thill-a4991090/" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        
+      </ul>
+      
+        <a aria-label="Follow @MarkusThill on GitHub" data-size="large" href="https://github.com/MarkusThill" class="github-button">Follow @MarkusThill</a>
+      
+      <br>
+      
+    </div>
+  </div>
+</div>
+
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://MarkusThill.github.io/programming/an-efficient-implementation-of-the-booth-algorithm-in-6502-assembler/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/" title="Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform">Deriving a Closed-Form Solution of the Fibonacci Sequence using the Z-Transform</a></h3>
+      <p>The Fibonacci sequence might be one of the most famous sequences in the field of mathmatics and computer science. Already high school stu...&hellip; <a href="https://MarkusThill.github.io/deriving-a-closed-form-solution-of-the-fibonacci-sequence/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/derivation-of-a-weighted-recursive-least-squares-estimator/" title="Derivation of a Weighted Recursive Linear Least Squares Estimator">Derivation of a Weighted Recursive Linear Least Squares Estimator</a></h4>
+        <span>Published on May 05, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://MarkusThill.github.io/gaussian-distribution-with-a-diagonal-covariance-matrix/" title="Gaussian Distribution With a Diagonal Covariance Matrix">Gaussian Distribution With a Diagonal Covariance Matrix</a></h4>
+        <span>Published on May 04, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script type="text/javascript" src="https://MarkusThill.github.io/assets/js/scripts.min.js"></script>
+<script type="text/javascript" async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+<script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'https':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+
+<!-- Asynchronous Google Analytics snippet -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113918188-1', 'auto');
+  ga('require', 'linkid', 'linkid.js');
+  ga('send', 'pageview');
+</script>
+
+
+
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'markusthill-github-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var s = document.createElement('script'); s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+<script type="text/javascript">
+    sharing();
+</script>
+
+
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Markus Thill. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://github.com/aron-bordin/neo-hpstr-jekyll-theme" rel="nofollow">Neo-HPSTR Theme</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+</body>
+</html>
